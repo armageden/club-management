@@ -107,6 +107,3 @@ chromium --headless --disable-gpu --print-to-pdf=schema-documentation.pdf --no-s
 - Both documents include version information and timestamps
 
 ---
-
-*Generated: August 3, 2026*
-*Source: ARCHITECTURE.md - Hackathon Operations Hub*
