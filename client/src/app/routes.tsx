@@ -1,10 +1,12 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
-import Layout from "../components/layout/Layout";
-import LoginPage from "../features/auth/LoginPage";
-import RegisterPage from "../features/auth/RegisterPage";
-import DashboardPage from "../pages/DashboardPage";
-import HomePage from "../pages/HomePage";
-import { useAuth } from "./providers";
+import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { Shell } from '../components/layout/Shell';
+import LoginPage from '../features/auth/LoginPage';
+import RegisterPage from '../features/auth/RegisterPage';
+import DashboardPage from '../pages/DashboardPage';
+import HomePage from '../pages/HomePage';
+import HardwareDashboardPage from '../features/hardware/pages/HardwareDashboardPage';
+import HardwareBrowsePage from '../features/hardware/pages/HardwareBrowsePage';
+import { useAuth } from './providers';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -42,14 +44,33 @@ function GuestRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+// Public layout (no sidebar)
+function PublicLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-gray-950 text-white">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {children}
+      </main>
+    </div>
+  );
+}
+
+// Hardware route - shows different page based on role
+function HardwareRoute() {
+  const { user } = useAuth();
+  const isOrganizer = user?.global_role === 'admin'; // Simplified - in real app check event membership
+
+  return isOrganizer ? <HardwareDashboardPage eventId="e0000000-0000-0000-0000-000000000001" /> : <HardwareBrowsePage eventId="e0000000-0000-0000-0000-000000000001" />;
+}
+
 export const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Layout />,
+    path: '/',
+    element: <PublicLayout />,
     children: [
       { index: true, element: <HomePage /> },
       {
-        path: "login",
+        path: 'login',
         element: (
           <GuestRoute>
             <LoginPage />
@@ -57,18 +78,64 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "register",
+        path: 'register',
         element: (
           <GuestRoute>
             <RegisterPage />
           </GuestRoute>
         ),
       },
+    ],
+  },
+  {
+    path: '/app',
+    element: <Shell />,
+    children: [
       {
-        path: "dashboard",
+        path: 'dashboard',
         element: (
           <ProtectedRoute>
             <DashboardPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'hardware',
+        element: (
+          <ProtectedRoute>
+            <HardwareRoute />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'venue',
+        element: (
+          <ProtectedRoute>
+            <div>Venue Dashboard - Coming Soon</div>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'projects',
+        element: (
+          <ProtectedRoute>
+            <div>Projects Dashboard - Coming Soon</div>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'judging',
+        element: (
+          <ProtectedRoute>
+            <div>Judging Dashboard - Coming Soon</div>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'team',
+        element: (
+          <ProtectedRoute>
+            <div>Team Dashboard - Coming Soon</div>
           </ProtectedRoute>
         ),
       },

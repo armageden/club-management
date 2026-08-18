@@ -3,6 +3,22 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "allowScripts": [
+    "vite",
+    "@vitejs/plugin-react",
+    "@tailwindcss/vite",
+    "esbuild",
+    "rollup",
+    "terser",
+    "lightningcss",
+    "sharp",
+    "oxlint",
+    "postcss",
+    "autoprefixer",
+    "cssnano",
+    "fsevents",
+    "node-gyp"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
@@ -10,9 +26,29 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@date-fns/tz": "^1.2.0",
+    "@hookform/resolvers": "^3.3.4",
+    "@react-pdf/renderer": "^3.4.4",
+    "@tanstack/react-table": "^8.16.0",
+    "@tanstack/react-virtual": "^3.10.9",
+    "clsx": "^2.1.1",
+    "cmdk": "^1.0.0",
+    "d3-array": "^3.2.4",
+    "d3-scale": "^4.0.2",
+    "date-fns": "^4.1.0",
+    "framer-motion": "^11.11.17",
+    "konva": "^9.3.16",
+    "lucide-react": "^0.460.0",
+    "qrcode.react": "^4.0.1",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
-    "react-router-dom": "^7.18.2"
+    "react-hook-form": "^7.51.3",
+    "react-konva": "^18.2.10",
+    "react-router-dom": "^7.18.2",
+    "recharts": "^2.12.7",
+    "sonner": "^1.5.0",
+    "tailwind-merge": "^2.5.5",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
