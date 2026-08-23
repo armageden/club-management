@@ -155,3 +155,10 @@ export interface CreateDamageReportRequest {
   description: string;
   severity: 'minor' | 'moderate' | 'major' | 'critical';
 }
+
+export function p(req: Request, key: string): string | undefined {
+  const val = (req.params as Record<string, unknown>)[key];
+  if (Array.isArray(val)) return val[0];
+  if (typeof val === "string") return val;
+  return undefined;
+}
