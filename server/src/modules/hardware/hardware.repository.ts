@@ -5,6 +5,7 @@ import type {
   HardwareReturn,
   HardwareDamageReport,
   HardwareAnalytics,
+  HardwareTimelineEvent,
   CreateHardwareItemRequest,
   UpdateHardwareItemRequest,
   CheckoutHardwareRequest,
@@ -442,5 +443,47 @@ export const hardwareRepository = {
       `UPDATE hardware_checkouts SET status = 'overdue' WHERE id = $1 AND status = 'active' AND due_at < NOW()`,
       [checkoutId]
     );
+  },
+
+  // Item timeline (created, checkouts, returns, damage reports)
+  async getItemTimeline(eventId: string, itemId: string): Promise<HardwareTimelineEvent[]> {
+    const result = await pool.query(
+      `SELECT type, timestamp, user_name, details FROM (
+         SELECT 'created' AS type, hi.created_at AS timestamp, NULL::text AS user_name,
+                json_build_object('name', hi.name, 'condition', hi.condition) AS details
+         FROM hardware_items hi
+         WHERE hi.id = $1 AND hi.event_id = $2
+         UNION ALL
+         SELECT 'checked_out', hc.checked_out_at, u.full_name,
+                json_build_object('checkout_id', hc.id, 'borrower_user_id', hc.borrower_user_id,
+                                  'due_at', hc.due_at, 'notes', hc.notes)
+         FROM hardware_checkouts hc
+         JOIN users u ON hc.borrower_user_id = u.id
+         WHERE hc.hardware_item_id = $1 AND hc.event_id = $2
+         UNION ALL
+         SELECT 'returned', hr.returned_at, u.full_name,
+                json_build_object('checkout_id', hr.checkout_id, 'condition', hr.condition,
+                                  'notes', hr.notes)
+         FROM hardware_returns hr
+         JOIN hardware_checkouts hc ON hr.checkout_id = hc.id
+         JOIN users u ON hr.received_by = u.id
+         WHERE hc.hardware_item_id = $1 AND hc.event_id = $2
+         UNION ALL
+         SELECT 'damaged', hdr.created_at, u.full_name,
+                json_build_object('damage_report_id', hdr.id, 'severity', hdr.severity,
+                                  'description', hdr.description, 'status', hdr.status)
+         FROM hardware_damage_reports hdr
+         JOIN users u ON hdr.reported_by = u.id
+         WHERE hdr.hardware_item_id = $1 AND hdr.event_id = $2
+       ) events
+       ORDER BY timestamp ASC`,
+      [itemId, eventId]
+    );
+    return result.rows.map((row) => ({
+      type: row.type,
+      timestamp: row.timestamp instanceof Date ? row.timestamp.toISOString() : String(row.timestamp),
+      user_name: row.user_name,
+      details: row.details,
+    }));
   },
 };

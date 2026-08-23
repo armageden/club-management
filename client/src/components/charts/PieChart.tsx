@@ -105,7 +105,7 @@ export const PieChart = forwardRef<HTMLDivElement, PieChartProps>(
           y={y}
           fill="white"
           textAnchor={midAngle > 90 && midAngle < 270 ? 'end' : 'start'}
-          dominantCentral="middle"
+          dominantBaseline="middle"
           fontSize={11}
           fontFamily="var(--font-mono)"
           fontWeight={500}
@@ -132,7 +132,7 @@ export const PieChart = forwardRef<HTMLDivElement, PieChartProps>(
               label={label ? CustomLabel : false}
               isAnimationActive={animate}
               animationDuration={animate ? animationDuration : 0}
-              animationEasing="easeOutQuart"
+              animationEasing={'easeOutQuart' as unknown as 'ease-out'}
             >
               {data.map((_, index) => (
                 <Cell key={`cell-${index}`} fill={chartColors[index % chartColors.length]} />

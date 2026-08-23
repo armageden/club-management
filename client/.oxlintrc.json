@@ -3,6 +3,14 @@
   "plugins": ["react", "typescript", "oxc"],
   "rules": {
     "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
+    "react-hooks/exhaustive-deps": "warn",
+    // Project does not use React Compiler; these are compiler-only advisories
+    "react/incompatible-library": "off",
+    "react/set-state-in-effect": "off",
+    "react/static-components": "off",
+    "react/use-memo": "off",
+    "react/purity": "off",
+    // Fast-refresh advisory; barrel files and mixed exports are intentional here
+    "react/only-export-components": "off"
   }
 }

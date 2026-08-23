@@ -142,6 +142,12 @@ function getBackendModules(): { done: string[]; planned: string[] } {
   return getModuleStatus(dir, allModules);
 }
 
+function hasHealthEndpoint(): boolean {
+  const appTs = join(SERVER_SRC, "app.ts");
+  if (!existsSync(appTs)) return false;
+  return readFileSync(appTs, "utf-8").includes("/api/v1/health");
+}
+
 function readTemplate(): string {
   // Read current summary to preserve manual sections, or use default template
   if (existsSync(SUMMARY_PATH)) {
@@ -162,6 +168,7 @@ function generateSummary(): string {
   const layoutComponents = getLayoutComponents();
   const { done: beDone, planned: bePlanned } = getBackendModules();
   const { done: feDone, partial: fePartial } = getFeatureModules();
+  const healthOk = hasHealthEndpoint();
 
   // Generate the markdown
   return `# Hackathon Hub - Project Summary
@@ -221,7 +228,7 @@ The **Hackathon Hub** (formerly "Event Operations & Hackathon Management Platfor
 | **Config Management** | ✅ Complete | \`config/index.ts\` with env validation |
 | **Error Handling** | ✅ Complete | \`error.middleware.ts\` centralized |
 | **Type Definitions** | ✅ Complete | \`types/index.ts\` shared types |
-| **Health Endpoint** | ⚠️ Partial | Referenced in start.sh, needs implementation |
+| **Health Endpoint** | ${healthOk ? "✅ Complete | \`GET /api/v1/health\` + \`/api/v1/health/detailed\` in \`app.ts\`" : "⚠️ Partial | Referenced in start.sh, needs implementation"} |
 
 **Module Structure (${beDone.length}/${beDone.length + bePlanned} implemented):**
 
@@ -370,9 +377,12 @@ ${fePartial.map(f => `- **${f}** - Has some files but incomplete`).join("\n")}` 
 ## 🎯 Next Priority Actions
 
 ### Immediate (Unblock Frontend Development)
-1. **Implement Health Endpoint** - \`GET /api/v1/health\` for start.sh checks
+${healthOk
+    ? `1. **Complete Users Module** - Profile management, avatar upload
+2. **Complete Events Module** - CRUD + event-scoped middleware`
+    : `1. **Implement Health Endpoint** - \`GET /api/v1/health\` for start.sh checks
 2. **Complete Users Module** - Profile management, avatar upload
-3. **Complete Events Module** - CRUD + event-scoped middleware
+3. **Complete Events Module** - CRUD + event-scoped middleware`}
 
 ### Short Term (Core Features)
 4. **Event Members Module** - Join/leave events, role management

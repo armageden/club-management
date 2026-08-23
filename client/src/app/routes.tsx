@@ -1,4 +1,5 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
+import { ErrorPage } from '../components/ErrorPage';
 import { Shell } from '../components/layout/Shell';
 import LoginPage from '../features/auth/LoginPage';
 import RegisterPage from '../features/auth/RegisterPage';
@@ -45,11 +46,11 @@ function GuestRoute({ children }: { children: React.ReactNode }) {
 }
 
 // Public layout (no sidebar)
-function PublicLayout({ children }: { children: React.ReactNode }) {
+function PublicLayout({ children }: { children?: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-gray-950 text-white">
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {children}
+        {children ?? <Outlet />}
       </main>
     </div>
   );
@@ -67,8 +68,10 @@ export const router = createBrowserRouter([
   {
     path: '/',
     element: <PublicLayout />,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
+      { path: '*', element: <ErrorPage notFound /> },
       {
         path: 'login',
         element: (
@@ -88,8 +91,8 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: '/app',
     element: <Shell />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: 'dashboard',

@@ -8,12 +8,8 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Input';
 import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from '@/components/ui/Dialog';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { hardwareApi } from '../api';
-import type { HardwareItem, CreateHardwareItemRequest, UpdateHardwareItemRequest } from '../types';
+import type { HardwareItem } from '../types';
 import { HARDWARE_CATEGORIES, HARDWARE_CONDITIONS, HARDWARE_STATUSES } from '../types';
-import { cn } from '@/lib/utils';
-import { X } from 'lucide-react';
 
 const createItemSchema = z.object({
   name: z.string().min(1, 'Name is required').max(255),
@@ -45,7 +41,6 @@ export function ItemForm({ open, onOpenChange, onSubmit, initialData, isLoading,
     register,
     handleSubmit,
     reset,
-    setValue,
     formState: { errors },
   } = useForm<ItemFormData>({
     resolver: zodResolver(createItemSchema),
@@ -71,7 +66,7 @@ export function ItemForm({ open, onOpenChange, onSubmit, initialData, isLoading,
           model: initialData.model || '',
           serial_number: initialData.serial_number || '',
           quantity_available: initialData.quantity_available,
-          condition: initialData.condition,
+          condition: initialData.condition as ItemFormData['condition'],
           status: initialData.status,
           location: initialData.location || '',
           notes: initialData.notes || '',
@@ -101,7 +96,7 @@ export function ItemForm({ open, onOpenChange, onSubmit, initialData, isLoading,
     try {
       await onSubmit(data);
       handleClose();
-    } catch (error) {
+    } catch {
       // Error handled by mutation
     }
   };

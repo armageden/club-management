@@ -7,17 +7,16 @@ import {
   CommandEmpty,
   CommandGroup,
   CommandItem,
-  CommandShortcut,
   CommandSeparator,
 } from 'cmdk';
-import {
-  Dialog as DialogPrimitive,
-  DialogContent,
-  DialogOverlay,
-} from '@radix-ui/react-dialog';
+import * as DialogPrimitive from '@radix-ui/react-dialog';
+
+function CommandShortcut({ className, ...props }: React.HTMLAttributes<HTMLSpanElement>) {
+  return <span className={cn('ml-auto text-xs tracking-widest opacity-60', className)} {...props} />;
+}
 import { Search, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { useEffect, useRef, useState } from 'react';
+import { useEffect } from 'react';
 
 interface CommandProps {
   open: boolean;
@@ -26,15 +25,11 @@ interface CommandProps {
 }
 
 export function CommandPalette({ open, onOpenChange, children }: CommandProps) {
-  const [isAnimating, setIsAnimating] = useState(false);
-  const dialogRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     if (open) {
-      setIsAnimating(true);
       document.body.style.overflow = 'hidden';
     } else {
-      setIsAnimating(false);
       document.body.style.overflow = 'unset';
     }
 
@@ -43,25 +38,24 @@ export function CommandPalette({ open, onOpenChange, children }: CommandProps) {
     };
   }, [open]);
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (event.key === 'Escape') {
-      onOpenChange(false);
-    }
-    if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
-      event.preventDefault();
-      onOpenChange(!open);
-    }
-  };
-
   useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        onOpenChange(false);
+      }
+      if ((event.metaKey || event.ctrlKey) && event.key === 'k') {
+        event.preventDefault();
+        onOpenChange(!open);
+      }
+    };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [open, onOpenChange]);
 
   return (
     <DialogPrimitive.Root open={open} onOpenChange={onOpenChange}>
-      <DialogOverlay className="fixed inset-0 bg-black/50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
-      <DialogContent className="fixed left-[50%] top-[15%] z-50 w-[calc(100%-2rem)] max-w-2xl translate-x-[-50%] rounded-xl border border-gray-700 bg-gray-900 shadow-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-top-2">
+      <DialogPrimitive.Overlay className="fixed inset-0 bg-black/50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+      <DialogPrimitive.Content className="fixed left-[50%] top-[15%] z-50 w-[calc(100%-2rem)] max-w-2xl translate-x-[-50%] rounded-xl border border-gray-700 bg-gray-900 shadow-2xl data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-top-2">
         <CommandPrimitive className="flex h-full flex-col overflow-hidden">
           <CommandInput
             className="flex h-12 w-full rounded-none border-none bg-transparent py-3 pl-10 pr-4 text-sm outline-none placeholder:text-gray-500 disabled:cursor-not-allowed disabled:opacity-50"
@@ -74,7 +68,7 @@ export function CommandPalette({ open, onOpenChange, children }: CommandProps) {
             {children}
           </CommandList>
         </CommandPrimitive>
-      </DialogContent>
+      </DialogPrimitive.Content>
     </DialogPrimitive.Root>
   );
 }

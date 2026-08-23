@@ -138,6 +138,15 @@ export interface ReturnHardwareRequest {
   condition: string;
   received_by: string;
   notes?: string;
+  // Used when condition is 'damaged' to seed the auto-created damage report
+  damage_severity?: 'minor' | 'moderate' | 'major' | 'critical';
+}
+
+export interface HardwareTimelineEvent {
+  type: 'created' | 'checked_out' | 'returned' | 'damaged' | 'status_change';
+  timestamp: string;
+  user_name: string | null;
+  details: Record<string, unknown>;
 }
 
 export interface CreateDamageReportRequest {

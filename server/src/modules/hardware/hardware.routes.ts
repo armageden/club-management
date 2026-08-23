@@ -3,7 +3,7 @@ import { hardwareController } from "./hardware.controller.js";
 import { authenticate } from "../../middleware/auth.middleware.js";
 import { requireGlobalRole } from "../../middleware/role.middleware.js";
 
-const router = Router();
+const router = Router({ mergeParams: true });
 
 // All routes require authentication
 router.use(authenticate);
@@ -11,6 +11,7 @@ router.use(authenticate);
 // Hardware Items
 router.get("/items", hardwareController.listItems);
 router.get("/items/:itemId", hardwareController.getItem);
+router.get("/items/:itemId/timeline", hardwareController.getItemTimeline);
 router.post("/items", requireGlobalRole("admin", "user"), hardwareController.createItem);
 router.put("/items/:itemId", requireGlobalRole("admin", "user"), hardwareController.updateItem);
 router.delete("/items/:itemId", requireGlobalRole("admin"), hardwareController.deleteItem);

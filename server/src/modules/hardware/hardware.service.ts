@@ -1,4 +1,5 @@
 import { hardwareRepository } from "./hardware.repository.js";
+import { authRepository } from "../auth/auth.repository.js";
 import { ConflictError, NotFoundError, ValidationError } from "../../middleware/error.middleware.js";
 import type {
   HardwareItem,
@@ -6,6 +7,7 @@ import type {
   HardwareReturn,
   HardwareDamageReport,
   HardwareAnalytics,
+  HardwareTimelineEvent,
   CreateHardwareItemRequest,
   UpdateHardwareItemRequest,
   CheckoutHardwareRequest,
@@ -124,8 +126,8 @@ export const hardwareService = {
     if (item.quantity_available <= 0) throw new ConflictError('No quantity available');
 
     // Validate borrower exists
-    // Note: In a real app, you'd check the users table
-    // For now we trust the userId is valid
+    const borrower = await authRepository.findById(data.borrower_user_id);
+    if (!borrower) throw new NotFoundError('Borrower not found');
 
     // Validate due date
     if (data.due_at) {
@@ -150,12 +152,32 @@ export const hardwareService = {
       throw new ValidationError('Invalid condition');
     }
 
-    // If damaged, we should create a damage report instead
+    // Complete the return first (restores quantity)
+    const result = await hardwareRepository.returnHardware(eventId, data);
+
+    // Per PRD: a damaged return must automatically create a damage report
     if (data.condition === 'damaged') {
-      throw new ValidationError('For damaged items, use the damage report endpoint');
+      const severity = data.damage_severity || 'moderate';
+      const validSeverities = ['minor', 'moderate', 'major', 'critical'];
+      if (!validSeverities.includes(severity)) {
+        throw new ValidationError('Invalid severity');
+      }
+      await hardwareRepository.createDamageReport(eventId, {
+        hardware_item_id: checkout.hardware_item_id,
+        checkout_id: data.checkout_id,
+        description: data.notes || 'Item returned in damaged condition',
+        severity,
+      }, data.received_by);
     }
 
-    return hardwareRepository.returnHardware(eventId, data);
+    return result;
+  },
+
+  // Timeline / history
+  async getItemTimeline(eventId: string, itemId: string): Promise<HardwareTimelineEvent[]> {
+    const item = await hardwareRepository.getById(eventId, itemId);
+    if (!item) throw new NotFoundError('Hardware item not found');
+    return hardwareRepository.getItemTimeline(eventId, itemId);
   },
 
   // Damage Reports

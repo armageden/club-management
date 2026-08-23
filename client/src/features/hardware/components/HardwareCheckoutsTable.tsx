@@ -1,19 +1,28 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import type { ColumnDef } from '@tanstack/react-table';
 import { DataTable, createColumns } from '@/components/tables/DataTable';
 import { Button } from '@/components/ui/Button';
-import { Badge, StatusBadge } from '@/components/ui/Badge';
+import { StatusBadge } from '@/components/ui/Badge';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { Skeleton, SkeletonTable } from '@/components/ui/Skeleton';
+import { SkeletonTable } from '@/components/ui/Skeleton';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/DropdownMenu';
-import { Toaster, toast } from '@/components/ui/Toast';
-import { hardwareApi, hardwareQueryKeys, hardwareMutationKeys } from '../api';
+import { hardwareApi, hardwareQueryKeys } from '../api';
 import type { HardwareCheckout } from '@/types/api';
 import { formatRelativeTime, formatDateTime } from '@/lib/formatters';
 import { cn } from '@/lib/utils';
-import { RotateCcw, AlertTriangle, Calendar, User, Package, MoreVertical } from 'lucide-react';
+import { RotateCcw, AlertTriangle, Calendar, Package, MoreVertical } from 'lucide-react';
+
+// API may enrich checkout rows with these display fields
+type EnrichedCheckout = HardwareCheckout & {
+  hardware_item_name?: string;
+  hardware_item_category?: string;
+  borrower_name?: string;
+  borrower_email?: string;
+  checked_out_by_name?: string;
+};
 
 interface HardwareCheckoutsTableProps {
   eventId: string;
@@ -22,7 +31,6 @@ interface HardwareCheckoutsTableProps {
 }
 
 export function HardwareCheckoutsTable({ eventId, onReturn, onDamageReport }: HardwareCheckoutsTableProps) {
-  const queryClient = useQueryClient();
   const [filters, setFilters] = useState({
     status: '',
     search: '',
@@ -40,7 +48,7 @@ export function HardwareCheckoutsTable({ eventId, onReturn, onDamageReport }: Ha
 
   const filteredData = useMemo(() => {
     if (!data?.data) return [];
-    return data.data.filter((checkout: HardwareCheckout) => {
+    return (data.data as EnrichedCheckout[]).filter((checkout) => {
       if (filters.status && checkout.status !== filters.status) return false;
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
@@ -53,7 +61,7 @@ export function HardwareCheckoutsTable({ eventId, onReturn, onDamageReport }: Ha
   }, [data, filters]);
 
   const columns = useMemo(() => {
-    const columnHelper = createColumns<HardwareCheckout>();
+    const columnHelper = createColumns<EnrichedCheckout>();
     return [
       columnHelper.accessor('hardware_item_name', {
         header: 'Item',
@@ -93,13 +101,14 @@ export function HardwareCheckoutsTable({ eventId, onReturn, onDamageReport }: Ha
       columnHelper.accessor('due_at', {
         header: 'Due',
         cell: (info) => {
-          if (!info.getValue()) return <span className="text-gray-500 text-xs">No due date</span>;
-          const isOverdue = new Date(info.getValue()) < new Date() && info.row.original.status === 'active';
+          const dueAt = info.getValue();
+          if (!dueAt) return <span className="text-gray-500 text-xs">No due date</span>;
+          const isOverdue = new Date(dueAt) < new Date() && info.row.original.status === 'active';
           return (
             <div className="flex items-center gap-1">
               <Calendar className={cn('h-3.5 w-3.5', isOverdue ? 'text-red-400' : 'text-gray-500')} />
               <span className={cn('text-sm', isOverdue ? 'text-red-400' : 'text-white')}>
-                {formatDateTime(info.getValue())}
+                {formatDateTime(dueAt)}
               </span>
               {isOverdue && <span className="text-xs text-red-400">(OVERDUE)</span>}
             </div>
@@ -211,17 +220,11 @@ export function HardwareCheckoutsTable({ eventId, onReturn, onDamageReport }: Ha
           </div>
         ) : (
           <DataTable
-            data={filteredData}
-            columns={columns}
+            data={filteredData as unknown as Record<string, unknown>[]}
+            columns={columns as unknown as ColumnDef<Record<string, unknown>>[]}
             pagination={true}
             pageSize={filters.pageSize}
             pageSizeOptions={[10, 25, 50, 100]}
-            onPaginationChange={(pagination) => setFilters(prev => ({ ...prev, page: pagination.pageIndex + 1, pageSize: pagination.pageSize }))}
-            onSortingChange={(sorting) => setFilters(prev => ({
-              ...prev,
-              sortBy: sorting[0]?.id || 'checked_out_at',
-              sortOrder: sorting[0]?.desc ? 'desc' : 'asc',
-            }))}
             emptyMessage="No checkouts found"
           />
         )}

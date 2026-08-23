@@ -1,4 +1,4 @@
-import { forwardRef, type HTMLAttributes } from 'react';
+import { Children, cloneElement, forwardRef, isValidElement, useState, type HTMLAttributes, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
 interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
@@ -23,7 +23,7 @@ const shapeStyles = {
 
 export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
   ({ className, src, alt, fallback, size = 'md', shape = 'circle', ...props }, ref) => {
-    const [imageError, setImageError] = React.useState(false);
+    const [imageError, setImageError] = useState(false);
 
     if (src && !imageError) {
       return (
@@ -75,18 +75,18 @@ Avatar.displayName = 'Avatar';
 interface AvatarGroupProps extends HTMLAttributes<HTMLDivElement> {
   max?: number;
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  children: React.ReactNode;
+  children: ReactNode;
 }
 
 export function AvatarGroup({ className, max = 5, size = 'md', children, ...props }: AvatarGroupProps) {
-  const kids = React.Children.toArray(children).slice(0, max);
-  const overflow = React.Children.count(children) - max;
+  const kids = Children.toArray(children).slice(0, max);
+  const overflow = Children.count(children) - max;
 
   return (
     <div className={cn('flex -space-x-2', className)} {...props}>
       {kids.map((child, index) => (
         <div key={index} className="relative z-[auto]">
-          {React.isValidElement(child) ? React.cloneElement(child, { size }) : child}
+          {isValidElement(child) ? cloneElement(child, { size }) : child}
         </div>
       ))}
       {overflow > 0 && (

@@ -10,22 +10,28 @@ const Table = forwardRef<HTMLTableElement, TableProps>(({ className, ...props },
 ));
 Table.displayName = 'Table';
 
-const TableHeader = forwardRef<HTMLTableSectionElement, TableProps>(({ className, ...props }, ref) => (
+interface TableSectionProps extends HTMLAttributes<HTMLTableSectionElement> {}
+
+const TableHeader = forwardRef<HTMLTableSectionElement, TableSectionProps>(({ className, ...props }, ref) => (
   <thead ref={ref} className={cn('[&_tr]:border-b border-gray-800', className)} {...props} />
 ));
 TableHeader.displayName = 'TableHeader';
 
-const TableBody = forwardRef<HTMLTableSectionElement, TableProps>(({ className, ...props }, ref) => (
+const TableBody = forwardRef<HTMLTableSectionElement, TableSectionProps>(({ className, ...props }, ref) => (
   <tbody ref={ref} className={cn('[&_tr:last-child]:border-0', className)} {...props} />
 ));
 TableBody.displayName = 'TableBody';
 
-const TableFooter = forwardRef<HTMLTableSectionElement, TableProps>(({ className, ...props }, ref) => (
+const TableFooter = forwardRef<HTMLTableSectionElement, TableSectionProps>(({ className, ...props }, ref) => (
   <tfoot ref={ref} className={cn('border-t border-gray-800 bg-gray-950/50 font-medium [&>tr]:last:border-b-0', className)} {...props} />
 ));
 TableFooter.displayName = 'TableFooter';
 
-const TableRow = forwardRef<HTMLTableRowElement, HTMLAttributes<HTMLTableRowElement>>(({ className, selected, ...props }, ref) => (
+interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
+  selected?: boolean;
+}
+
+const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(({ className, selected, ...props }, ref) => (
   <tr
     ref={ref}
     className={cn(

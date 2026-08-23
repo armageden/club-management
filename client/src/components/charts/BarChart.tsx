@@ -151,13 +151,12 @@ export const BarChart = forwardRef<HTMLDivElement, BarChartProps>(
                 dataKey={bar.key}
                 name={bar.label}
                 fill={bar.color || colors[index % colors.length]}
-                radius={bar.radius || [4, 4, 0, 0]}
+                radius={(bar.radius || [4, 4, 0, 0]) as [number, number, number, number]}
                 maxBarSize={maxBarSize}
-                barGap={barGap}
-                categoryGap={categoryGap}
+                {...({ barGap, categoryGap } as object)}
                 isAnimationActive={animate}
                 animationDuration={animate ? animationDuration : 0}
-                animationEasing="easeOutQuart"
+                animationEasing={'easeOutQuart' as unknown as 'ease-out'}
               >
                 {data.map((_, i) => (
                   <Cell key={`cell-${bar.key}-${i}`} fill={bar.color || colors[index % colors.length]} />

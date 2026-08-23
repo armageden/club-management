@@ -14,15 +14,15 @@ import {
   type ColumnFiltersState,
   type PaginationState,
   type Row,
-  type Table,
+  type ExpandedState,
 } from '@tanstack/react-table';
-import { useState, useMemo, type ReactNode } from 'react';
+import { useState, useMemo, useId, type ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronUp, ChevronDown, ChevronLeft, ChevronRight, Search, FilterX } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { Select, SelectOption } from '@/components/ui/Input';
-import { Checkbox } from '@/components/ui/Checkbox';
+import { Select } from "@/components/ui/Input";
+import { forwardRef, useEffect } from 'react';
 
 interface DataTableProps<TData> {
   data: TData[];
@@ -48,7 +48,6 @@ export function DataTable<TData extends Record<string, unknown>>({
   data,
   columns,
   searchable = true,
-  searchKeys = [],
   filterable = true,
   sortable = true,
   pagination = true,
@@ -71,7 +70,7 @@ export function DataTable<TData extends Record<string, unknown>>({
     pageSize,
   });
   const [rowSelection, setRowSelection] = useState<Record<string, boolean>>({});
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const [expanded, setExpanded] = useState<ExpandedState>({});
 
   const getRowId = useMemo(() => {
     if (typeof rowKey === 'function') return rowKey;
@@ -114,8 +113,7 @@ export function DataTable<TData extends Record<string, unknown>>({
     if (onRowSelect) onRowSelect(selectedRows);
   }, [selectedRows, onRowSelect]);
 
-  const handleSelectAll = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const checked = event.target.checked;
+  const handleSelectAll = (checked: boolean) => {
     if (checked) {
       table.getFilteredSelectedRowModel().rows.forEach(row => {
         setRowSelection(prev => ({ ...prev, [getRowId(row.original)]: true }));
@@ -195,7 +193,7 @@ export function DataTable<TData extends Record<string, unknown>>({
               <label className="text-sm text-gray-400">Rows per page:</label>
               <Select
                 value={paginationState.pageSize}
-                onValueChange={(v) => setPaginationState(prev => ({ ...prev, pageSize: Number(v), pageIndex: 0 }))}
+                onChange={(e) => setPaginationState(prev => ({ ...prev, pageSize: Number(e.target.value), pageIndex: 0 }))}
                 options={pageSizeOptions.map(n => ({ value: String(n), label: String(n) }))}
                 className="w-[100px]"
               />
@@ -226,7 +224,7 @@ export function DataTable<TData extends Record<string, unknown>>({
                     className={cn(
                       'p-4',
                       header.column.getCanSort() && 'cursor-pointer select-none hover:bg-gray-800',
-                      header.getIsSorted() && 'bg-gray-800'
+                      header.column.getIsSorted() && 'bg-gray-800'
                     )}
                     onClick={header.column.getToggleSortingHandler()}
                     style={{ width: header.getSize() }}
@@ -235,17 +233,17 @@ export function DataTable<TData extends Record<string, unknown>>({
                       {flexRender(header.column.columnDef.header, header.getContext())}
                       {header.column.getCanSort() && (
                         <span className="inline-flex">
-                          {header.getIsSorted() === 'asc' ? <ChevronUp className="h-4 w-4" /> : header.getIsSorted() === 'desc' ? <ChevronDown className="h-4 w-4" /> : <ChevronDown className="h-4 w-4 opacity-30" />}
+                          {header.column.getIsSorted() === 'asc' ? <ChevronUp className="h-4 w-4" /> : header.column.getIsSorted() === 'desc' ? <ChevronDown className="h-4 w-4" /> : <ChevronDown className="h-4 w-4 opacity-30" />}
                         </span>
                       )}
                     </div>
                     {header.column.getCanFilter() && filterable && (
                       <div className="mt-2">
-                        {header.column.filterFn === 'includesString' && (
+                        {header.column.columnDef.filterFn === 'includesString' && (
                           <Input
                             placeholder="Filter..."
-                            value={(header.getFilterValue() as string) || ''}
-                            onChange={(e) => header.setFilterValue(e.target.value)}
+                            value={(header.column.getFilterValue() as string) || ''}
+                            onChange={(e) => header.column.setFilterValue(e.target.value)}
                             className="text-xs h-8"
                           />
                         )}
@@ -342,23 +340,29 @@ export function createColumns<TData>() {
 }
 
 // Checkbox component (simple version)
-import { forwardRef } from 'react';
-
-interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface CheckboxProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
   label?: string;
+  indeterminate?: boolean;
+  onCheckedChange?: (checked: boolean) => void;
 }
 
-const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
-  ({ className, label, id, ...props }, ref) => {
-    const checkboxId = id || `checkbox-${Math.random().toString(36).slice(2, 9)}`;
+export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
+  ({ className, label, id, onCheckedChange, indeterminate, ...props }, ref) => {
+    const generatedId = useId();
+    const checkboxId = id || generatedId;
 
     return (
       <div className="flex items-center gap-2">
         <input
-          ref={ref}
+          ref={(el) => {
+            if (el) el.indeterminate = !!indeterminate;
+            if (typeof ref === 'function') ref(el);
+            else if (ref) ref.current = el;
+          }}
           type="checkbox"
           id={checkboxId}
-          className="h-4 w-4 rounded border-gray-700 bg-gray-800 text-indigo-500 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-950"
+          className={cn('h-4 w-4 rounded border-gray-700 bg-gray-800 text-indigo-500 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-950', className)}
+          onChange={(e) => onCheckedChange?.(e.target.checked)}
           {...props}
         />
         {label && <label htmlFor={checkboxId} className="text-sm text-gray-300">{label}</label>}
@@ -368,8 +372,3 @@ const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 );
 
 Checkbox.displayName = 'Checkbox';
-
-export { Checkbox };
-
-// Need to import useEffect
-import { useEffect } from 'react';

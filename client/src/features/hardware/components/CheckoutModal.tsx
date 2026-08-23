@@ -8,13 +8,10 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Input';
 import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from '@/components/ui/Dialog';
-import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/Card';
+import { Card, CardContent } from '@/components/ui/Card';
 import { Badge, StatusBadge } from '@/components/ui/Badge';
-import { hardwareApi } from '../api';
 import type { HardwareItem, User } from '@/types/api';
-import { cn } from '@/lib/utils';
-import { formatRelativeTime } from '@/lib/formatters';
-import { Package, User, Calendar, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Package } from 'lucide-react';
 
 const checkoutSchema = z.object({
   hardware_item_id: z.string().uuid(),
@@ -28,7 +25,7 @@ type CheckoutFormData = z.infer<typeof checkoutSchema>;
 interface CheckoutModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  item: HardwareItem;
+  item: HardwareItem | null;
   participants: User[];
   onSubmit: (data: CheckoutFormData) => Promise<void>;
   isLoading?: boolean;
@@ -41,13 +38,11 @@ export function CheckoutModal({ open, onOpenChange, item, participants, onSubmit
     register,
     handleSubmit,
     reset,
-    setValue,
-    watch,
     formState: { errors },
   } = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
-      hardware_item_id: item.id,
+      hardware_item_id: item?.id ?? '',
       borrower_user_id: '',
       due_at: null,
       notes: '',
@@ -56,7 +51,7 @@ export function CheckoutModal({ open, onOpenChange, item, participants, onSubmit
 
   const handleClose = () => {
     onOpenChange(false);
-    reset({ hardware_item_id: item.id, borrower_user_id: '', due_at: null, notes: '' });
+    reset({ hardware_item_id: item?.id ?? '', borrower_user_id: '', due_at: null, notes: '' });
     setDueDate(null);
   };
 
@@ -68,10 +63,12 @@ export function CheckoutModal({ open, onOpenChange, item, participants, onSubmit
       };
       await onSubmit(submitData);
       handleClose();
-    } catch (error) {
+    } catch {
       // Error handled by mutation
     }
   };
+
+  if (!item) return null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

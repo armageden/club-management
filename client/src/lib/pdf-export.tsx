@@ -1,6 +1,6 @@
 'use client';
 
-import { Document, Page, Text, View, StyleSheet, Font, FontProvider } from '@react-pdf/renderer';
+import { Document, Page, Text, View, StyleSheet, Font } from '@react-pdf/renderer';
 import { format } from 'date-fns';
 
 // Register fonts (using built-in Helvetica for now)
@@ -116,7 +116,7 @@ interface PDFExportOptions {
   filename?: string;
 }
 
-export function generatePDF(content: React.ReactElement, options: PDFExportOptions) {
+export function generatePDF(_content: React.ReactElement, _options: PDFExportOptions) {
   // This function would be called with a custom document component
   // For now, we provide template components below
 }

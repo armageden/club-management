@@ -7,7 +7,7 @@ import { TopBar } from './TopBar';
 import { cn } from '@/lib/utils';
 
 export function Shell() {
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [, setSidebarOpen] = useState(false);
 
   return (
     <div className="min-h-screen bg-gray-950 text-white">

@@ -1,4 +1,4 @@
-import { forwardRef, type InputHTMLAttributes, type TextareaHTMLAttributes } from 'react';
+import { forwardRef, useId, type InputHTMLAttributes, type TextareaHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
 export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -9,7 +9,8 @@ export interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, error, helperText, id, ...props }, ref) => {
-    const inputId = id || `input-${Math.random().toString(36).slice(2, 9)}`;
+    const generatedId = useId();
+    const inputId = id || generatedId;
     const errorId = `${inputId}-error`;
     const helperId = `${inputId}-helper`;
 
@@ -59,7 +60,8 @@ export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElemen
 
 const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
   ({ className, label, error, helperText, id, ...props }, ref) => {
-    const textareaId = id || `textarea-${Math.random().toString(36).slice(2, 9)}`;
+    const generatedId = useId();
+    const textareaId = id || generatedId;
     const errorId = `${textareaId}-error`;
     const helperId = `${textareaId}-helper`;
 
@@ -117,7 +119,8 @@ export interface SelectProps extends Omit<React.SelectHTMLAttributes<HTMLSelectE
 
 const Select = forwardRef<HTMLSelectElement, SelectProps>(
   ({ className, label, error, helperText, options, placeholder, id, ...props }, ref) => {
-    const selectId = id || `select-${Math.random().toString(36).slice(2, 9)}`;
+    const generatedId = useId();
+    const selectId = id || generatedId;
     const errorId = `${selectId}-error`;
     const helperId = `${selectId}-helper`;
 

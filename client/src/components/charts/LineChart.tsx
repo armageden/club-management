@@ -11,7 +11,7 @@ import {
   Legend,
 } from 'recharts';
 import { cn } from '@/lib/utils';
-import { forwardRef, type ReactNode } from 'react';
+import { forwardRef } from 'react';
 
 interface LineChartDataPoint {
   [key: string]: string | number | Date;
@@ -48,8 +48,8 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
       data,
       xKey,
       lines,
-      xAxisLabel,
-      yAxisLabel,
+      xAxisLabel: _xAxisLabel,
+      yAxisLabel: _yAxisLabel,
       height = 300,
       showGrid = true,
       showLegend = false,
@@ -132,7 +132,7 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                 align="right"
                 verticalAlign="middle"
                 iconType="line"
-                iconHeight={3}
+                {...({ iconHeight: 3 } as object)}
                 wrapperStyle={{ paddingTop: 20 }}
               />
             )}
@@ -147,7 +147,7 @@ export const LineChart = forwardRef<HTMLDivElement, LineChartProps>(
                 dot={line.dot ?? false}
                 activeDot={{ r: 6, strokeWidth: 2 }}
                 animationDuration={animate ? animationDuration : 0}
-                animationEasing="easeOutQuart"
+                animationEasing={'easeOutQuart' as unknown as 'ease-out'}
                 isAnimationActive={animate}
               />
             ))}

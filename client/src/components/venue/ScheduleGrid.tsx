@@ -2,7 +2,6 @@
 
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/Button';
 import { Tooltip } from '@/components/ui/Tooltip';
 import type { VenueLocation, VenueAssignment } from '@/types/api';
 import { format, addMinutes, startOfDay, isWithinInterval } from 'date-fns';

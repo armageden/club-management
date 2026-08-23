@@ -7,12 +7,16 @@ import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Input';
 import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from '@/components/ui/Dialog';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { Badge, StatusBadge } from '@/components/ui/Badge';
-import { hardwareApi } from '../api';
+import { Card, CardContent } from '@/components/ui/Card';
+import { StatusBadge } from '@/components/ui/Badge';
 import type { HardwareCheckout } from '../types';
-import { cn } from '@/lib/utils';
-import { Package, RotateCcw, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Package, AlertTriangle } from 'lucide-react';
+
+// API may enrich checkout rows with these display fields
+type EnrichedCheckout = HardwareCheckout & {
+  hardware_item_name?: string;
+  borrower_name?: string;
+};
 
 const returnSchema = z.object({
   checkout_id: z.string().uuid(),
@@ -26,7 +30,7 @@ type ReturnFormData = z.infer<typeof returnSchema>;
 interface ReturnModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  checkout: HardwareCheckout;
+  checkout: EnrichedCheckout | null;
   organizers: Array<{ id: string; full_name: string; email: string }>;
   onSubmit: (data: ReturnFormData) => Promise<void>;
   isLoading?: boolean;
@@ -38,12 +42,11 @@ export function ReturnModal({ open, onOpenChange, checkout, organizers, onSubmit
     handleSubmit,
     reset,
     watch,
-    setValue,
     formState: { errors },
   } = useForm<ReturnFormData>({
     resolver: zodResolver(returnSchema),
     defaultValues: {
-      checkout_id: checkout.id,
+      checkout_id: checkout?.id ?? '',
       condition: 'good',
       received_by: '',
       notes: '',
@@ -55,17 +58,19 @@ export function ReturnModal({ open, onOpenChange, checkout, organizers, onSubmit
 
   const handleClose = () => {
     onOpenChange(false);
-    reset({ checkout_id: checkout.id, condition: 'good', received_by: '', notes: '' });
+    reset({ checkout_id: checkout?.id ?? '', condition: 'good', received_by: '', notes: '' });
   };
 
   const handleFormSubmit = async (data: ReturnFormData) => {
     try {
       await onSubmit(data);
       handleClose();
-    } catch (error) {
+    } catch {
       // Error handled by mutation
     }
   };
+
+  if (!checkout) return null;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

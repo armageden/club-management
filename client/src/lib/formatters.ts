@@ -1,5 +1,4 @@
-import { format, formatDistanceToNow, formatRelative, isToday, isYesterday, isThisWeek, isThisYear, parseISO } from 'date-fns';
-import { cn } from './utils';
+import { format, formatDistanceToNow, isToday, isYesterday, isThisWeek, isThisYear, parseISO } from 'date-fns';
 
 /**
  * Format a number compactly (1.2k, 3.4M, etc.)
@@ -63,7 +62,7 @@ export function formatDuration(ms: number): string {
  */
 export function formatDate(date: Date | string, options?: Intl.DateTimeFormatOptions): string {
   const d = typeof date === 'string' ? parseISO(date) : date;
-  return format(d, 'MMM d, yyyy', { ...options });
+  return format(d, 'MMM d, yyyy', ({ ...options }) as Parameters<typeof format>[2]);
 }
 
 /**

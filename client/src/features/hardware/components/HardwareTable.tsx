@@ -1,50 +1,31 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import type { ColumnDef } from '@tanstack/react-table';
 import { DataTable, createColumns } from '@/components/tables/DataTable';
 import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
-import { Select, SelectOption } from '@/components/ui/Input';
+import { Select } from "@/components/ui/Input";
 import { Badge, StatusBadge } from '@/components/ui/Badge';
-import { Dialog, DialogTriggerButton, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogCloseButton } from '@/components/ui/Dialog';
+import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription, DialogCloseButton } from '@/components/ui/Dialog';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { Skeleton, SkeletonTable } from '@/components/ui/Skeleton';
-import { Tooltip } from '@/components/ui/Tooltip';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/DropdownMenu';
-import { Toaster, toast } from '@/components/ui/Toast';
-import { hardwareApi, hardwareQueryKeys, hardwareMutationKeys } from './api';
-import type { HardwareItem, HardwareItemFormData, CreateHardwareItemRequest, UpdateHardwareItemRequest } from './types';
-import { HARDWARE_CATEGORIES, HARDWARE_CONDITIONS, HARDWARE_STATUSES } from './types';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { Plus, Search, Filter, MoreVertical, Edit, Trash2, Package, AlertTriangle, Clock, Eye } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { formatRelativeTime } from '@/lib/formatters';
-
-const createItemSchema = z.object({
-  name: z.string().min(1, 'Name is required').max(255),
-  category: z.string().optional(),
-  model: z.string().optional(),
-  serial_number: z.string().optional(),
-  quantity_available: z.coerce.number().int().min(0, 'Quantity must be >= 0').default(1),
-  condition: z.enum(['new', 'good', 'fair', 'damaged', 'retired']).default('good'),
-  status: z.enum(['available', 'checked_out', 'damaged', 'lost', 'retired']).default('available'),
-  location: z.string().optional(),
-  notes: z.string().optional(),
-});
-
-const updateItemSchema = createItemSchema.partial();
+import { SkeletonTable } from '@/components/ui/Skeleton';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/DropdownMenu';
+import { toast } from '@/components/ui/Toast';
+import { hardwareApi, hardwareQueryKeys, hardwareMutationKeys } from '../api';
+import type { HardwareItem, CreateHardwareItemRequest } from '../types';
+import { HARDWARE_CATEGORIES, HARDWARE_CONDITIONS, HARDWARE_STATUSES } from '../types';
+import { Plus, Search, MoreVertical, Edit, Trash2, History } from 'lucide-react';
 
 interface HardwareTableProps {
   eventId: string;
   onEdit?: (item: HardwareItem) => void;
+  onViewHistory?: (item: HardwareItem) => void;
   canEdit?: boolean;
   canDelete?: boolean;
 }
 
-export function HardwareTable({ eventId, onEdit, canEdit = true, canDelete = true }: HardwareTableProps) {
+export function HardwareTable({ eventId, onEdit, onViewHistory, canEdit = true, canDelete = true }: HardwareTableProps) {
   const queryClient = useQueryClient();
   const [filters, setFilters] = useState({
     status: '',
@@ -57,7 +38,7 @@ export function HardwareTable({ eventId, onEdit, canEdit = true, canDelete = tru
   });
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<HardwareItem | null>(null);
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: hardwareQueryKeys.items(eventId, filters),
     queryFn: () => hardwareApi.getItems(eventId, filters),
     placeholderData: (prev) => prev,
@@ -73,17 +54,6 @@ export function HardwareTable({ eventId, onEdit, canEdit = true, canDelete = tru
     onError: (error: Error) => toast.error(error.message),
   });
 
-  const updateMutation = useMutation({
-    mutationKey: hardwareMutationKeys.updateItem(),
-    mutationFn: ({ itemId, data }: { itemId: string; data: UpdateHardwareItemRequest }) =>
-      hardwareApi.updateItem(eventId, itemId, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: hardwareQueryKeys.items(eventId) });
-      toast.success('Hardware item updated');
-    },
-    onError: (error: Error) => toast.error(error.message),
-  });
-
   const deleteMutation = useMutation({
     mutationKey: hardwareMutationKeys.deleteItem(),
     mutationFn: (itemId: string) => hardwareApi.deleteItem(eventId, itemId),
@@ -95,9 +65,9 @@ export function HardwareTable({ eventId, onEdit, canEdit = true, canDelete = tru
     onError: (error: Error) => toast.error(error.message),
   });
 
-  const handleEdit = (item: HardwareItem) => {
+  const handleEdit = useCallback((item: HardwareItem) => {
     onEdit?.(item);
-  };
+  }, [onEdit]);
 
   const columns = useMemo(() => {
     const columnHelper = createColumns<HardwareItem>();
@@ -173,6 +143,12 @@ export function HardwareTable({ eventId, onEdit, canEdit = true, canDelete = tru
                 Edit
               </DropdownMenuItem>
               <DropdownMenuItem
+                onClick={() => onViewHistory?.(info.row.original)}
+              >
+                <History className="h-4 w-4 mr-2" />
+                View History
+              </DropdownMenuItem>
+              <DropdownMenuItem
                 onClick={() => setDeleteDialogOpen(info.row.original)}
                 disabled={!canDelete}
                 className="text-red-400 focus:text-red-300"
@@ -185,7 +161,7 @@ export function HardwareTable({ eventId, onEdit, canEdit = true, canDelete = tru
         ),
       }),
     ];
-  }, [canEdit, canDelete, handleEdit]);
+  }, [canEdit, canDelete, handleEdit, onViewHistory]);
 
   const handleDeleteConfirm = () => {
     if (deleteDialogOpen) {
@@ -216,14 +192,14 @@ export function HardwareTable({ eventId, onEdit, canEdit = true, canDelete = tru
           </div>
           <Select
             value={filters.status}
-            onValueChange={(v) => setFilters(prev => ({ ...prev, status: v, page: 1 }))}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilters(prev => ({ ...prev, status: e.target.value, page: 1 }))}
             options={[{ value: '', label: 'All Status' }, ...HARDWARE_STATUSES.map(s => ({ value: s.value, label: s.label }))]}
             placeholder="Status"
             className="w-[160px]"
           />
           <Select
             value={filters.category}
-            onValueChange={(v) => setFilters(prev => ({ ...prev, category: v, page: 1 }))}
+            onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilters(prev => ({ ...prev, category: e.target.value, page: 1 }))}
             options={[{ value: '', label: 'All Categories' }, ...HARDWARE_CATEGORIES.map(c => ({ value: c, label: c }))]}
             placeholder="Category"
             className="w-[160px]"
@@ -235,17 +211,11 @@ export function HardwareTable({ eventId, onEdit, canEdit = true, canDelete = tru
           <SkeletonTable rows={5} columns={8} />
         ) : data ? (
           <DataTable
-            data={data.data}
-            columns={columns}
+            data={data.data as unknown as Record<string, unknown>[]}
+            columns={columns as unknown as ColumnDef<Record<string, unknown>>[]}
             pagination={true}
             pageSize={filters.pageSize}
             pageSizeOptions={[10, 25, 50, 100]}
-            onPaginationChange={(pagination) => setFilters(prev => ({ ...prev, page: pagination.pageIndex + 1, pageSize: pagination.pageSize }))}
-            onSortingChange={(sorting) => setFilters(prev => ({
-              ...prev,
-              sortBy: sorting[0]?.id || 'created_at',
-              sortOrder: sorting[0]?.desc ? 'desc' : 'asc',
-            }))}
             emptyMessage="No hardware items found"
           />
         ) : (

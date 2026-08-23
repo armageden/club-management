@@ -38,6 +38,7 @@ const returnSchema = z.object({
   condition: z.enum(['new', 'good', 'fair', 'damaged']),
   received_by: z.string().uuid(),
   notes: z.string().optional(),
+  damage_severity: z.enum(['minor', 'moderate', 'major', 'critical']).optional(),
 });
 
 const damageReportSchema = z.object({
@@ -241,6 +242,20 @@ export const hardwareController = {
 
       const report = await hardwareService.resolveDamageReport(eventId, reportId, req.user.id);
       res.json({ success: true, data: report });
+    } catch (err) {
+      next(err);
+    }
+  },
+
+  // Item timeline
+  async getItemTimeline(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      const eventId = getParam(req.params, 'eventId');
+      const itemId = getParam(req.params, 'itemId');
+      if (!eventId || !itemId) throw new ValidationError('Event ID and Item ID required');
+
+      const timeline = await hardwareService.getItemTimeline(eventId, itemId);
+      res.json({ success: true, data: timeline });
     } catch (err) {
       next(err);
     }

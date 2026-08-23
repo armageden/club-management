@@ -2,18 +2,24 @@
 
 import { useState, useMemo } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import type { ColumnDef } from '@tanstack/react-table';
 import { DataTable, createColumns } from '@/components/tables/DataTable';
 import { Button } from '@/components/ui/Button';
 import { Badge, StatusBadge } from '@/components/ui/Badge';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { Skeleton, SkeletonTable } from '@/components/ui/Skeleton';
+import { SkeletonTable } from '@/components/ui/Skeleton';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/DropdownMenu';
-import { Toaster, toast } from '@/components/ui/Toast';
+import { toast } from '@/components/ui/Toast';
 import { hardwareApi, hardwareQueryKeys, hardwareMutationKeys } from '../api';
 import type { HardwareDamageReport } from '@/types/api';
 import { formatRelativeTime, formatDateTime } from '@/lib/formatters';
-import { cn } from '@/lib/utils';
 import { AlertTriangle, CheckCircle, MoreVertical, RotateCcw } from 'lucide-react';
+
+// API may enrich damage report rows with these display fields
+type EnrichedDamageReport = HardwareDamageReport & {
+  hardware_item_name?: string;
+  reported_by_name?: string;
+};
 
 interface DamageReportsTableProps {
   eventId: string;
@@ -48,10 +54,11 @@ export function DamageReportsTable({ eventId, onResolve }: DamageReportsTablePro
     },
     onError: (error: Error) => toast.error(error.message),
   });
+  const { mutate: resolveReport, isPending: isResolving } = resolveMutation;
 
   const filteredData = useMemo(() => {
     if (!data?.data) return [];
-    return data.data.filter((report: HardwareDamageReport) => {
+    return (data.data as EnrichedDamageReport[]).filter((report) => {
       if (filters.status && report.status !== filters.status) return false;
       if (filters.search) {
         const searchLower = filters.search.toLowerCase();
@@ -65,7 +72,7 @@ export function DamageReportsTable({ eventId, onResolve }: DamageReportsTablePro
   }, [data, filters]);
 
   const columns = useMemo(() => {
-    const columnHelper = createColumns<HardwareDamageReport>();
+    const columnHelper = createColumns<EnrichedDamageReport>();
     return [
       columnHelper.accessor('hardware_item_name', {
         header: 'Item',
@@ -85,7 +92,7 @@ export function DamageReportsTable({ eventId, onResolve }: DamageReportsTablePro
       columnHelper.accessor('severity', {
         header: 'Severity',
         cell: (info) => {
-          const severityColors: Record<string, string> = {
+          const severityColors: Record<string, 'info' | 'warning' | 'danger' | 'neutral'> = {
             minor: 'info',
             moderate: 'warning',
             major: 'danger',
@@ -114,11 +121,12 @@ export function DamageReportsTable({ eventId, onResolve }: DamageReportsTablePro
       columnHelper.accessor('resolved_at', {
         header: 'Resolved',
         cell: (info) => {
-          if (!info.getValue()) return <span className="text-gray-500 text-xs">—</span>;
+          const resolvedAt = info.getValue();
+          if (!resolvedAt) return <span className="text-gray-500 text-xs">—</span>;
           return (
             <div className="flex items-center gap-1">
               <CheckCircle className="h-3.5 w-3.5 text-emerald-400" />
-              <span className="text-sm text-emerald-400">{formatDateTime(info.getValue())}</span>
+              <span className="text-sm text-emerald-400">{formatDateTime(resolvedAt)}</span>
             </div>
           );
         },
@@ -142,9 +150,9 @@ export function DamageReportsTable({ eventId, onResolve }: DamageReportsTablePro
                   <DropdownMenuItem
                     onClick={() => {
                       onResolve(report.id);
-                      resolveMutation.mutate(report.id);
+                      resolveReport(report.id);
                     }}
-                    disabled={resolveMutation.isPending}
+                    disabled={isResolving}
                     className="flex items-center gap-2"
                   >
                     <CheckCircle className="h-4 w-4" />
@@ -164,7 +172,7 @@ export function DamageReportsTable({ eventId, onResolve }: DamageReportsTablePro
         },
       }),
     ];
-  }, [onResolve, resolveMutation.isPending]);
+  }, [onResolve, resolveReport, isResolving]);
 
   if (isLoading) {
     return (
@@ -216,17 +224,11 @@ export function DamageReportsTable({ eventId, onResolve }: DamageReportsTablePro
           </div>
         ) : (
           <DataTable
-            data={filteredData}
-            columns={columns}
+            data={filteredData as unknown as Record<string, unknown>[]}
+            columns={columns as unknown as ColumnDef<Record<string, unknown>>[]}
             pagination={true}
             pageSize={filters.pageSize}
             pageSizeOptions={[10, 25, 50, 100]}
-            onPaginationChange={(pagination) => setFilters(prev => ({ ...prev, page: pagination.pageIndex + 1, pageSize: pagination.pageSize }))}
-            onSortingChange={(sorting) => setFilters(prev => ({
-              ...prev,
-              sortBy: sorting[0]?.id || 'created_at',
-              sortOrder: sorting[0]?.desc ? 'desc' : 'asc',
-            }))}
             emptyMessage="No damage reports found"
           />
         )}

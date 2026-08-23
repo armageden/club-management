@@ -1,6 +1,5 @@
 'use client';
 
-import { Line, XAxis, YAxis, CartesianGrid, ResponsiveContainer } from 'recharts';
 import { cn } from '@/lib/utils';
 import { forwardRef } from 'react';
 

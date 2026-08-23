@@ -4,14 +4,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Button } from '@/components/ui/Button';
-import { Input } from '@/components/ui/Input';
 import { Select } from '@/components/ui/Input';
 import { Dialog, DialogContent, DialogHeader, DialogFooter, DialogTitle, DialogDescription } from '@/components/ui/Dialog';
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
-import { Badge, StatusBadge } from '@/components/ui/Badge';
-import type { HardwareCheckout } from '../types';
+import { Card, CardContent } from '@/components/ui/Card';
 import { DAMAGE_SEVERITIES } from '../types';
-import { cn } from '@/lib/utils';
 import { AlertTriangle, AlertCircle } from 'lucide-react';
 
 const damageReportSchema = z.object({
@@ -58,7 +54,7 @@ export function DamageReportModal({ open, onOpenChange, itemId, itemName, checko
     try {
       await onSubmit(data);
       handleClose();
-    } catch (error) {
+    } catch {
       // Error handled by mutation
     }
   };

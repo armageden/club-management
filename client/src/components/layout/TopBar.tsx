@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { cn } from '@/lib/utils';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/Button';
 import { Avatar } from '@/components/ui/Avatar';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/DropdownMenu';
-import { CommandPalette, CommandGroupWrapper, CommandItemComp, CommandLabel, CommandSeparatorComp } from '@/components/ui/CommandPalette';
+import { CommandPalette, CommandGroupWrapper, CommandItemComp, CommandSeparatorComp } from '@/components/ui/CommandPalette';
 import { useAuth } from '@/app/providers';
 import { Search, Bell, Settings, LogOut, HelpCircle, Keyboard } from 'lucide-react';
 
@@ -17,7 +16,6 @@ export function TopBar({ onMenuClick }: TopBarProps) {
   const { user } = useAuth();
   const [commandOpen, setCommandOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
-  const commandRef = useRef<HTMLDivElement>(null);
 
   // Handle ⌘K / Ctrl+K globally
   useEffect(() => {
@@ -171,7 +169,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
                 <CommandItemComp
                   key={item.label}
                   onSelect={() => {
-                    if (item.href) {
+                    if ('href' in item) {
                       window.location.href = item.href;
                     }
                     setCommandOpen(false);

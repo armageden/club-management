@@ -1,9 +1,4 @@
-import {
-  Tabs as TabsPrimitive,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from '@radix-ui/react-tabs';
+import * as TabsPrimitive from '@radix-ui/react-tabs';
 import { cn } from '@/lib/utils';
 
 interface TabsProps {
@@ -20,7 +15,6 @@ export function Tabs({
   value,
   onValueChange,
   children,
-  variant = 'default',
   className,
 }: TabsProps) {
   return (
@@ -50,7 +44,7 @@ export function TabsListComp({ children, className, variant = 'default' }: TabsL
   };
 
   return (
-    <TabsList
+    <TabsPrimitive.List
       className={cn(
         variantStyles[variant],
         'data-[orientation=horizontal]:flex',
@@ -59,11 +53,11 @@ export function TabsListComp({ children, className, variant = 'default' }: TabsL
       aria-orientation="horizontal"
     >
       {children}
-    </TabsList>
+    </TabsPrimitive.List>
   );
 }
 
-interface TabsTriggerProps extends React.ComponentProps<typeof TabsTrigger> {
+interface TabsTriggerProps extends React.ComponentProps<typeof TabsPrimitive.Trigger> {
   variant?: 'default' | 'underline' | 'pills';
   disabled?: boolean;
 }
@@ -76,7 +70,7 @@ export function TabsTriggerComp({ className, variant = 'default', disabled, chil
   };
 
   return (
-    <TabsTrigger
+    <TabsPrimitive.Trigger
       className={cn(
         'inline-flex items-center justify-center whitespace-nowrap rounded-md px-3 py-1.5 text-sm font-medium transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-950 disabled:pointer-events-none disabled:opacity-50',
         variantStyles[variant],
@@ -86,17 +80,17 @@ export function TabsTriggerComp({ className, variant = 'default', disabled, chil
       {...props}
     >
       {children}
-    </TabsTrigger>
+    </TabsPrimitive.Trigger>
   );
 }
 
-interface TabsContentProps extends React.ComponentProps<typeof TabsContent> {
+interface TabsContentProps extends React.ComponentProps<typeof TabsPrimitive.Content> {
   className?: string;
 }
 
 export function TabsContentComp({ className, ...props }: TabsContentProps) {
   return (
-    <TabsContent
+    <TabsPrimitive.Content
       className={cn('mt-4 ring-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500', className)}
       {...props}
     />

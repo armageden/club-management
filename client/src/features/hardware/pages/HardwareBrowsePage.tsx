@@ -6,12 +6,12 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Badge, StatusBadge } from '@/components/ui/Badge';
 import { Tabs, TabsListComp as TabsList, TabsTriggerComp as TabsTrigger, TabsContentComp as TabsContent } from '@/components/ui/Tabs';
-import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Input';
 import { hardwareApi, hardwareQueryKeys } from '../api';
 import type { HardwareItem, HardwareCheckout } from '@/types/api';
-import { CheckoutModal } from './components/CheckoutModal';
+import { CheckoutModal } from '../components/CheckoutModal';
 import { Toaster, toast } from '@/components/ui/Toast';
-import { Package, Search, Filter, Package as PackageIcon, CheckCircle } from 'lucide-react';
+import { Package, Search, Package as PackageIcon } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { hardwareMutationKeys } from '../api';
 import { useAuth } from '@/app/providers';
@@ -56,6 +56,10 @@ export default function HardwareBrowsePage({ eventId }: { eventId: string }) {
     setCheckoutModalOpen(true);
   };
 
+  // The list endpoint returns a paginated payload; treat the items as the item array here
+  const items = data?.data as unknown as HardwareItem[] | undefined;
+  const myCheckouts = myCheckoutsData?.data as (HardwareCheckout & { hardware_item_name?: string })[] | undefined;
+
   const handleCheckoutSubmit = async (data: any) => {
     await checkoutMutation.mutateAsync(data);
   };
@@ -95,7 +99,7 @@ export default function HardwareBrowsePage({ eventId }: { eventId: string }) {
                 </div>
                 <Select
                   value={filters.category}
-                  onValueChange={(v) => setFilters(prev => ({ ...prev, category: v }))}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilters(prev => ({ ...prev, category: e.target.value }))}
                   options={[
                     { value: '', label: 'All Categories' },
                     { value: 'Microcontrollers', label: 'Microcontrollers' },
@@ -114,7 +118,7 @@ export default function HardwareBrowsePage({ eventId }: { eventId: string }) {
                 />
                 <Select
                   value={filters.status}
-                  onValueChange={(v) => setFilters(prev => ({ ...prev, status: v }))}
+                  onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFilters(prev => ({ ...prev, status: e.target.value }))}
                   options={[
                     { value: 'available', label: 'Available' },
                     { value: 'checked_out', label: 'Checked Out' },
@@ -142,14 +146,14 @@ export default function HardwareBrowsePage({ eventId }: { eventId: string }) {
                   </div>
                 </Card>
               ))
-            ) : data?.data.length === 0 ? (
+            ) : !items || items.length === 0 ? (
               <div className="col-span-full text-center py-12 text-gray-500">
                 <Package className="h-12 w-12 mx-auto text-gray-700 mb-4" />
                 <p className="text-lg">No hardware items found</p>
                 <p className="text-sm">Try adjusting your filters</p>
               </div>
             ) : (
-              data!.data.map((item) => (
+              items.map((item) => (
                 <HardwareItemCard key={item.id} item={item} onCheckout={handleCheckout} />
               ))
             )}
@@ -163,7 +167,7 @@ export default function HardwareBrowsePage({ eventId }: { eventId: string }) {
               <CardTitle>My Active Checkouts</CardTitle>
             </CardHeader>
             <CardContent>
-              {myCheckoutsData?.data.length === 0 ? (
+              {myCheckouts?.length === 0 || !myCheckouts ? (
                 <div className="text-center py-12 text-gray-500">
                   <PackageIcon className="h-12 w-12 mx-auto text-gray-700 mb-4" />
                   <p className="text-lg">No active checkouts</p>
@@ -171,7 +175,7 @@ export default function HardwareBrowsePage({ eventId }: { eventId: string }) {
                 </div>
               ) : (
                 <div className="space-y-3">
-                  {myCheckoutsData.data.map((checkout) => (
+                  {myCheckouts.map((checkout) => (
                     <div key={checkout.id} className="flex items-center justify-between p-4 bg-gray-900/50 rounded-lg border border-gray-800">
                       <div className="flex items-center gap-4">
                         <div className="p-2 bg-indigo-500/20 rounded-lg">
@@ -199,8 +203,8 @@ export default function HardwareBrowsePage({ eventId }: { eventId: string }) {
       <CheckoutModal
         open={checkoutModalOpen}
         onOpenChange={setCheckoutModalOpen}
-        item={checkoutItem!}
-        participants={user ? [{ id: user.id, full_name: user.full_name, email: user.email }] : []}
+        item={checkoutItem}
+        participants={user ? [{ id: user.id, full_name: user.full_name, email: user.email }] as unknown as import('@/types/api').User[] : []}
         onSubmit={handleCheckoutSubmit}
         isLoading={checkoutMutation.isPending}
       />

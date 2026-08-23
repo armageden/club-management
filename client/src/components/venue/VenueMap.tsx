@@ -1,9 +1,15 @@
 'use client';
 
 import { useMemo } from 'react';
-import { Stage, Layer, Rect, Circle, Text, Group, Line, Transformer } from 'react-konva';
-import { cn } from '@/lib/utils';
+import { Stage, Layer, Rect, Circle, Text, Group, Line } from 'react-konva';
 import type { VenueLocation, VenueAssignment } from '@/types/api';
+
+type VenueLocationGeometry = VenueLocation & {
+  position_x?: number | null;
+  position_y?: number | null;
+  size_width?: number | null;
+  size_height?: number | null;
+};
 
 interface VenueMapProps {
   locations: VenueLocation[];
@@ -155,7 +161,7 @@ export function VenueMap({
     );
   };
 
-  const renderAssignments = (location: VenueLocation, x: number, y: number, w: number, h: number) => {
+  const renderAssignments = (location: VenueLocation, x: number, y: number, h: number) => {
     const locationAssignments = assignments.filter(a => a.venue_location_id === location.id);
     if (locationAssignments.length === 0) return null;
 
@@ -203,7 +209,7 @@ export function VenueMap({
 
   return (
     <div className="relative" style={{ width, height }}>
-      <Stage width={width} height={height} scale={stageScale}>
+      <Stage width={width} height={height} scaleX={stageScale} scaleY={stageScale}>
         <Layer>
           {/* Grid Background */}
           {showGrid && (
@@ -230,15 +236,18 @@ export function VenueMap({
           )}
 
           {/* Locations */}
-          {locations.map(location => (
+          {locations.map(location => {
+            const loc = location as VenueLocationGeometry;
+            return (
             <Group
               key={location.id}
               onClick={() => onLocationClick(location)}
             >
-              {renderLocationShape(location, location.position_x || 0, location.position_y || 0, location.size_width || 100, location.size_height || 100)}
-              {renderAssignments(location, location.position_x || 0, location.position_y || 0, location.size_width || 100, location.size_height || 100)}
+              {renderLocationShape(location, loc.position_x || 0, loc.position_y || 0, loc.size_width || 100, loc.size_height || 100)}
+              {renderAssignments(location, loc.position_x || 0, loc.position_y || 0, loc.size_height || 100)}
             </Group>
-          ))}
+            );
+          })}
 
           {/* Conflict Overlays */}
           {conflicts.map(conflict => (
@@ -291,17 +300,20 @@ export function Minimap({ locations, viewport, scale, onNavigate, width = 200, h
         <Stage width={width} height={height}>
           <Layer>
             {/* Locations on minimap */}
-            {locations.map(location => (
+            {locations.map(location => {
+              const loc = location as VenueLocationGeometry;
+              return (
               <Rect
                 key={location.id}
-                x={(location.position_x || 0) * scaleX}
-                y={(location.position_y || 0) * scaleY}
-                width={(location.size_width || 100) * scaleX}
-                height={(location.size_height || 100) * scaleY}
+                x={(loc.position_x || 0) * scaleX}
+                y={(loc.position_y || 0) * scaleY}
+                width={(loc.size_width || 100) * scaleX}
+                height={(loc.size_height || 100) * scaleY}
                 fill={LOCATION_TYPE_COLORS[location.location_type] || 'var(--color-chart-1)'}
                 opacity={0.5}
               />
-            ))}
+              );
+            })}
             {/* Viewport indicator */}
             <Rect
               x={viewport.x * scaleX}

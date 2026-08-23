@@ -4,20 +4,20 @@ import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
-import { Badge } from '@/components/ui/Badge';
 import { Tabs, TabsListComp as TabsList, TabsTriggerComp as TabsTrigger, TabsContentComp as TabsContent } from '@/components/ui/Tabs';
 import { hardwareApi, hardwareQueryKeys, hardwareMutationKeys } from '../api';
-import type { HardwareItem, User, HardwareCheckout } from '@/types/api';
-import { HardwareTable } from './components/HardwareTable';
-import { HardwareCheckoutsTable } from './components/HardwareCheckoutsTable';
-import { DamageReportsTable } from './components/DamageReportsTable';
-import { ItemForm } from './components/ItemForm';
-import { CheckoutModal } from './components/CheckoutModal';
-import { ReturnModal } from './components/ReturnModal';
-import { DamageReportModal } from './components/DamageReportModal';
-import { AnalyticsDashboard } from './components/AnalyticsDashboard';
+import type { HardwareItem, HardwareCheckout } from '@/types/api';
+import { HardwareTable } from '../components/HardwareTable';
+import { HardwareCheckoutsTable } from '../components/HardwareCheckoutsTable';
+import { DamageReportsTable } from '../components/DamageReportsTable';
+import { ItemForm } from '../components/ItemForm';
+import { CheckoutModal } from '../components/CheckoutModal';
+import { ReturnModal } from '../components/ReturnModal';
+import { DamageReportModal } from '../components/DamageReportModal';
+import { AnalyticsDashboard } from '../components/AnalyticsDashboard';
+import { ItemTimeline } from '../components/ItemTimeline';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/Dialog';
 import { Toaster, toast } from '@/components/ui/Toast';
-import { cn } from '@/lib/utils';
 import { Package } from 'lucide-react';
 
 export default function HardwareDashboardPage({ eventId }: { eventId: string }) {
@@ -30,6 +30,7 @@ export default function HardwareDashboardPage({ eventId }: { eventId: string }) 
   const [returnCheckout, setReturnCheckout] = useState<HardwareCheckout | null>(null);
   const [damageReportOpen, setDamageReportOpen] = useState(false);
   const [damageReportItem, setDamageReportItem] = useState<{ id: string; name: string; checkoutId?: string } | null>(null);
+  const [historyItem, setHistoryItem] = useState<HardwareItem | null>(null);
 
   // Fetch participants for checkout dropdown
   const { data: participantsData } = useQuery({
@@ -144,17 +145,12 @@ export default function HardwareDashboardPage({ eventId }: { eventId: string }) 
     setItemFormOpen(true);
   };
 
-  const handleCheckout = (item: HardwareItem) => {
-    setCheckoutItem(item);
-    setCheckoutModalOpen(true);
-  };
-
   const handleReturn = (checkout: HardwareCheckout) => {
     setReturnCheckout(checkout);
     setReturnModalOpen(true);
   };
 
-  const handleDamageReport = (item: HardwareItem, checkoutId?: string) => {
+  const handleDamageReport = (item: { id: string; name: string }, checkoutId?: string) => {
     setDamageReportItem({ id: item.id, name: item.name, checkoutId });
     setDamageReportOpen(true);
   };
@@ -209,7 +205,7 @@ export default function HardwareDashboardPage({ eventId }: { eventId: string }) 
 
         {/* Inventory Tab */}
         <TabsContent value="inventory">
-          <HardwareTable eventId={eventId} onEdit={handleEdit} />
+          <HardwareTable eventId={eventId} onEdit={handleEdit} onViewHistory={setHistoryItem} />
         </TabsContent>
 
         {/* Checkouts Tab */}
@@ -262,7 +258,7 @@ export default function HardwareDashboardPage({ eventId }: { eventId: string }) 
       <CheckoutModal
         open={checkoutModalOpen}
         onOpenChange={setCheckoutModalOpen}
-        item={checkoutItem!}
+        item={checkoutItem}
         participants={participantsData?.data || []}
         onSubmit={handleCheckoutSubmit}
         isLoading={checkoutMutation.isPending}
@@ -271,7 +267,7 @@ export default function HardwareDashboardPage({ eventId }: { eventId: string }) 
       <ReturnModal
         open={returnModalOpen}
         onOpenChange={setReturnModalOpen}
-        checkout={returnCheckout!}
+        checkout={returnCheckout}
         organizers={organizersData?.data || []}
         onSubmit={handleReturnSubmit}
         isLoading={returnMutation.isPending}
@@ -286,6 +282,17 @@ export default function HardwareDashboardPage({ eventId }: { eventId: string }) 
         onSubmit={handleDamageReportSubmit}
         isLoading={damageReportMutation.isPending}
       />
+
+      {/* Item history dialog */}
+      <Dialog open={!!historyItem} onOpenChange={(open) => !open && setHistoryItem(null)}>
+        <DialogContent size="lg">
+          <DialogHeader>
+            <DialogTitle>{historyItem?.name} — History</DialogTitle>
+            <DialogDescription>Full audit trail for this item.</DialogDescription>
+          </DialogHeader>
+          {historyItem && <ItemTimeline eventId={eventId} itemId={historyItem.id} />}
+        </DialogContent>
+      </Dialog>
 
       <Toaster />
     </div>

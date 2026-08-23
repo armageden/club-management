@@ -1,6 +1,6 @@
-import { forwardRef, useState, type ReactNode } from 'react';
+import { Fragment, useState, type ReactNode, type ChangeEvent } from 'react';
 import { cn } from '@/lib/utils';
-import { Button } from './Button';
+import { Button } from '@/components/ui/Button';
 import { ChevronLeft, ChevronRight, Check } from 'lucide-react';
 
 interface FormWizardStep {
@@ -20,7 +20,7 @@ interface FormWizardProps {
 
 export function FormWizard({ steps, onSubmit, initialValues = {}, className }: FormWizardProps) {
   const [currentStep, setCurrentStep] = useState(0);
-  const [values, setValues] = useState<Record<string, unknown>>(initialValues);
+  const [values] = useState<Record<string, unknown>>(initialValues);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -64,19 +64,12 @@ export function FormWizard({ steps, onSubmit, initialValues = {}, className }: F
     }
   };
 
-  const updateValue = (key: string, value: unknown) => {
-    setValues(prev => ({ ...prev, [key]: value }));
-    if (errors[key]) {
-      setErrors(prev => { const next = { ...prev }; delete next[key]; return next; });
-    }
-  };
-
   return (
     <div className={cn('space-y-6', className)}>
       {/* Step Progress */}
       <div className="flex items-center">
         {steps.map((step, index) => (
-          <React.Fragment key={step.id}>
+          <Fragment key={step.id}>
             <div className="flex items-center">
               <div
                 className={cn(
@@ -109,7 +102,7 @@ export function FormWizard({ steps, onSubmit, initialValues = {}, className }: F
                 )}
               />
             )}
-          </React.Fragment>
+          </Fragment>
         ))}
       </div>
 
@@ -130,7 +123,7 @@ export function FormWizard({ steps, onSubmit, initialValues = {}, className }: F
         {Object.keys(errors).length > 0 && (
           <div className="mt-4 p-3 bg-red-900/30 border border-red-500/30 rounded-lg">
             <ul className="space-y-1">
-              {Object.entries(errors).map(([_, message]) => (
+              {Object.values(errors).map((message) => (
                 <li key={message} className="text-sm text-red-300 flex items-center gap-2">
                   <svg className="h-4 w-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
@@ -181,7 +174,7 @@ export function FormWizard({ steps, onSubmit, initialValues = {}, className }: F
 export function useFormField(key: string, values: Record<string, unknown>, onChange: (key: string, value: unknown) => void) {
   return {
     value: values[key] as string,
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
+    onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
       onChange(key, e.target.value);
     },
     onBlur: () => {}, // For validation trigger if needed

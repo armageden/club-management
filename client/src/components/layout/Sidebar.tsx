@@ -3,10 +3,10 @@
 import { useState } from 'react';
 import { Link, useLocation, NavLink } from 'react-router-dom';
 import { cn } from '@/lib/utils';
-import { Button } from './Button';
-import { Avatar } from './Avatar';
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from './DropdownMenu';
-import { Sheet, SheetTrigger, SheetContent } from './Sheet';
+import { Button } from '@/components/ui/Button';
+import { Avatar } from '@/components/ui/Avatar';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/DropdownMenu';
+import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/Sheet';
 import { useAuth } from '@/app/providers';
 import {
   LayoutDashboard,
@@ -15,7 +15,6 @@ import {
   GitBranch,
   Gavel,
   Users,
-  Settings,
   LogOut,
   Menu,
   X,
@@ -97,7 +96,6 @@ export function Sidebar() {
             variant="ghost"
             size="icon"
             className="w-full justify-center"
-            asChild
           >
             <DropdownMenu>
               <DropdownMenuTrigger asChild>

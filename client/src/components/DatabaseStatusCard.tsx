@@ -4,7 +4,6 @@ import { useQuery } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { api, queryKeys } from '@/lib/api';
-import { cn } from '@/lib/utils';
 import { 
   Database, 
   Server, 
@@ -23,24 +22,33 @@ interface DatabaseHealthData {
   active_connections: number;
 }
 
+interface MemoryUsage {
+  rss: number;
+  heapTotal: number;
+  heapUsed: number;
+  external: number;
+}
+
 interface DetailedHealthResponse {
   success: boolean;
-  data?: {
-    status: string;
-    database: DatabaseHealthData;
-    tables: string[];
-    recent_migrations: Array<{ id: number; filename: string; applied_at: string }>;
-    uptime: number;
-    memory: NodeJS.MemoryUsage;
-  };
+  data?: DetailedHealthData;
   error?: { code: string; message: string };
+}
+
+interface DetailedHealthData {
+  status: string;
+  database: DatabaseHealthData;
+  tables: string[];
+  recent_migrations: Array<{ id: number; filename: string; applied_at: string }>;
+  uptime: number;
+  memory: MemoryUsage;
 }
 
 export function DatabaseStatusCard() {
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: queryKeys.healthDetailed,
     queryFn: async () => {
-      const res = await api.get<DetailedHealthResponse>('/health/detailed');
+      const res: DetailedHealthResponse = await api.get<DetailedHealthData>('/health/detailed');
       if (!res.success || !res.data) throw new Error(res.error?.message || 'Failed to fetch health');
       return res.data;
     },

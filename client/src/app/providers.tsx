@@ -8,8 +8,19 @@ import {
   useCallback,
   type ReactNode,
 } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/Toast';
 import type { User } from '@/types/api';
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      staleTime: 30_000,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 interface AuthContextType {
   user: User | null;
@@ -106,12 +117,14 @@ export function useTheme(): ThemeContextType {
 // Combined providers
 export function Providers({ children }: { children: ReactNode }) {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        {children}
-        <Toaster position="top-right" richColors />
-      </AuthProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider>
+        <AuthProviderInner>
+          {children}
+          <Toaster position="top-right" richColors />
+        </AuthProviderInner>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }
 
@@ -161,4 +174,10 @@ const AuthProviderInner = ({ children }: { children: ReactNode }) => {
 };
 
 export { AuthProviderInner as AuthProvider };
-export { useAuth };
+export function useAuth(): AuthContextType {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within an AuthProvider');
+  }
+  return context;
+}

@@ -1,4 +1,4 @@
-import QRCode from 'qrcode.react';
+import { QRCodeCanvas } from 'qrcode.react';
 import { useMemo } from 'react';
 
 export interface QRCodeData {
@@ -66,7 +66,7 @@ export function QRCodeDisplay({
 }: QRCodeDisplayProps) {
   return (
     <div className={className} style={{ display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-      <QRCode
+      <QRCodeCanvas
         value={data}
         size={size}
         level={level}

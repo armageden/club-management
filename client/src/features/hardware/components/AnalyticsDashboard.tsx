@@ -3,13 +3,13 @@
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
 import { LineChart } from '@/components/charts/LineChart';
 import { BarChart } from '@/components/charts/BarChart';
 import { PieChart } from '@/components/charts/PieChart';
 import { hardwareApi, hardwareQueryKeys } from '../api';
-import type { HardwareAnalytics } from '../types';
-import { formatCompact, formatCurrency } from '@/lib/formatters';
-import { Package, CheckCircle, AlertTriangle, Clock, TrendingUp, TrendingDown } from 'lucide-react';
+import { formatCompact } from '@/lib/formatters';
+import { Package, CheckCircle, AlertTriangle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface AnalyticsDashboardProps {

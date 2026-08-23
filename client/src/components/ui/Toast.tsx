@@ -21,9 +21,9 @@ export function Toaster(props?: ToasterProps) {
 }
 
 // Toast wrapper for consistent usage
-import { toast as sonnerToast, type ToastOptions } from 'sonner';
+import { toast as sonnerToast, type ExternalToast } from 'sonner';
 
-interface ToastOptions extends ToastOptions {
+interface ToastOptions extends ExternalToast {
   action?: {
     label: string;
     onClick: () => void;
@@ -52,7 +52,8 @@ export const toast = {
       ...options,
     }),
   promise: <T,>(promise: Promise<T>, messages: { loading: string; success: string; error: string }, options?: ToastOptions) => 
-    sonnerToast.promise(promise, messages, {
+    sonnerToast.promise(promise, {
+      ...messages,
       className: 'bg-gray-900 border-gray-700',
       ...options,
     }),

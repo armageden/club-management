@@ -1,7 +1,21 @@
 import { useAuth } from "../app/providers";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/Button";
+
+const quickActions = [
+  { label: "Events", href: "/app/events", description: "Manage events" },
+  { label: "Teams", href: "/app/team", description: "Team management" },
+  { label: "Hardware", href: "/app/hardware", description: "Inventory & checkouts" },
+  { label: "Schedule", href: "/app/venue", description: "Venue & schedule" },
+  { label: "Check-in", href: "/app/checkin", description: "Attendee check-in" },
+  { label: "Budget", href: "/app/budget", description: "Sponsors & expenses" },
+  { label: "Projects", href: "/app/projects", description: "Submissions & judging" },
+  { label: "Incidents", href: "/app/incidents", description: "Safety & reports" },
+] as const;
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   if (!user) return null;
 
@@ -43,22 +57,16 @@ export default function DashboardPage() {
           Quick Actions
         </h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            "Events",
-            "Teams",
-            "Hardware",
-            "Schedule",
-            "Check-in",
-            "Budget",
-            "Projects",
-            "Incidents",
-          ].map((item) => (
-            <button
-              key={item}
-              className="px-4 py-3 bg-gray-800 hover:bg-gray-700 rounded text-sm text-gray-300 transition-colors"
+          {quickActions.map((action) => (
+            <Button
+              key={action.label}
+              variant="outline"
+              className="h-auto py-3 text-left text-sm transition-colors hover:bg-gray-800"
+              onClick={() => navigate(action.href)}
             >
-              {item}
-            </button>
+              <span className="font-medium text-white block">{action.label}</span>
+              <span className="text-xs text-gray-500">{action.description}</span>
+            </Button>
           ))}
         </div>
       </div>
