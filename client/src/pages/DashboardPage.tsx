@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/Button";
 
 const quickActions = [
-  { label: "Events", href: "/app/events", description: "Manage events" },
-  { label: "Teams", href: "/app/team", description: "Team management" },
-  { label: "Hardware", href: "/app/hardware", description: "Inventory & checkouts" },
-  { label: "Schedule", href: "/app/venue", description: "Venue & schedule" },
-  { label: "Check-in", href: "/app/checkin", description: "Attendee check-in" },
-  { label: "Budget", href: "/app/budget", description: "Sponsors & expenses" },
-  { label: "Projects", href: "/app/projects", description: "Submissions & judging" },
-  { label: "Incidents", href: "/app/incidents", description: "Safety & reports" },
+  { label: "Events", href: "/events", description: "Manage events" },
+  { label: "Teams", href: "/team", description: "Team management" },
+  { label: "Hardware", href: "/hardware", description: "Inventory & checkouts" },
+  { label: "Schedule", href: "/venue", description: "Venue & schedule" },
+  { label: "Check-in", href: "/checkin", description: "Attendee check-in" },
+  { label: "Budget", href: "/budget", description: "Sponsors & expenses" },
+  { label: "Projects", href: "/projects", description: "Submissions & judging" },
+  { label: "Incidents", href: "/incidents", description: "Safety & reports" },
 ] as const;
 
 export default function DashboardPage() {

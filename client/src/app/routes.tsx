@@ -142,6 +142,38 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      {
+        path: 'events',
+        element: (
+          <ProtectedRoute>
+            <div>Events Dashboard - Coming Soon</div>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'checkin',
+        element: (
+          <ProtectedRoute>
+            <div>Check-in Dashboard - Coming Soon</div>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'budget',
+        element: (
+          <ProtectedRoute>
+            <div>Budget Dashboard - Coming Soon</div>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'incidents',
+        element: (
+          <ProtectedRoute>
+            <div>Incidents Dashboard - Coming Soon</div>
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ]);
