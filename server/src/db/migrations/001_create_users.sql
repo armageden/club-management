@@ -1,3 +1,10 @@
+-- Migration tracking table (must be created first)
+CREATE TABLE IF NOT EXISTS migrations (
+  id SERIAL PRIMARY KEY,
+  filename VARCHAR(255) NOT NULL UNIQUE,
+  applied_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+);
+
 -- Table 1: users
 -- Stores global user accounts
 

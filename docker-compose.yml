@@ -1,0 +1,80 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:16-alpine
+    container_name: hackathon-hub-db
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-hackathon_hub}
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # pgAdmin - PostgreSQL Admin UI (like phpMyAdmin)
+  pgadmin:
+    image: dpage/pgadmin4:8-alpine
+    container_name: hackathon-hub-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@hackathon.local}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin123}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+      PGADMIN_CONFIG_MASTER_PASSWORD_REQUIRED: 'False'
+    ports:
+      - "${PGADMIN_PORT:-5050}:80"
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    depends_on:
+      - db
+    profiles:
+      - tools
+
+  # Backend API Server
+  server:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    container_name: hackathon-hub-server
+    environment:
+      PORT: ${SERVER_PORT:-5000}
+      DATABASE_URL: ${DATABASE_URL:-postgresql://postgres:postgres@db:5432/hackathon_hub}
+      JWT_SECRET: ${JWT_SECRET:-hackathon-hub-secret-key-change-in-production}
+      JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:-7d}
+      NODE_ENV: ${NODE_ENV:-development}
+      CLIENT_URL: ${CLIENT_URL:-http://localhost:5173}
+    ports:
+      - "${SERVER_PORT:-5000}:5000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+
+  # Frontend Dev Server
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: hackathon-hub-client
+    environment:
+      VITE_API_URL: ${VITE_API_URL:-http://localhost:5000/api/v1}
+    ports:
+      - "${CLIENT_PORT:-5173}:5173"
+    depends_on:
+      - server
+    volumes:
+      - ./client:/app
+      - /app/node_modules
+
+volumes:
+  postgres_data:
+  pgadmin_data:

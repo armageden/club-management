@@ -1,15 +1,21 @@
 import { useAuth } from "../app/providers";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/Button";
 
-const features = [
-  { name: "Teams & Profiles", path: "/teams", desc: "Create or join teams, manage your profile" },
-  { name: "Schedule", path: "/itinerary", desc: "View event schedule and sessions" },
-  { name: "Check-in", path: "/checkin", desc: "Check in to the event" },
-  { name: "Certificates", path: "/certificates", desc: "View and issue certificates" },
-];
+const quickActions = [
+  { label: "Events", href: "/events", description: "Manage events" },
+  { label: "Teams", href: "/team", description: "Team management" },
+  { label: "Hardware", href: "/hardware", description: "Inventory & checkouts" },
+  { label: "Schedule", href: "/venue", description: "Venue & schedule" },
+  { label: "Check-in", href: "/checkin", description: "Attendee check-in" },
+  { label: "Budget", href: "/budget", description: "Sponsors & expenses" },
+  { label: "Projects", href: "/projects", description: "Submissions & judging" },
+  { label: "Incidents", href: "/incidents", description: "Safety & reports" },
+] as const;
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   if (!user) return null;
 
@@ -48,20 +54,19 @@ export default function DashboardPage() {
 
       <div className="mt-8 bg-gray-900 rounded-lg p-6 shadow-lg">
         <h2 className="text-lg font-semibold text-indigo-400 mb-4">
-          Feature Modules
+          Quick Actions
         </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-          {features.map((f) => (
-            <Link
-              key={f.name}
-              to={f.path}
-              className="block px-5 py-4 bg-gray-800 hover:bg-gray-700 rounded-lg text-left transition-colors group"
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          {quickActions.map((action) => (
+            <Button
+              key={action.label}
+              variant="outline"
+              className="h-auto py-3 text-left text-sm transition-colors hover:bg-gray-800"
+              onClick={() => navigate(action.href)}
             >
-              <span className="text-indigo-400 font-medium group-hover:text-indigo-300">
-                {f.name}
-              </span>
-              <p className="text-gray-500 text-xs mt-1">{f.desc}</p>
-            </Link>
+              <span className="font-medium text-white block">{action.label}</span>
+              <span className="text-xs text-gray-500">{action.description}</span>
+            </Button>
           ))}
         </div>
       </div>

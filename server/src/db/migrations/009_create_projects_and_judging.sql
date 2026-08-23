@@ -18,10 +18,19 @@ CREATE TABLE IF NOT EXISTS project_submissions (
 CREATE INDEX IF NOT EXISTS idx_project_submissions_event_id ON project_submissions(event_id);
 CREATE INDEX IF NOT EXISTS idx_project_submissions_team_id ON project_submissions(team_id);
 
--- Add FK from venue_assignments to project_submissions
-ALTER TABLE venue_assignments
-  ADD CONSTRAINT fk_venue_assignments_project_submission
-  FOREIGN KEY (project_submission_id) REFERENCES project_submissions(id) ON DELETE SET NULL;
+-- Add FK from venue_assignments to project_submissions (if not exists)
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_constraint
+    WHERE conname = 'fk_venue_assignments_project_submission'
+      AND conrelid = 'venue_assignments'::regclass
+  ) THEN
+    ALTER TABLE venue_assignments
+      ADD CONSTRAINT fk_venue_assignments_project_submission
+      FOREIGN KEY (project_submission_id) REFERENCES project_submissions(id) ON DELETE SET NULL;
+  END IF;
+END $$;
 
 -- Table 23: judging_scores
 -- Stores judge scores for projects

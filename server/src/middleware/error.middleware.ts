@@ -42,18 +42,31 @@ export class ConflictError extends AppError {
   }
 }
 
+// Raw driver errors reach this handler uncaught; translate known pg error
+// codes into client-facing errors so they don't surface as 500s
+function normalizeDbError(err: Error): Error {
+  const pgCode = (err as { code?: string }).code;
+  if (pgCode === "22P02") {
+    // invalid_text_representation — e.g. malformed uuid in a path param or body
+    return new ValidationError("Invalid ID format");
+  }
+  return err;
+}
+
 export function errorHandler(
   err: Error,
   _req: Request,
   res: Response,
   _next: NextFunction
 ): void {
-  if (err instanceof AppError) {
-    res.status(err.statusCode).json({
+  const normalized = err instanceof AppError ? err : normalizeDbError(err);
+
+  if (normalized instanceof AppError) {
+    res.status(normalized.statusCode).json({
       success: false,
       error: {
-        code: err.code,
-        message: err.message,
+        code: normalized.code,
+        message: normalized.message,
       },
     });
     return;

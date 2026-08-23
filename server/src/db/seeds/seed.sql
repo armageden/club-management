@@ -54,27 +54,136 @@ VALUES (
   'active'
 ) ON CONFLICT (event_id, user_id) DO NOTHING;
 
--- Tech stack tags
-INSERT INTO tech_stack_tags (id, name, category) VALUES
-  ('b0000000-0000-0000-0000-000000000001', 'JavaScript', 'language'),
-  ('b0000000-0000-0000-0000-000000000002', 'TypeScript', 'language'),
-  ('b0000000-0000-0000-0000-000000000003', 'Python', 'language'),
-  ('b0000000-0000-0000-0000-000000000004', 'React', 'framework'),
-  ('b0000000-0000-0000-0000-000000000005', 'Node.js', 'framework'),
-  ('b0000000-0000-0000-0000-000000000006', 'Flask', 'framework'),
-  ('b0000000-0000-0000-0000-000000000007', 'PostgreSQL', 'database'),
-  ('b0000000-0000-0000-0000-000000000008', 'MongoDB', 'database'),
-  ('b0000000-0000-0000-0000-000000000009', 'Docker', 'tool'),
-  ('b0000000-0000-0000-0000-000000000010', 'AWS', 'platform')
-ON CONFLICT (name) DO NOTHING;
-
--- Sample itinerary items
-INSERT INTO itinerary_items (id, event_id, title, description, location, starts_at, ends_at, session_type)
-VALUES
-  ('c0000000-0000-0000-0000-000000000001', 'e0000000-0000-0000-0000-000000000001', 'Opening Ceremony', 'Welcome speech and event rules', 'Main Hall', '2026-09-01 09:00:00+00', '2026-09-01 10:00:00+00', 'ceremony'),
-  ('c0000000-0000-0000-0000-000000000002', 'e0000000-0000-0000-0000-000000000001', 'Hacking Begins', 'Start working on your projects', 'Open Area', '2026-09-01 10:00:00+00', '2026-09-02 18:00:00+00', 'general'),
-  ('c0000000-0000-0000-0000-000000000003', 'e0000000-0000-0000-0000-000000000001', 'Mentoring Session', 'Get help from industry experts', 'Room A', '2026-09-01 14:00:00+00', '2026-09-01 16:00:00+00', 'workshop'),
-  ('c0000000-0000-0000-0000-000000000004', 'e0000000-0000-0000-0000-000000000001', 'Project Submissions', 'Submit your final projects', 'Online', '2026-09-02 16:00:00+00', '2026-09-02 18:00:00+00', 'general'),
-  ('c0000000-0000-0000-0000-000000000005', 'e0000000-0000-0000-0000-000000000001', 'Demo Day & Judging', 'Present your projects to judges', 'Main Hall', '2026-09-03 09:00:00+00', '2026-09-03 15:00:00+00', 'presentation'),
-  ('c0000000-0000-0000-0000-000000000006', 'e0000000-0000-0000-0000-000000000001', 'Closing Ceremony', 'Awards and closing remarks', 'Main Hall', '2026-09-03 15:00:00+00', '2026-09-03 18:00:00+00', 'ceremony')
-ON CONFLICT (id) DO NOTHING;
+-- Sample hardware items
+INSERT INTO hardware_items (id, event_id, name, category, model, serial_number, quantity_available, condition, status, location, notes)
+VALUES 
+  (
+    'a0000000-0000-0000-0000-000000000001',
+    'e0000000-0000-0000-0000-000000000001',
+    'Arduino Uno R3',
+    'Microcontrollers',
+    'A000066',
+    'ARD-UNO-001',
+    10,
+    'new',
+    'available',
+    'Shelf A-1',
+    'Standard Arduino Uno boards for prototyping'
+  ),
+  (
+    'a0000000-0000-0000-0000-000000000002',
+    'e0000000-0000-0000-0000-000000000001',
+    'Raspberry Pi 4 Model B (4GB)',
+    'Microcontrollers',
+    'RPI4-MODBP-4GB',
+    'RPI4-001',
+    5,
+    'new',
+    'available',
+    'Shelf A-2',
+    'Raspberry Pi 4 with 4GB RAM for advanced projects'
+  ),
+  (
+    'a0000000-0000-0000-0000-000000000003',
+    'e0000000-0000-0000-0000-000000000001',
+    'DHT22 Temperature & Humidity Sensor',
+    'Sensors',
+    'DHT22',
+    'DHT22-001',
+    20,
+    'good',
+    'available',
+    'Shelf B-1',
+    'Digital temperature and humidity sensor'
+  ),
+  (
+    'a0000000-0000-0000-0000-000000000004',
+    'e0000000-0000-0000-0000-000000000001',
+    'HC-SR04 Ultrasonic Distance Sensor',
+    'Sensors',
+    'HC-SR04',
+    'HCSR04-001',
+    15,
+    'good',
+    'available',
+    'Shelf B-2',
+    'Ultrasonic ranging module for distance measurement'
+  ),
+  (
+    'a0000000-0000-0000-0000-000000000005',
+    'e0000000-0000-0000-0000-000000000001',
+    'SG90 Micro Servo Motor',
+    'Actuators',
+    'SG90',
+    'SG90-001',
+    25,
+    'fair',
+    'available',
+    'Shelf C-1',
+    'Micro servo motor for robotics projects'
+  ),
+  (
+    'a0000000-0000-0000-0000-000000000006',
+    'e0000000-0000-0000-0000-000000000001',
+    '0.96" I2C OLED Display',
+    'Displays',
+    'SSD1306',
+    'OLED-001',
+    12,
+    'new',
+    'available',
+    'Shelf C-2',
+    '0.96 inch I2C OLED display module'
+  ),
+  (
+    'a0000000-0000-0000-0000-000000000007',
+    'e0000000-0000-0000-0000-000000000001',
+    'ESP8266 WiFi Module',
+    'Communication',
+    'ESP-01',
+    'ESP8266-001',
+    15,
+    'good',
+    'available',
+    'Shelf D-1',
+    'ESP8266 WiFi module for IoT projects'
+  ),
+  (
+    'a0000000-0000-0000-0000-000000000008',
+    'e0000000-0000-0000-0000-000000000001',
+    'Breadboard Power Supply Module',
+    'Power',
+    'MB102',
+    'MB102-001',
+    8,
+    'new',
+    'available',
+    'Shelf D-2',
+    '3.3V/5V breadboard power supply module'
+  ),
+  (
+    'a0000000-0000-0000-0000-000000000009',
+    'e0000000-0000-0000-0000-000000000001',
+    'Jumper Wire Kit (120pcs)',
+    'Cables & Connectors',
+    'JMP-120',
+    'JMP-001',
+    3,
+    'fair',
+    'available',
+    'Shelf E-1',
+    'Assorted jumper wires for breadboarding'
+  ),
+  (
+    'a0000000-0000-0000-0000-000000000010',
+    'e0000000-0000-0000-0000-000000000001',
+    'Arduino Starter Kit',
+    'Kits',
+    'ARK001',
+    'ARK-001',
+    2,
+    'new',
+    'available',
+    'Shelf F-1',
+    'Complete Arduino starter kit with components and guide'
+  ) ON CONFLICT (id) DO NOTHING;

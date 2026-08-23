@@ -1,14 +1,13 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
-import Layout from "../components/layout/Layout";
-import LoginPage from "../features/auth/LoginPage";
-import RegisterPage from "../features/auth/RegisterPage";
-import DashboardPage from "../pages/DashboardPage";
-import HomePage from "../pages/HomePage";
-import TeamsPage from "../features/teams/TeamsPage";
-import ItineraryPage from "../features/itinerary/ItineraryPage";
-import CheckinPage from "../features/checkin/CheckinPage";
-import CertificatesPage from "../features/certificates/CertificatesPage";
-import { useAuth } from "./providers";
+import { createBrowserRouter, Navigate, Outlet } from 'react-router-dom';
+import { ErrorPage } from '../components/ErrorPage';
+import { Shell } from '../components/layout/Shell';
+import LoginPage from '../features/auth/LoginPage';
+import RegisterPage from '../features/auth/RegisterPage';
+import DashboardPage from '../pages/DashboardPage';
+import HomePage from '../pages/HomePage';
+import HardwareDashboardPage from '../features/hardware/pages/HardwareDashboardPage';
+import HardwareBrowsePage from '../features/hardware/pages/HardwareBrowsePage';
+import { useAuth } from './providers';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
@@ -46,14 +45,35 @@ function GuestRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+// Public layout (no sidebar)
+function PublicLayout({ children }: { children?: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-gray-950 text-white">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {children ?? <Outlet />}
+      </main>
+    </div>
+  );
+}
+
+// Hardware route - shows different page based on role
+function HardwareRoute() {
+  const { user } = useAuth();
+  const isOrganizer = user?.global_role === 'admin'; // Simplified - in real app check event membership
+
+  return isOrganizer ? <HardwareDashboardPage eventId="e0000000-0000-0000-0000-000000000001" /> : <HardwareBrowsePage eventId="e0000000-0000-0000-0000-000000000001" />;
+}
+
 export const router = createBrowserRouter([
   {
-    path: "/",
-    element: <Layout />,
+    path: '/',
+    element: <PublicLayout />,
+    errorElement: <ErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
+      { path: '*', element: <ErrorPage notFound /> },
       {
-        path: "login",
+        path: 'login',
         element: (
           <GuestRoute>
             <LoginPage />
@@ -61,15 +81,21 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "register",
+        path: 'register',
         element: (
           <GuestRoute>
             <RegisterPage />
           </GuestRoute>
         ),
       },
+    ],
+  },
+  {
+    element: <Shell />,
+    errorElement: <ErrorPage />,
+    children: [
       {
-        path: "dashboard",
+        path: 'dashboard',
         element: (
           <ProtectedRoute>
             <DashboardPage />
@@ -77,34 +103,74 @@ export const router = createBrowserRouter([
         ),
       },
       {
-        path: "teams",
+        path: 'hardware',
         element: (
           <ProtectedRoute>
-            <TeamsPage />
+            <HardwareRoute />
           </ProtectedRoute>
         ),
       },
       {
-        path: "itinerary",
+        path: 'venue',
         element: (
           <ProtectedRoute>
-            <ItineraryPage />
+            <div>Venue Dashboard - Coming Soon</div>
           </ProtectedRoute>
         ),
       },
       {
-        path: "checkin",
+        path: 'projects',
         element: (
           <ProtectedRoute>
-            <CheckinPage />
+            <div>Projects Dashboard - Coming Soon</div>
           </ProtectedRoute>
         ),
       },
       {
-        path: "certificates",
+        path: 'judging',
         element: (
           <ProtectedRoute>
-            <CertificatesPage />
+            <div>Judging Dashboard - Coming Soon</div>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'team',
+        element: (
+          <ProtectedRoute>
+            <div>Team Dashboard - Coming Soon</div>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'events',
+        element: (
+          <ProtectedRoute>
+            <div>Events Dashboard - Coming Soon</div>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'checkin',
+        element: (
+          <ProtectedRoute>
+            <div>Check-in Dashboard - Coming Soon</div>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'budget',
+        element: (
+          <ProtectedRoute>
+            <div>Budget Dashboard - Coming Soon</div>
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'incidents',
+        element: (
+          <ProtectedRoute>
+            <div>Incidents Dashboard - Coming Soon</div>
           </ProtectedRoute>
         ),
       },

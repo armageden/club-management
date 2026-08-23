@@ -12,13 +12,13 @@ export function authenticate(
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return next(new AuthenticationError("Missing or invalid authorization header"));
+    throw new AuthenticationError("Missing or invalid authorization header");
   }
 
   const token = authHeader.split(" ")[1];
 
   if (!token) {
-    return next(new AuthenticationError("No token provided"));
+    throw new AuthenticationError("No token provided");
   }
 
   try {
@@ -30,6 +30,6 @@ export function authenticate(
     };
     next();
   } catch {
-    next(new AuthenticationError("Invalid or expired token"));
+    throw new AuthenticationError("Invalid or expired token");
   }
 }

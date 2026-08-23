@@ -8,30 +8,9 @@ export default function Navbar() {
     <nav className="bg-gray-900 text-white shadow-lg">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          <div className="flex items-center gap-6">
-            <Link to="/" className="text-xl font-bold text-indigo-400">
-              Hackathon Hub
-            </Link>
-            {user && (
-              <div className="hidden md:flex items-center gap-4">
-                <Link to="/dashboard" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Dashboard
-                </Link>
-                <Link to="/teams" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Teams
-                </Link>
-                <Link to="/itinerary" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Schedule
-                </Link>
-                <Link to="/checkin" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Check-in
-                </Link>
-                <Link to="/certificates" className="text-sm text-gray-300 hover:text-white transition-colors">
-                  Certificates
-                </Link>
-              </div>
-            )}
-          </div>
+          <Link to="/" className="text-xl font-bold text-indigo-400">
+            Hackathon Hub
+          </Link>
 
           <div className="flex items-center gap-4">
             {user ? (
