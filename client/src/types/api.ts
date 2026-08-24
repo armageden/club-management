@@ -201,6 +201,7 @@ export interface HardwareAnalytics {
   checkedOutItems: number;
   damagedItems: number;
   overdueItems: number;
+  activeCheckouts: number;
   itemsByCategory: Record<string, number>;
   itemsByStatus: Record<string, number>;
   checkoutsOverTime: Array<{ date: string; count: number }>;
@@ -278,7 +279,9 @@ export interface ProjectSubmission {
   created_at: string;
   updated_at: string;
   team?: { id: string; name: string };
+  team_name?: string;
   scores?: JudgingScore[];
+  is_own?: boolean;
 }
 
 export interface CreateProjectRequest {
@@ -333,6 +336,7 @@ export interface LeaderboardEntry {
     total: number;
   };
   judge_count: number;
+  feedback?: string[];
   rank: number;
   previous_rank?: number;
 }

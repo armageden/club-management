@@ -11,9 +11,10 @@ import { SkeletonTable } from '@/components/ui/Skeleton';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/DropdownMenu';
 import { hardwareApi, hardwareQueryKeys } from '../api';
 import type { HardwareCheckout } from '@/types/api';
-import { formatRelativeTime, formatDateTime } from '@/lib/formatters';
+import { formatRelativeTime, formatDateTime, getDueState, dueStateStyles } from '@/lib/formatters';
 import { cn } from '@/lib/utils';
-import { RotateCcw, AlertTriangle, Calendar, Package, MoreVertical } from 'lucide-react';
+import { RotateCcw, AlertTriangle, Calendar, Package, MoreVertical, Download } from 'lucide-react';
+import { downloadCsv } from '@/lib/export-csv';
 
 // API may enrich checkout rows with these display fields
 type EnrichedCheckout = HardwareCheckout & {
@@ -28,9 +29,10 @@ interface HardwareCheckoutsTableProps {
   eventId: string;
   onReturn: (checkout: HardwareCheckout) => void;
   onDamageReport: (item: { id: string; name: string }, checkoutId: string) => void;
+  onViewDetails?: (item: { id: string; name: string }) => void;
 }
 
-export function HardwareCheckoutsTable({ eventId, onReturn, onDamageReport }: HardwareCheckoutsTableProps) {
+export function HardwareCheckoutsTable({ eventId, onReturn, onDamageReport, onViewDetails }: HardwareCheckoutsTableProps) {
   const [filters, setFilters] = useState({
     status: '',
     search: '',
@@ -103,14 +105,15 @@ export function HardwareCheckoutsTable({ eventId, onReturn, onDamageReport }: Ha
         cell: (info) => {
           const dueAt = info.getValue();
           if (!dueAt) return <span className="text-gray-500 text-xs">No due date</span>;
-          const isOverdue = new Date(dueAt) < new Date() && info.row.original.status === 'active';
+          const state = getDueState(dueAt, info.row.original.status);
+          const style = dueStateStyles[state];
           return (
             <div className="flex items-center gap-1">
-              <Calendar className={cn('h-3.5 w-3.5', isOverdue ? 'text-red-400' : 'text-gray-500')} />
-              <span className={cn('text-sm', isOverdue ? 'text-red-400' : 'text-white')}>
+              <Calendar className={cn('h-3.5 w-3.5', style.icon)} />
+              <span className={cn('text-sm', style.text)}>
                 {formatDateTime(dueAt)}
               </span>
-              {isOverdue && <span className="text-xs text-red-400">(OVERDUE)</span>}
+              {style.label && <span className="text-xs font-medium">{style.label}</span>}
             </div>
           );
         },
@@ -154,7 +157,9 @@ export function HardwareCheckoutsTable({ eventId, onReturn, onDamageReport }: Ha
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem disabled className="text-gray-500">
+                <DropdownMenuItem
+                  onClick={() => onViewDetails?.({ id: checkout.hardware_item_id, name: checkout.hardware_item_name || 'Unknown' })}
+                >
                   <span className="flex items-center gap-2">
                     <Package className="h-4 w-4" />
                     View Details
@@ -166,7 +171,7 @@ export function HardwareCheckoutsTable({ eventId, onReturn, onDamageReport }: Ha
         },
       }),
     ];
-  }, [onReturn, onDamageReport]);
+  }, [onReturn, onDamageReport, onViewDetails]);
 
   if (isLoading) {
     return (
@@ -183,8 +188,26 @@ export function HardwareCheckoutsTable({ eventId, onReturn, onDamageReport }: Ha
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Active Checkouts</CardTitle>
+        <Button
+          variant="outline"
+          leftIcon={<Download className="h-4 w-4" />}
+          disabled={filteredData.length === 0}
+          onClick={() =>
+            downloadCsv(
+              `hardware-checkouts-${eventId.slice(0, 8)}`,
+              filteredData.map((c) => ({
+                item: c.hardware_item_name, category: c.hardware_item_category,
+                borrower: c.borrower_name, borrower_email: c.borrower_email,
+                checked_out_at: c.checked_out_at, due_at: c.due_at, status: c.status,
+                checked_out_by: c.checked_out_by_name,
+              }))
+            )
+          }
+        >
+          Export CSV
+        </Button>
       </CardHeader>
       <CardContent>
         {/* Filters */}

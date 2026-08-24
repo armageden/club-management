@@ -15,6 +15,9 @@ import {
   GitBranch,
   Gavel,
   Users,
+  CalendarDays,
+  UserCheck,
+  Award,
   LogOut,
   Menu,
   X,
@@ -28,6 +31,9 @@ const navigation = [
   { name: 'Projects', href: '/projects', icon: GitBranch },
   { name: 'Judging', href: '/judging', icon: Gavel },
   { name: 'Team', href: '/team', icon: Users },
+  { name: 'Itinerary', href: '/itinerary', icon: CalendarDays },
+  { name: 'Check-in', href: '/checkin', icon: UserCheck },
+  { name: 'Certificates', href: '/certificates', icon: Award },
 ];
 
 export function Sidebar() {

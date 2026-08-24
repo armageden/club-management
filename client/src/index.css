@@ -664,3 +664,16 @@
   .card { box-shadow: none !important; border: 1px solid #e5e5e5 !important; }
   .btn { display: none !important; }
 }
+/* Print only the QR label sheet when printing labels */
+@media print {
+  body *:not(.qr-labels):not(.qr-labels *) {
+    visibility: hidden;
+  }
+  .qr-labels {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: white;
+  }
+}

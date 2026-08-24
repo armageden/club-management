@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import type { ColumnDef } from '@tanstack/react-table';
 import { DataTable, createColumns } from '@/components/tables/DataTable';
 import { Button } from '@/components/ui/Button';
@@ -9,11 +9,11 @@ import { Badge, StatusBadge } from '@/components/ui/Badge';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { SkeletonTable } from '@/components/ui/Skeleton';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/DropdownMenu';
-import { toast } from '@/components/ui/Toast';
-import { hardwareApi, hardwareQueryKeys, hardwareMutationKeys } from '../api';
+import { hardwareApi, hardwareQueryKeys } from '../api';
 import type { HardwareDamageReport } from '@/types/api';
 import { formatRelativeTime, formatDateTime } from '@/lib/formatters';
-import { AlertTriangle, CheckCircle, MoreVertical, RotateCcw } from 'lucide-react';
+import { AlertTriangle, CheckCircle, MoreVertical, RotateCcw, Download } from 'lucide-react';
+import { downloadCsv } from '@/lib/export-csv';
 
 // API may enrich damage report rows with these display fields
 type EnrichedDamageReport = HardwareDamageReport & {
@@ -24,10 +24,10 @@ type EnrichedDamageReport = HardwareDamageReport & {
 interface DamageReportsTableProps {
   eventId: string;
   onResolve: (reportId: string) => void;
+  onViewDetails?: (item: { id: string; name: string }) => void;
 }
 
-export function DamageReportsTable({ eventId, onResolve }: DamageReportsTableProps) {
-  const queryClient = useQueryClient();
+export function DamageReportsTable({ eventId, onResolve, onViewDetails }: DamageReportsTableProps) {
   const [filters, setFilters] = useState({
     status: '',
     search: '',
@@ -42,19 +42,6 @@ export function DamageReportsTable({ eventId, onResolve }: DamageReportsTablePro
     queryFn: () => hardwareApi.getDamageReports(eventId),
     placeholderData: (prev) => prev,
   });
-
-  const resolveMutation = useMutation({
-    mutationKey: hardwareMutationKeys.createDamageReport(), // Reusing key, could create separate
-    mutationFn: (reportId: string) => hardwareApi.resolveDamageReport(eventId, reportId),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: hardwareQueryKeys.damageReports(eventId) });
-      queryClient.invalidateQueries({ queryKey: hardwareQueryKeys.items(eventId) });
-      queryClient.invalidateQueries({ queryKey: hardwareQueryKeys.analytics(eventId) });
-      toast.success('Damage report resolved');
-    },
-    onError: (error: Error) => toast.error(error.message),
-  });
-  const { mutate: resolveReport, isPending: isResolving } = resolveMutation;
 
   const filteredData = useMemo(() => {
     if (!data?.data) return [];
@@ -148,11 +135,7 @@ export function DamageReportsTable({ eventId, onResolve }: DamageReportsTablePro
               <DropdownMenuContent align="end">
                 {canResolve && (
                   <DropdownMenuItem
-                    onClick={() => {
-                      onResolve(report.id);
-                      resolveReport(report.id);
-                    }}
-                    disabled={isResolving}
+                    onClick={() => onResolve(report.id)}
                     className="flex items-center gap-2"
                   >
                     <CheckCircle className="h-4 w-4" />
@@ -160,7 +143,9 @@ export function DamageReportsTable({ eventId, onResolve }: DamageReportsTablePro
                   </DropdownMenuItem>
                 )}
                 <DropdownMenuSeparator />
-                <DropdownMenuItem disabled className="text-gray-500">
+                <DropdownMenuItem
+                  onClick={() => onViewDetails?.({ id: report.hardware_item_id, name: report.hardware_item_name || 'Unknown' })}
+                >
                   <span className="flex items-center gap-2">
                     <AlertTriangle className="h-4 w-4" />
                     View Details
@@ -172,7 +157,7 @@ export function DamageReportsTable({ eventId, onResolve }: DamageReportsTablePro
         },
       }),
     ];
-  }, [onResolve, resolveReport, isResolving]);
+  }, [onResolve, onViewDetails]);
 
   if (isLoading) {
     return (
@@ -189,8 +174,22 @@ export function DamageReportsTable({ eventId, onResolve }: DamageReportsTablePro
 
   return (
     <Card>
-      <CardHeader>
+      <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Damage Reports</CardTitle>
+        <Button
+          variant="outline"
+          leftIcon={<Download className="h-4 w-4" />}
+          onClick={() => {
+            const rows = ((data?.data ?? []) as unknown as EnrichedDamageReport[]).map((r) => ({
+              item: r.hardware_item_name, severity: r.severity, status: r.status,
+              description: r.description, reported_by: r.reported_by_name,
+              resolved_at: r.resolved_at ?? '',
+            }));
+            downloadCsv(`hardware-damage-reports-${eventId.slice(0, 8)}`, rows);
+          }}
+        >
+          Export CSV
+        </Button>
       </CardHeader>
       <CardContent>
         {/* Filters */}

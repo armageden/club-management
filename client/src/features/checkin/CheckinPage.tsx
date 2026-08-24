@@ -24,7 +24,7 @@ function formatTimestamp(iso: string): string {
 }
 
 export default function CheckinPage() {
-  const { isOrganizer, isVolunteer, canManage, loading: roleLoading } = useEventRole();
+  const { canManage, canCheckIn, loading: roleLoading } = useEventRole();
   const [activeTab, setActiveTab] = useState<"checkins" | "qr">("checkins");
 
   const [checkins, setCheckins] = useState<Checkin[]>([]);
@@ -46,9 +46,11 @@ export default function CheckinPage() {
   async function loadData() {
     setLoading(true);
     try {
+      // Stats are organizer-only server-side; requesting them as another role
+      // 403s and would blank the whole page via Promise.all rejection.
       const [checkinData, statsData, itinData] = await Promise.all([
         listCheckins(EVENT_ID),
-        getCheckinStats(EVENT_ID),
+        canManage ? getCheckinStats(EVENT_ID) : Promise.resolve(null),
         listItinerary(EVENT_ID),
       ]);
       setCheckins(checkinData);
@@ -63,7 +65,8 @@ export default function CheckinPage() {
 
   useEffect(() => {
     if (!roleLoading) loadData();
-  }, [roleLoading]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [roleLoading, canManage]);
 
   async function handleManualCheckin(e: React.FormEvent) {
     e.preventDefault();
@@ -140,7 +143,7 @@ export default function CheckinPage() {
           >
             Check-ins
           </button>
-          {canManage && (
+          {canCheckIn && (
             <button
               onClick={() => setActiveTab("qr")}
               className={`px-5 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -179,7 +182,7 @@ export default function CheckinPage() {
               </div>
             )}
 
-            {canManage && (
+            {canCheckIn && (
               <div className="bg-gray-900 border border-gray-800 rounded-xl p-5">
                 <h2 className="text-lg font-semibold mb-4">Manual Check-in</h2>
 
@@ -229,7 +232,7 @@ export default function CheckinPage() {
             <div className="bg-gray-900 border border-gray-800 rounded-xl overflow-hidden">
               <div className="px-5 py-4 border-b border-gray-800">
                 <h2 className="text-lg font-semibold">
-                  {canManage ? "All Check-ins" : "My Check-ins"}
+                  {canCheckIn ? "All Check-ins" : "My Check-ins"}
                 </h2>
               </div>
               {checkins.length === 0 ? (

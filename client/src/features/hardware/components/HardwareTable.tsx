@@ -13,19 +13,21 @@ import { SkeletonTable } from '@/components/ui/Skeleton';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem } from '@/components/ui/DropdownMenu';
 import { toast } from '@/components/ui/Toast';
 import { hardwareApi, hardwareQueryKeys, hardwareMutationKeys } from '../api';
-import type { HardwareItem, CreateHardwareItemRequest } from '../types';
+import type { HardwareItem } from '../types';
 import { HARDWARE_CATEGORIES, HARDWARE_CONDITIONS, HARDWARE_STATUSES } from '../types';
-import { Plus, Search, MoreVertical, Edit, Trash2, History } from 'lucide-react';
+import { Plus, Search, MoreVertical, Edit, Trash2, History, Download } from 'lucide-react';
+import { downloadCsv } from '@/lib/export-csv';
 
 interface HardwareTableProps {
   eventId: string;
   onEdit?: (item: HardwareItem) => void;
   onViewHistory?: (item: HardwareItem) => void;
+  onAddItem?: () => void;
   canEdit?: boolean;
   canDelete?: boolean;
 }
 
-export function HardwareTable({ eventId, onEdit, onViewHistory, canEdit = true, canDelete = true }: HardwareTableProps) {
+export function HardwareTable({ eventId, onEdit, onViewHistory, onAddItem, canEdit = true, canDelete = true }: HardwareTableProps) {
   const queryClient = useQueryClient();
   const [filters, setFilters] = useState({
     status: '',
@@ -42,16 +44,6 @@ export function HardwareTable({ eventId, onEdit, onViewHistory, canEdit = true, 
     queryKey: hardwareQueryKeys.items(eventId, filters),
     queryFn: () => hardwareApi.getItems(eventId, filters),
     placeholderData: (prev) => prev,
-  });
-
-  const createMutation = useMutation({
-    mutationKey: hardwareMutationKeys.createItem(),
-    mutationFn: (data: CreateHardwareItemRequest) => hardwareApi.createItem(eventId, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: hardwareQueryKeys.items(eventId) });
-      toast.success('Hardware item created');
-    },
-    onError: (error: Error) => toast.error(error.message),
   });
 
   const deleteMutation = useMutation({
@@ -97,10 +89,7 @@ export function HardwareTable({ eventId, onEdit, onViewHistory, canEdit = true, 
       columnHelper.accessor('quantity_available', {
         header: 'Available',
         cell: (info) => (
-          <div className="flex items-center gap-2">
-            <span className="font-mono tabular-nums text-lg">{info.getValue()}</span>
-            <span className="text-xs text-gray-500">/ {info.row.original.quantity_available + (info.row.original.status === 'checked_out' ? 1 : 0)}</span>
-          </div>
+          <span className="font-mono tabular-nums text-lg">{info.getValue()}</span>
         ),
       }),
       columnHelper.accessor('condition', {
@@ -173,9 +162,25 @@ export function HardwareTable({ eventId, onEdit, onViewHistory, canEdit = true, 
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Hardware Inventory</CardTitle>
-        <Button onClick={() => createMutation.reset()} leftIcon={<Plus className="h-4 w-4" />}>
-          Add Item
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            leftIcon={<Download className="h-4 w-4" />}
+            onClick={() => {
+              const rows = ((data?.data ?? []) as unknown as HardwareItem[]).map((i) => ({
+                name: i.name, category: i.category, model: i.model, serial_number: i.serial_number,
+                quantity_available: i.quantity_available, condition: i.condition, status: i.status,
+                location: i.location, notes: i.notes,
+              }));
+              downloadCsv(`hardware-inventory-${eventId.slice(0, 8)}`, rows);
+            }}
+          >
+            Export CSV
+          </Button>
+          <Button onClick={() => onAddItem?.()} leftIcon={<Plus className="h-4 w-4" />}>
+            Add Item
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         {/* Filters */}

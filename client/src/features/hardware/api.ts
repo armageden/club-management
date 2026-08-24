@@ -29,6 +29,9 @@ export const hardwareApi = {
 
   createItem: (eventId: string, data: CreateHardwareItemRequest) => api.post<HardwareItem>(`/events/${eventId}/hardware/items`, data),
 
+  createItemsBulk: (eventId: string, items: CreateHardwareItemRequest[]) =>
+    api.post<{ created: number; items: HardwareItem[] }>(`/events/${eventId}/hardware/items/bulk`, { items }),
+
   updateItem: (eventId: string, itemId: string, data: UpdateHardwareItemRequest) => api.put<HardwareItem>(`/events/${eventId}/hardware/items/${itemId}`, data),
 
   deleteItem: (eventId: string, itemId: string) => api.delete<{ message: string }>(`/events/${eventId}/hardware/items/${itemId}`),

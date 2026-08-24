@@ -1,6 +1,7 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
@@ -11,10 +12,11 @@ import { hardwareApi, hardwareQueryKeys } from '../api';
 import type { HardwareItem, HardwareCheckout } from '@/types/api';
 import { CheckoutModal } from '../components/CheckoutModal';
 import { Toaster, toast } from '@/components/ui/Toast';
-import { Package, Search, Package as PackageIcon } from 'lucide-react';
+import { Package, Search, Package as PackageIcon, MapPin, Info } from 'lucide-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { hardwareMutationKeys } from '../api';
 import { useAuth } from '@/app/providers';
+import { getDueState, dueStateStyles } from '@/lib/formatters';
 
 export default function HardwareBrowsePage({ eventId }: { eventId: string }) {
   const queryClient = useQueryClient();
@@ -26,6 +28,28 @@ export default function HardwareBrowsePage({ eventId }: { eventId: string }) {
   });
   const [checkoutModalOpen, setCheckoutModalOpen] = useState(false);
   const [checkoutItem, setCheckoutItem] = useState<HardwareItem | null>(null);
+
+  // Deep link from a scanned QR label (?item=<id>)
+  const [searchParams, setSearchParams] = useSearchParams();
+  const scannedItemId = searchParams.get('item');
+  const { data: scannedData } = useQuery({
+    queryKey: [...hardwareQueryKeys.item(eventId, scannedItemId || 'none')],
+    queryFn: () => hardwareApi.getItem(eventId, scannedItemId!),
+    enabled: !!scannedItemId,
+  });
+
+  useEffect(() => {
+    if (!scannedItemId || !scannedData?.data) return;
+    const item = scannedData.data as HardwareItem;
+    if (item.status === 'available') {
+      setCheckoutItem(item);
+      setCheckoutModalOpen(true);
+      toast.success(`Scanned: ${item.name}`);
+    } else {
+      toast.info(`"${item.name}" is ${item.status.replace('_', ' ')} right now`);
+    }
+    setSearchParams({}, { replace: true });
+  }, [scannedItemId, scannedData, setSearchParams]);
 
   const { data, isLoading } = useQuery({
     queryKey: hardwareQueryKeys.items(eventId, filters),
@@ -185,7 +209,15 @@ export default function HardwareBrowsePage({ eventId }: { eventId: string }) {
                           <p className="font-medium text-white">{checkout.hardware_item_name}</p>
                           <p className="text-sm text-gray-400">
                             Checked out: {new Date(checkout.checked_out_at).toLocaleString()}
-                            {checkout.due_at && ` · Due: ${new Date(checkout.due_at).toLocaleString()}`}
+                            {checkout.due_at && (
+                              <>
+                                {' · '}
+                                <span className={dueStateStyles[getDueState(checkout.due_at, checkout.status)].text}>
+                                  Due: {new Date(checkout.due_at).toLocaleString()}
+                                  {getDueState(checkout.due_at, checkout.status) === 'overdue' && ' (OVERDUE)'}
+                                </span>
+                              </>
+                            )}
                           </p>
                         </div>
                       </div>
@@ -239,7 +271,7 @@ function HardwareItemCard({ item, onCheckout }: { item: any; onCheckout: (item: 
       <div className="flex items-center gap-2 text-xs text-gray-500 mb-4">
         {item.location && (
           <span className="flex items-center gap-1">
-            <span>📍</span> {item.location}
+            <MapPin className="h-3.5 w-3.5" /> {item.location}
           </span>
         )}
       </div>
@@ -254,8 +286,8 @@ function HardwareItemCard({ item, onCheckout }: { item: any; onCheckout: (item: 
         >
           {isAvailable ? 'Check Out' : 'Unavailable'}
         </Button>
-        <Button variant="ghost" size="sm" className="p-2">
-          <span className="text-lg">ℹ️</span>
+        <Button variant="ghost" size="sm" className="p-2" aria-label={`About ${item.name}`} title={item.notes || item.name}>
+          <Info className="h-4 w-4" />
         </Button>
       </div>
     </Card>

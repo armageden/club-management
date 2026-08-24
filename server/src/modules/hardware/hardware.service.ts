@@ -1,6 +1,6 @@
 import { hardwareRepository } from "./hardware.repository.js";
 import { authRepository } from "../auth/auth.repository.js";
-import { ConflictError, NotFoundError, ValidationError } from "../../middleware/error.middleware.js";
+import { ConflictError, NotFoundError, ValidationError, AuthorizationError } from "../../middleware/error.middleware.js";
 import type {
   HardwareItem,
   HardwareCheckout,
@@ -56,6 +56,31 @@ export const hardwareService = {
     return hardwareRepository.create(eventId, data, userId);
   },
 
+  async createItemsBulk(
+    eventId: string,
+    items: CreateHardwareItemRequest[],
+    userId: string
+  ): Promise<{ created: number; items: HardwareItem[] }> {
+    // Reuse the single-item rules so a batch can never contain a row that
+    // the regular create endpoint would reject
+    for (const data of items) {
+      if (data.quantity_available !== undefined && data.quantity_available < 0) {
+        throw new ValidationError('Quantity cannot be negative');
+      }
+      const validStatuses = ['available', 'checked_out', 'damaged', 'lost', 'retired'];
+      if (data.status && !validStatuses.includes(data.status)) {
+        throw new ValidationError('Invalid status');
+      }
+      const validConditions = ['new', 'good', 'fair', 'damaged', 'retired'];
+      if (data.condition && !validConditions.includes(data.condition)) {
+        throw new ValidationError('Invalid condition');
+      }
+    }
+
+    const created = await hardwareRepository.createMany(eventId, items, userId);
+    return { created: created.length, items: created };
+  },
+
   async updateItem(eventId: string, itemId: string, data: UpdateHardwareItemRequest): Promise<HardwareItem> {
     const item = await hardwareRepository.getById(eventId, itemId);
     if (!item) throw new NotFoundError('Hardware item not found');
@@ -109,6 +134,7 @@ export const hardwareService = {
 
   // Checkouts
   async listCheckouts(eventId: string): Promise<HardwareCheckout[]> {
+    await hardwareRepository.markOverdue(eventId);
     return hardwareRepository.listCheckouts(eventId);
   },
 
@@ -118,7 +144,11 @@ export const hardwareService = {
     return checkout;
   },
 
-  async checkoutItem(eventId: string, data: CheckoutHardwareRequest, checkedOutBy: string): Promise<HardwareCheckout> {
+  async checkoutItem(
+    eventId: string,
+    data: CheckoutHardwareRequest,
+    actor: { id: string; globalRole: "admin" | "user" }
+  ): Promise<HardwareCheckout> {
     // Validate item exists and is available
     const item = await hardwareRepository.getById(eventId, data.hardware_item_id);
     if (!item) throw new NotFoundError('Hardware item not found');
@@ -129,15 +159,24 @@ export const hardwareService = {
     const borrower = await authRepository.findById(data.borrower_user_id);
     if (!borrower) throw new NotFoundError('Borrower not found');
 
-    // Validate due date
-    if (data.due_at) {
-      const dueDate = new Date(data.due_at);
-      if (dueDate <= new Date()) {
-        throw new ValidationError('Due date must be in the future');
-      }
+    // Hardware belongs to an event: borrower and actor must belong to it too
+    if (!(await hardwareRepository.isEventMember(eventId, data.borrower_user_id))) {
+      throw new AuthorizationError('Borrower is not an active member of this event');
+    }
+    if (actor.globalRole !== 'admin' && !(await hardwareRepository.isEventMember(eventId, actor.id))) {
+      throw new AuthorizationError('You are not an active member of this event');
     }
 
-    return hardwareRepository.checkout(eventId, data, checkedOutBy);
+    // Validate due date
+    if (!data.due_at) {
+      throw new ValidationError('Due time is required');
+    }
+    const dueDate = new Date(data.due_at);
+    if (dueDate <= new Date()) {
+      throw new ValidationError('Due date must be in the future');
+    }
+
+    return hardwareRepository.checkout(eventId, data, actor.id);
   },
 
   // Returns
@@ -152,25 +191,23 @@ export const hardwareService = {
       throw new ValidationError('Invalid condition');
     }
 
-    // Complete the return first (restores quantity)
-    const result = await hardwareRepository.returnHardware(eventId, data);
-
-    // Per PRD: a damaged return must automatically create a damage report
+    // Validate severity up front so the transaction below cannot fail halfway
+    let damage: { description: string; severity: string } | undefined;
     if (data.condition === 'damaged') {
       const severity = data.damage_severity || 'moderate';
       const validSeverities = ['minor', 'moderate', 'major', 'critical'];
       if (!validSeverities.includes(severity)) {
         throw new ValidationError('Invalid severity');
       }
-      await hardwareRepository.createDamageReport(eventId, {
-        hardware_item_id: checkout.hardware_item_id,
-        checkout_id: data.checkout_id,
+      damage = {
         description: data.notes || 'Item returned in damaged condition',
         severity,
-      }, data.received_by);
+      };
     }
 
-    return result;
+    // Per PRD: a damaged return automatically creates its damage report.
+    // Both writes happen inside one repository transaction.
+    return hardwareRepository.returnHardware(eventId, data, damage);
   },
 
   // Timeline / history
@@ -216,20 +253,18 @@ export const hardwareService = {
 
   // Analytics
   async getAnalytics(eventId: string): Promise<HardwareAnalytics> {
+    await hardwareRepository.markOverdue(eventId);
     return hardwareRepository.getAnalytics(eventId);
   },
 
   // Overdue Management
   async getOverdueItems(eventId: string): Promise<HardwareCheckout[]> {
+    await hardwareRepository.markOverdue(eventId);
     return hardwareRepository.getOverdueCheckouts(eventId);
   },
 
   async markOverdueItems(eventId: string): Promise<number> {
-    const overdue = await hardwareRepository.getOverdueCheckouts(eventId);
-    for (const checkout of overdue) {
-      await hardwareRepository.markOverdue(checkout.id);
-    }
-    return overdue.length;
+    return hardwareRepository.markOverdue(eventId);
   },
 
   // User-specific

@@ -13,6 +13,7 @@ router.get("/items", hardwareController.listItems);
 router.get("/items/:itemId", hardwareController.getItem);
 router.get("/items/:itemId/timeline", hardwareController.getItemTimeline);
 router.post("/items", requireGlobalRole("admin", "user"), hardwareController.createItem);
+router.post("/items/bulk", requireGlobalRole("admin"), hardwareController.createItemsBulk);
 router.put("/items/:itemId", requireGlobalRole("admin", "user"), hardwareController.updateItem);
 router.delete("/items/:itemId", requireGlobalRole("admin"), hardwareController.deleteItem);
 

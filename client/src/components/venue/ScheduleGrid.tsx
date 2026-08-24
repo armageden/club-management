@@ -4,7 +4,7 @@ import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Tooltip } from '@/components/ui/Tooltip';
 import type { VenueLocation, VenueAssignment } from '@/types/api';
-import { format, addMinutes, startOfDay, isWithinInterval } from 'date-fns';
+import { format, addMinutes, startOfDay } from 'date-fns';
 
 interface ScheduleGridProps {
   locations: VenueLocation[];
@@ -59,7 +59,7 @@ export function ScheduleGrid({
       if (!a.starts_at || !a.ends_at) return false;
       const start = new Date(a.starts_at);
       const end = new Date(a.ends_at);
-      return isWithinInterval(time, { start, end });
+      return time >= start && time < end;
     });
   };
 

@@ -7,3 +7,4 @@ export { ReturnModal } from './ReturnModal';
 export { DamageReportModal } from './DamageReportModal';
 export { AnalyticsDashboard } from './AnalyticsDashboard';
 export { ItemTimeline } from './ItemTimeline';
+export { ItemDetailsModal } from './ItemDetailsModal';

@@ -1,4 +1,5 @@
 import { pool } from "../../db/pool.js";
+import { ConflictError, NotFoundError } from "../../middleware/error.middleware.js";
 import type {
   HardwareItem,
   HardwareCheckout,
@@ -103,6 +104,41 @@ export const hardwareRepository = {
     return result.rows[0];
   },
 
+  // All-or-nothing: one transaction, any failure rolls back the whole batch
+  async createMany(eventId: string, items: CreateHardwareItemRequest[], createdBy: string): Promise<HardwareItem[]> {
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      const created: HardwareItem[] = [];
+      for (const data of items) {
+        const result = await client.query(
+          `INSERT INTO hardware_items (event_id, name, category, model, serial_number, quantity_available, condition, location, notes)
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+           RETURNING id, event_id, name, category, model, serial_number, quantity_available, condition, status, location, notes, created_at, updated_at`,
+          [
+            eventId,
+            data.name,
+            data.category || null,
+            data.model || null,
+            data.serial_number || null,
+            data.quantity_available || 1,
+            data.condition || 'good',
+            data.location || null,
+            data.notes || null,
+          ]
+        );
+        created.push(result.rows[0]);
+      }
+      await client.query('COMMIT');
+      return created;
+    } catch (error) {
+      await client.query('ROLLBACK');
+      throw error;
+    } finally {
+      client.release();
+    }
+  },
+
   async update(eventId: string, itemId: string, data: UpdateHardwareItemRequest): Promise<HardwareItem | null> {
     const fields: string[] = [];
     const values: unknown[] = [itemId, eventId];
@@ -195,19 +231,23 @@ export const hardwareRepository = {
     try {
       await client.query('BEGIN');
 
-      // Check availability and lock the item row
+      // Check availability and lock the item row.
+      // status must be re-checked here: the service-level check happened
+      // outside this transaction, so it can be stale by the time we lock.
       const itemResult = await client.query(
-        `SELECT quantity_available FROM hardware_items WHERE id = $1 AND event_id = $2 FOR UPDATE`,
+        `SELECT quantity_available FROM hardware_items
+         WHERE id = $1 AND event_id = $2 AND status = 'available'
+         FOR UPDATE`,
         [data.hardware_item_id, eventId]
       );
 
       if (itemResult.rows.length === 0) {
-        throw new Error('Hardware item not found');
+        throw new ConflictError('Item is not available for checkout');
       }
 
       const available = itemResult.rows[0].quantity_available;
       if (available <= 0) {
-        throw new Error('Item not available for checkout');
+        throw new ConflictError('No quantity available');
       }
 
       // Create checkout record
@@ -218,7 +258,7 @@ export const hardwareRepository = {
         [eventId, data.hardware_item_id, data.borrower_user_id, checkedOutBy, data.due_at || null, data.notes || null]
       );
 
-      // Decrease available quantity
+      // Decrease available quantity; flip status only when pool is exhausted
       await client.query(
         `UPDATE hardware_items SET quantity_available = quantity_available - 1,
          status = CASE WHEN quantity_available - 1 <= 0 THEN 'checked_out' ELSE status END,
@@ -226,14 +266,6 @@ export const hardwareRepository = {
          WHERE id = $1`,
         [data.hardware_item_id]
       );
-
-      // Update item status if needed
-      if (available === 1) {
-        await client.query(
-          `UPDATE hardware_items SET status = 'checked_out', updated_at = NOW() WHERE id = $1`,
-          [data.hardware_item_id]
-        );
-      }
 
       await client.query('COMMIT');
       return checkoutResult.rows[0];
@@ -246,7 +278,11 @@ export const hardwareRepository = {
   },
 
   // Returns
-  async returnHardware(eventId: string, data: ReturnHardwareRequest): Promise<{ checkout: HardwareCheckout; returnRecord: HardwareReturn }> {
+  async returnHardware(
+    eventId: string,
+    data: ReturnHardwareRequest,
+    damage?: { description: string; severity: string }
+  ): Promise<{ checkout: HardwareCheckout; returnRecord: HardwareReturn }> {
     const client = await pool.connect();
     try {
       await client.query('BEGIN');
@@ -258,15 +294,15 @@ export const hardwareRepository = {
       );
 
       if (checkoutResult.rows.length === 0) {
-        throw new Error('Checkout record not found');
+        throw new NotFoundError('Checkout not found');
       }
 
       const checkout = checkoutResult.rows[0];
       if (checkout.status === 'returned') {
-        throw new Error('Item already returned');
+        throw new ConflictError('Item already returned');
       }
       if (checkout.status === 'damaged') {
-        throw new Error('Item marked as damaged, cannot return normally');
+        throw new ConflictError('Item marked as damaged, cannot return normally');
       }
 
       // Create return record
@@ -283,15 +319,31 @@ export const hardwareRepository = {
         [data.notes || null, data.checkout_id]
       );
 
-      // Increase available quantity
-      await client.query(
-        `UPDATE hardware_items SET quantity_available = quantity_available + 1,
-         condition = $1,
-         status = CASE WHEN quantity_available + 1 > 0 THEN 'available' ELSE status END,
-         updated_at = NOW()
-         WHERE id = $2`,
-        [data.condition, checkout.hardware_item_id]
-      );
+      if (damage) {
+        // Damaged return: report and item state must land in this same
+        // transaction, otherwise a failure halfway leaves an inconsistent item
+        await client.query(
+          `INSERT INTO hardware_damage_reports (event_id, hardware_item_id, checkout_id, reported_by, description, severity)
+           VALUES ($1, $2, $3, $4, $5, $6)`,
+          [eventId, checkout.hardware_item_id, data.checkout_id, data.received_by, damage.description, damage.severity]
+        );
+        await client.query(
+          `UPDATE hardware_items SET quantity_available = quantity_available + 1,
+           condition = 'damaged', status = 'damaged', updated_at = NOW()
+           WHERE id = $1`,
+          [checkout.hardware_item_id]
+        );
+      } else {
+        // Increase available quantity
+        await client.query(
+          `UPDATE hardware_items SET quantity_available = quantity_available + 1,
+           condition = $1,
+           status = CASE WHEN quantity_available + 1 > 0 THEN 'available' ELSE status END,
+           updated_at = NOW()
+           WHERE id = $2`,
+          [data.condition, checkout.hardware_item_id]
+        );
+      }
 
       await client.query('COMMIT');
       return { checkout: checkoutResult.rows[0], returnRecord: returnResult.rows[0] };
@@ -352,7 +404,7 @@ export const hardwareRepository = {
 
   // Analytics
   async getAnalytics(eventId: string): Promise<HardwareAnalytics> {
-    const [itemsStats, checkoutsOverTime, topBorrowed] = await Promise.all([
+    const [itemsStats, checkoutsOverTime, topBorrowed, activeCheckouts] = await Promise.all([
       pool.query(
         `SELECT
            COUNT(*) as total_items,
@@ -360,7 +412,9 @@ export const hardwareRepository = {
            SUM(CASE WHEN status = 'checked_out' THEN 1 ELSE 0 END) as checked_out_items,
            SUM(CASE WHEN status = 'damaged' THEN 1 ELSE 0 END) as damaged_items,
            SUM(CASE WHEN status = 'lost' THEN 1 ELSE 0 END) as lost_items,
-           SUM(CASE WHEN status = 'overdue' THEN 1 ELSE 0 END) as overdue_items
+           (SELECT COUNT(*) FROM hardware_checkouts
+            WHERE event_id = $1 AND status IN ('active', 'overdue')
+              AND due_at IS NOT NULL AND due_at < NOW()) as overdue_items
          FROM hardware_items WHERE event_id = $1`,
         [eventId]
       ),
@@ -382,6 +436,11 @@ export const hardwareRepository = {
          LIMIT 10`,
         [eventId]
       ),
+      pool.query(
+        `SELECT COUNT(*) as count FROM hardware_checkouts
+         WHERE event_id = $1 AND status IN ('active', 'overdue')`,
+        [eventId]
+      ),
     ]);
 
     const itemsByCategoryResult = await pool.query(
@@ -400,6 +459,7 @@ export const hardwareRepository = {
       checkedOutItems: parseInt(itemsStats.rows[0].checked_out_items, 10),
       damagedItems: parseInt(itemsStats.rows[0].damaged_items, 10),
       overdueItems: parseInt(itemsStats.rows[0].overdue_items, 10),
+      activeCheckouts: parseInt(activeCheckouts.rows[0].count, 10),
       itemsByCategory: Object.fromEntries(itemsByCategoryResult.rows.map(r => [r.category, parseInt(r.count, 10)])),
       itemsByStatus: Object.fromEntries(itemsByStatusResult.rows.map(r => [r.status, parseInt(r.count, 10)])),
       checkoutsOverTime: checkoutsOverTime.rows.map(r => ({ date: r.date, count: parseInt(r.count, 10) })),
@@ -438,11 +498,24 @@ export const hardwareRepository = {
     return result.rows;
   },
 
-  async markOverdue(checkoutId: string): Promise<void> {
-    await pool.query(
-      `UPDATE hardware_checkouts SET status = 'overdue' WHERE id = $1 AND status = 'active' AND due_at < NOW()`,
-      [checkoutId]
+  async markOverdue(eventId: string): Promise<number> {
+    const result = await pool.query(
+      `UPDATE hardware_checkouts SET status = 'overdue'
+       WHERE event_id = $1 AND status = 'active' AND due_at IS NOT NULL AND due_at < NOW()`,
+      [eventId]
     );
+    return result.rowCount ?? 0;
+  },
+
+  async isEventMember(eventId: string, userId: string): Promise<boolean> {
+    const result = await pool.query(
+      `SELECT EXISTS(
+         SELECT 1 FROM event_members
+         WHERE event_id = $1 AND user_id = $2 AND status = 'active'
+       ) AS member`,
+      [eventId, userId]
+    );
+    return result.rows[0]?.member === true;
   },
 
   // Item timeline (created, checkouts, returns, damage reports)
@@ -456,6 +529,7 @@ export const hardwareRepository = {
          UNION ALL
          SELECT 'checked_out', hc.checked_out_at, u.full_name,
                 json_build_object('checkout_id', hc.id, 'borrower_user_id', hc.borrower_user_id,
+                                  'borrower_name', u.full_name,
                                   'due_at', hc.due_at, 'notes', hc.notes)
          FROM hardware_checkouts hc
          JOIN users u ON hc.borrower_user_id = u.id

@@ -274,3 +274,25 @@ export function formatPercentageScore(score: number | null | undefined): { text:
   if (rounded >= 50) return { text: `${rounded}%`, color: 'text-orange-400' };
   return { text: `${rounded}%`, color: 'text-red-400' };
 }
+/**
+ * Due-date urgency for hardware checkouts: overdue (red), due within
+ * DUE_SOON_WINDOW (amber), or normal.
+ */
+export type DueState = 'none' | 'overdue' | 'due-soon' | 'ok';
+
+const DUE_SOON_WINDOW_MS = 2 * 60 * 60 * 1000; // 2 hours
+
+export function getDueState(dueAt: string | null | undefined, status: string): DueState {
+  if (!dueAt || (status !== 'active' && status !== 'overdue')) return 'none';
+  const diff = new Date(dueAt).getTime() - Date.now();
+  if (diff <= 0) return 'overdue';
+  if (diff <= DUE_SOON_WINDOW_MS) return 'due-soon';
+  return 'ok';
+}
+
+export const dueStateStyles: Record<DueState, { text: string; icon: string; label?: string }> = {
+  none: { text: 'text-gray-500', icon: 'text-gray-500' },
+  ok: { text: 'text-white', icon: 'text-gray-500' },
+  'due-soon': { text: 'text-amber-400', icon: 'text-amber-400', label: 'DUE SOON' },
+  overdue: { text: 'text-red-400', icon: 'text-red-400', label: 'OVERDUE' },
+};

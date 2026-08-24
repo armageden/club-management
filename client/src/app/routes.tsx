@@ -7,6 +7,13 @@ import DashboardPage from '../pages/DashboardPage';
 import HomePage from '../pages/HomePage';
 import HardwareDashboardPage from '../features/hardware/pages/HardwareDashboardPage';
 import HardwareBrowsePage from '../features/hardware/pages/HardwareBrowsePage';
+import TeamsPage from '../features/teams/TeamsPage';
+import ItineraryPage from '../features/itinerary/ItineraryPage';
+import CheckinPage from '../features/checkin/CheckinPage';
+import CertificatesPage from '../features/certificates/CertificatesPage';
+import VenuePage from '../features/venue/VenuePage';
+import ProjectsPage from '../features/projects/ProjectsPage';
+import JudgingPage from '../features/judging/JudgingPage';
 import { useAuth } from './providers';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -114,7 +121,7 @@ export const router = createBrowserRouter([
         path: 'venue',
         element: (
           <ProtectedRoute>
-            <div>Venue Dashboard - Coming Soon</div>
+            <VenuePage />
           </ProtectedRoute>
         ),
       },
@@ -122,7 +129,7 @@ export const router = createBrowserRouter([
         path: 'projects',
         element: (
           <ProtectedRoute>
-            <div>Projects Dashboard - Coming Soon</div>
+            <ProjectsPage />
           </ProtectedRoute>
         ),
       },
@@ -130,7 +137,7 @@ export const router = createBrowserRouter([
         path: 'judging',
         element: (
           <ProtectedRoute>
-            <div>Judging Dashboard - Coming Soon</div>
+            <JudgingPage />
           </ProtectedRoute>
         ),
       },
@@ -138,7 +145,15 @@ export const router = createBrowserRouter([
         path: 'team',
         element: (
           <ProtectedRoute>
-            <div>Team Dashboard - Coming Soon</div>
+            <TeamsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'itinerary',
+        element: (
+          <ProtectedRoute>
+            <ItineraryPage />
           </ProtectedRoute>
         ),
       },
@@ -154,7 +169,15 @@ export const router = createBrowserRouter([
         path: 'checkin',
         element: (
           <ProtectedRoute>
-            <div>Check-in Dashboard - Coming Soon</div>
+            <CheckinPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: 'certificates',
+        element: (
+          <ProtectedRoute>
+            <CertificatesPage />
           </ProtectedRoute>
         ),
       },

@@ -81,12 +81,20 @@ export function AnalyticsDashboard({ eventId }: AnalyticsDashboardProps) {
       bg: 'bg-red-500/10',
       trend: null,
     },
+    {
+      label: 'Active Checkouts',
+      value: formatCompact(analytics.activeCheckouts),
+      icon: Package,
+      color: 'text-sky-400',
+      bg: 'bg-sky-500/10',
+      trend: analytics.overdueItems > 0 ? { value: `${analytics.overdueItems} overdue`, positive: false } : null,
+    },
   ];
 
   return (
     <div className="space-y-6">
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
         {kpiCards.map((kpi, index) => (
           <Card key={index} className="p-6">
             <div className="flex items-start justify-between">

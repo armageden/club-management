@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/Card';
 import { Button } from '@/components/ui/Button';
 import { Tabs, TabsListComp as TabsList, TabsTriggerComp as TabsTrigger, TabsContentComp as TabsContent } from '@/components/ui/Tabs';
 import { hardwareApi, hardwareQueryKeys, hardwareMutationKeys } from '../api';
-import type { HardwareItem, HardwareCheckout } from '@/types/api';
+import type { HardwareItem, HardwareCheckout, CreateHardwareItemRequest } from '@/types/api';
 import { HardwareTable } from '../components/HardwareTable';
 import { HardwareCheckoutsTable } from '../components/HardwareCheckoutsTable';
 import { DamageReportsTable } from '../components/DamageReportsTable';
@@ -15,10 +16,11 @@ import { CheckoutModal } from '../components/CheckoutModal';
 import { ReturnModal } from '../components/ReturnModal';
 import { DamageReportModal } from '../components/DamageReportModal';
 import { AnalyticsDashboard } from '../components/AnalyticsDashboard';
-import { ItemTimeline } from '../components/ItemTimeline';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/Dialog';
+import { QrLabelsModal } from '../components/QrLabelsModal';
+import { ImportItemsDialog } from '../components/ImportItemsDialog';
+import { ItemDetailsModal } from '../components/ItemDetailsModal';
 import { Toaster, toast } from '@/components/ui/Toast';
-import { Package } from 'lucide-react';
+import { Package, QrCode } from 'lucide-react';
 
 export default function HardwareDashboardPage({ eventId }: { eventId: string }) {
   const queryClient = useQueryClient();
@@ -30,7 +32,32 @@ export default function HardwareDashboardPage({ eventId }: { eventId: string }) 
   const [returnCheckout, setReturnCheckout] = useState<HardwareCheckout | null>(null);
   const [damageReportOpen, setDamageReportOpen] = useState(false);
   const [damageReportItem, setDamageReportItem] = useState<{ id: string; name: string; checkoutId?: string } | null>(null);
-  const [historyItem, setHistoryItem] = useState<HardwareItem | null>(null);
+  const [detailsItem, setDetailsItem] = useState<{ id: string; name: string } | null>(null);
+  const [qrLabelsOpen, setQrLabelsOpen] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
+
+  // Deep link from a scanned QR label (?item=<id>)
+  const [searchParams, setSearchParams] = useSearchParams();
+  const scannedItemId = searchParams.get('item');
+  const { data: scannedData } = useQuery({
+    queryKey: [...hardwareQueryKeys.item(eventId, scannedItemId || 'none')],
+    queryFn: () => hardwareApi.getItem(eventId, scannedItemId!),
+    enabled: !!scannedItemId,
+  });
+
+  useEffect(() => {
+    if (!scannedItemId || !scannedData?.data) return;
+    const item = scannedData.data as HardwareItem;
+    if (item.status === 'available') {
+      setCheckoutItem(item);
+      setCheckoutModalOpen(true);
+      toast.success(`Scanned: ${item.name}`);
+    } else {
+      setDetailsItem({ id: item.id, name: item.name });
+      toast.info(`Scanned: ${item.name} (${item.status.replace('_', ' ')})`);
+    }
+    setSearchParams({}, { replace: true });
+  }, [scannedItemId, scannedData, setSearchParams]);
 
   // Fetch participants for checkout dropdown
   const { data: participantsData } = useQuery({
@@ -135,6 +162,18 @@ export default function HardwareDashboardPage({ eventId }: { eventId: string }) 
     onError: (error: Error) => toast.error(error.message),
   });
 
+  const importMutation = useMutation({
+    mutationKey: ['hardware', 'import-items'],
+    mutationFn: (items: CreateHardwareItemRequest[]) => hardwareApi.createItemsBulk(eventId, items),
+    onSuccess: (res) => {
+      queryClient.invalidateQueries({ queryKey: hardwareQueryKeys.items(eventId) });
+      queryClient.invalidateQueries({ queryKey: hardwareQueryKeys.analytics(eventId) });
+      toast.success(`Imported ${res.data?.created ?? 0} items`);
+      setImportOpen(false);
+    },
+    onError: (error: Error) => toast.error(error.message),
+  });
+
   const handleOpenCreate = () => {
     setEditingItem(null);
     setItemFormOpen(true);
@@ -189,9 +228,17 @@ export default function HardwareDashboardPage({ eventId }: { eventId: string }) 
           <h1 className="text-3xl font-bold text-white">Hardware Inventory</h1>
           <p className="text-gray-400 mt-1">Manage hardware items, checkouts, and returns</p>
         </div>
-        <Button onClick={handleOpenCreate} leftIcon={<Package className="h-4 w-4" />}>
-          Add Item
-        </Button>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={() => setImportOpen(true)}>
+            Import CSV
+          </Button>
+          <Button variant="outline" onClick={() => setQrLabelsOpen(true)} leftIcon={<QrCode className="h-4 w-4" />}>
+            QR Labels
+          </Button>
+          <Button onClick={handleOpenCreate} leftIcon={<Package className="h-4 w-4" />}>
+            Add Item
+          </Button>
+        </div>
       </div>
 
       {/* Tabs */}
@@ -205,7 +252,12 @@ export default function HardwareDashboardPage({ eventId }: { eventId: string }) 
 
         {/* Inventory Tab */}
         <TabsContent value="inventory">
-          <HardwareTable eventId={eventId} onEdit={handleEdit} onViewHistory={setHistoryItem} />
+          <HardwareTable
+            eventId={eventId}
+            onEdit={handleEdit}
+            onViewHistory={setDetailsItem}
+            onAddItem={handleOpenCreate}
+          />
         </TabsContent>
 
         {/* Checkouts Tab */}
@@ -219,6 +271,7 @@ export default function HardwareDashboardPage({ eventId }: { eventId: string }) 
                 eventId={eventId}
                 onReturn={handleReturn}
                 onDamageReport={handleDamageReport}
+                onViewDetails={setDetailsItem}
               />
             </CardContent>
           </Card>
@@ -234,6 +287,7 @@ export default function HardwareDashboardPage({ eventId }: { eventId: string }) 
               <DamageReportsTable
                 eventId={eventId}
                 onResolve={handleResolveDamageReport}
+                onViewDetails={setDetailsItem}
               />
             </CardContent>
           </Card>
@@ -283,16 +337,27 @@ export default function HardwareDashboardPage({ eventId }: { eventId: string }) 
         isLoading={damageReportMutation.isPending}
       />
 
-      {/* Item history dialog */}
-      <Dialog open={!!historyItem} onOpenChange={(open) => !open && setHistoryItem(null)}>
-        <DialogContent size="lg">
-          <DialogHeader>
-            <DialogTitle>{historyItem?.name} — History</DialogTitle>
-            <DialogDescription>Full audit trail for this item.</DialogDescription>
-          </DialogHeader>
-          {historyItem && <ItemTimeline eventId={eventId} itemId={historyItem.id} />}
-        </DialogContent>
-      </Dialog>
+      {/* QR labels dialog */}
+      <QrLabelsModal open={qrLabelsOpen} onOpenChange={setQrLabelsOpen} eventId={eventId} />
+
+      {/* Bulk import dialog */}
+      <ImportItemsDialog
+        open={importOpen}
+        onOpenChange={setImportOpen}
+        onSubmit={async (items) => {
+          await importMutation.mutateAsync(items);
+        }}
+        isLoading={importMutation.isPending}
+      />
+
+      {/* Item details / lifecycle dialog */}
+      <ItemDetailsModal
+        open={!!detailsItem}
+        onOpenChange={(open) => !open && setDetailsItem(null)}
+        eventId={eventId}
+        itemId={detailsItem?.id ?? null}
+        itemName={detailsItem?.name}
+      />
 
       <Toaster />
     </div>

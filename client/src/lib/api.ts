@@ -54,6 +54,23 @@ async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
 }
 
 /**
+ * Fetch-style helper for feature modules: same auth/base-URL handling as
+ * `api`, but resolves to the envelope's inner `data` payload directly and
+ * accepts a standard RequestInit (method/body).
+ */
+export async function apiRequest<T>(path: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(buildUrl(path), {
+    ...init,
+    headers: {
+      ...getAuthHeaders(),
+      ...(init?.headers ?? {}),
+    },
+  });
+  const json = await handleResponse<unknown>(response);
+  return (json.data !== undefined ? json.data : (json as unknown)) as T;
+}
+
+/**
  * Typed API client with automatic auth handling
  */
 export const api = {

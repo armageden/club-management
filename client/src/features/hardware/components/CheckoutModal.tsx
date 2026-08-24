@@ -76,7 +76,7 @@ export function CheckoutModal({ open, onOpenChange, item, participants, onSubmit
         <DialogHeader>
           <DialogTitle>Checkout Hardware</DialogTitle>
           <DialogDescription>
-            Assign <strong>{item.name}</strong> to a participant.
+            Check out <strong>{item.name}</strong>.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-4">
@@ -110,7 +110,7 @@ export function CheckoutModal({ open, onOpenChange, item, participants, onSubmit
 
           {/* Due Date */}
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-1">Due Date & Time</label>
+            <label className="block text-sm font-medium text-gray-300 mb-1">Due Date &amp; Time *</label>
             <div className="flex gap-2">
               <input
                 type="date"
@@ -135,7 +135,7 @@ export function CheckoutModal({ open, onOpenChange, item, participants, onSubmit
                 }}
               />
             </div>
-            <p className="text-xs text-gray-500 mt-1">Optional: When the item should be returned</p>
+            {!dueDate && <p className="text-xs text-red-400 mt-1">Due time is required</p>}
           </div>
 
           {/* Notes */}
@@ -150,7 +150,7 @@ export function CheckoutModal({ open, onOpenChange, item, participants, onSubmit
             <Button type="button" variant="secondary" onClick={handleClose}>
               Cancel
             </Button>
-            <Button type="submit" loading={isLoading} disabled={isLoading}>
+            <Button type="submit" loading={isLoading} disabled={isLoading || !dueDate}>
               Checkout Item
             </Button>
           </DialogFooter>

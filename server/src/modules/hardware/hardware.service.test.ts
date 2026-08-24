@@ -20,6 +20,7 @@ vi.mock("./hardware.repository.js", () => ({
     getOverdueCheckouts: vi.fn(),
     markOverdue: vi.fn(),
     getItemTimeline: vi.fn(),
+    isEventMember: vi.fn(),
   },
 }));
 
@@ -69,12 +70,15 @@ const activeCheckout = {
 };
 
 describe("hardwareService.checkoutItem", () => {
-  beforeEach(() => vi.clearAllMocks());
+  beforeEach(() => {
+    vi.clearAllMocks();
+    repo.isEventMember.mockResolvedValue(true);
+  });
 
   it("rejects checkout when item is unavailable", async () => {
     repo.getById.mockResolvedValue({ ...baseItem, status: "checked_out" });
     await expect(
-      hardwareService.checkoutItem(EVENT_ID, { hardware_item_id: ITEM_ID, borrower_user_id: "user-1" }, "admin-1")
+      hardwareService.checkoutItem(EVENT_ID, { hardware_item_id: ITEM_ID, borrower_user_id: "user-1" }, { id: "admin-1", globalRole: "admin" })
     ).rejects.toThrow("not available");
     expect(repo.checkout).not.toHaveBeenCalled();
   });
@@ -82,7 +86,7 @@ describe("hardwareService.checkoutItem", () => {
   it("rejects checkout when quantity is zero", async () => {
     repo.getById.mockResolvedValue({ ...baseItem, quantity_available: 0 });
     await expect(
-      hardwareService.checkoutItem(EVENT_ID, { hardware_item_id: ITEM_ID, borrower_user_id: "user-1" }, "admin-1")
+      hardwareService.checkoutItem(EVENT_ID, { hardware_item_id: ITEM_ID, borrower_user_id: "user-1" }, { id: "admin-1", globalRole: "admin" })
     ).rejects.toThrow("No quantity available");
     expect(repo.checkout).not.toHaveBeenCalled();
   });
@@ -91,9 +95,42 @@ describe("hardwareService.checkoutItem", () => {
     repo.getById.mockResolvedValue(baseItem);
     authRepo.findById.mockResolvedValue(null);
     await expect(
-      hardwareService.checkoutItem(EVENT_ID, { hardware_item_id: ITEM_ID, borrower_user_id: "ghost" }, "admin-1")
+      hardwareService.checkoutItem(EVENT_ID, { hardware_item_id: ITEM_ID, borrower_user_id: "ghost" }, { id: "admin-1", globalRole: "admin" })
     ).rejects.toThrow("Borrower not found");
     expect(repo.checkout).not.toHaveBeenCalled();
+  });
+
+  it("rejects checkout when borrower is not an event member", async () => {
+    repo.getById.mockResolvedValue(baseItem);
+    authRepo.findById.mockResolvedValue({ id: "user-1" });
+    repo.isEventMember.mockResolvedValue(false);
+    await expect(
+      hardwareService.checkoutItem(EVENT_ID, { hardware_item_id: ITEM_ID, borrower_user_id: "user-1" }, { id: "admin-1", globalRole: "admin" })
+    ).rejects.toThrow("Borrower is not an active member");
+    expect(repo.checkout).not.toHaveBeenCalled();
+  });
+
+  it("rejects non-admin actor who is not an event member", async () => {
+    repo.getById.mockResolvedValue(baseItem);
+    authRepo.findById.mockResolvedValue({ id: "user-1" });
+    repo.isEventMember.mockImplementation(async (_eventId: string, userId: string) => userId !== "outsider-1");
+    await expect(
+      hardwareService.checkoutItem(EVENT_ID, { hardware_item_id: ITEM_ID, borrower_user_id: "user-1" }, { id: "outsider-1", globalRole: "user" })
+    ).rejects.toThrow("You are not an active member");
+    expect(repo.checkout).not.toHaveBeenCalled();
+  });
+
+  it("allows admin actor who is not an event member", async () => {
+    repo.getById.mockResolvedValue(baseItem);
+    authRepo.findById.mockResolvedValue({ id: "user-1" });
+    repo.isEventMember.mockImplementation(async (_eventId: string, userId: string) => userId !== "admin-9");
+    repo.checkout.mockResolvedValue(activeCheckout);
+    await hardwareService.checkoutItem(
+      EVENT_ID,
+      { hardware_item_id: ITEM_ID, borrower_user_id: "user-1", due_at: new Date(Date.now() + 86400000).toISOString() },
+      { id: "admin-9", globalRole: "admin" }
+    );
+    expect(repo.checkout).toHaveBeenCalledOnce();
   });
 
   it("rejects checkout with due date in the past", async () => {
@@ -103,9 +140,22 @@ describe("hardwareService.checkoutItem", () => {
       hardwareService.checkoutItem(
         EVENT_ID,
         { hardware_item_id: ITEM_ID, borrower_user_id: "user-1", due_at: new Date(Date.now() - 60000).toISOString() },
-        "admin-1"
+        { id: "admin-1", globalRole: "admin" }
       )
     ).rejects.toThrow("Due date must be in the future");
+    expect(repo.checkout).not.toHaveBeenCalled();
+  });
+
+  it("rejects checkout without a due time", async () => {
+    repo.getById.mockResolvedValue(baseItem);
+    authRepo.findById.mockResolvedValue({ id: "user-1" });
+    await expect(
+      hardwareService.checkoutItem(
+        EVENT_ID,
+        { hardware_item_id: ITEM_ID, borrower_user_id: "user-1" },
+        { id: "admin-1", globalRole: "admin" }
+      )
+    ).rejects.toThrow("Due time is required");
     expect(repo.checkout).not.toHaveBeenCalled();
   });
 
@@ -116,7 +166,7 @@ describe("hardwareService.checkoutItem", () => {
     const result = await hardwareService.checkoutItem(
       EVENT_ID,
       { hardware_item_id: ITEM_ID, borrower_user_id: "user-1", due_at: new Date(Date.now() + 86400000).toISOString() },
-      "admin-1"
+      { id: "admin-1", globalRole: "admin" }
     );
     expect(result).toEqual(activeCheckout);
     expect(repo.checkout).toHaveBeenCalledOnce();
@@ -141,18 +191,21 @@ describe("hardwareService.returnItem", () => {
     ).rejects.toThrow("Checkout not found");
   });
 
-  it("completes a normal return without creating a damage report", async () => {
+  it("completes a normal return without a damage payload", async () => {
     repo.getCheckoutById.mockResolvedValue(activeCheckout);
     repo.returnHardware.mockResolvedValue({ checkout: activeCheckout, returnRecord: { id: "ret-1" } });
     await hardwareService.returnItem(EVENT_ID, { checkout_id: "co-1", condition: "good", received_by: "admin-1" });
-    expect(repo.returnHardware).toHaveBeenCalledOnce();
+    expect(repo.returnHardware).toHaveBeenCalledWith(
+      EVENT_ID,
+      { checkout_id: "co-1", condition: "good", received_by: "admin-1" },
+      undefined
+    );
     expect(repo.createDamageReport).not.toHaveBeenCalled();
   });
 
-  it("creates a damage report AND completes the return when condition is damaged", async () => {
+  it("passes damage details into the return transaction when condition is damaged", async () => {
     repo.getCheckoutById.mockResolvedValue(activeCheckout);
     repo.returnHardware.mockResolvedValue({ checkout: activeCheckout, returnRecord: { id: "ret-1" } });
-    repo.createDamageReport.mockResolvedValue({ id: "dr-1" });
 
     await hardwareService.returnItem(EVENT_ID, {
       checkout_id: "co-1",
@@ -161,23 +214,18 @@ describe("hardwareService.returnItem", () => {
       notes: "Cracked screen",
     });
 
-    expect(repo.returnHardware).toHaveBeenCalledOnce();
-    expect(repo.createDamageReport).toHaveBeenCalledWith(
+    expect(repo.returnHardware).toHaveBeenCalledWith(
       EVENT_ID,
-      {
-        hardware_item_id: ITEM_ID,
-        checkout_id: "co-1",
-        description: "Cracked screen",
-        severity: "moderate",
-      },
-      "admin-1"
+      expect.objectContaining({ checkout_id: "co-1", condition: "damaged" }),
+      { description: "Cracked screen", severity: "moderate" }
     );
+    // report is written inside the same transaction now, not via this method
+    expect(repo.createDamageReport).not.toHaveBeenCalled();
   });
 
   it("uses provided damage severity for damaged returns", async () => {
     repo.getCheckoutById.mockResolvedValue(activeCheckout);
     repo.returnHardware.mockResolvedValue({ checkout: activeCheckout, returnRecord: { id: "ret-1" } });
-    repo.createDamageReport.mockResolvedValue({ id: "dr-1" });
 
     await hardwareService.returnItem(EVENT_ID, {
       checkout_id: "co-1",
@@ -186,10 +234,10 @@ describe("hardwareService.returnItem", () => {
       damage_severity: "critical",
     });
 
-    expect(repo.createDamageReport).toHaveBeenCalledWith(
+    expect(repo.returnHardware).toHaveBeenCalledWith(
       EVENT_ID,
-      expect.objectContaining({ severity: "critical" }),
-      "admin-1"
+      expect.anything(),
+      expect.objectContaining({ severity: "critical" })
     );
   });
 });

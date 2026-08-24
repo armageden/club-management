@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
+import { ZodError } from "zod";
 
 export class AppError extends Error {
   public statusCode: number;
@@ -45,10 +46,23 @@ export class ConflictError extends AppError {
 // Raw driver errors reach this handler uncaught; translate known pg error
 // codes into client-facing errors so they don't surface as 500s
 function normalizeDbError(err: Error): Error {
+  if (err instanceof ZodError) {
+    const first = err.issues[0];
+    const where = first && first.path.length > 0 ? first.path.join(".") + ": " : "";
+    return new ValidationError(where + (first?.message ?? "Invalid request"));
+  }
   const pgCode = (err as { code?: string }).code;
   if (pgCode === "22P02") {
     // invalid_text_representation — e.g. malformed uuid in a path param or body
     return new ValidationError("Invalid ID format");
+  }
+  if (pgCode === "23503" || pgCode === "23001") {
+    // foreign_key_violation / restrict_violation — e.g. deleting a row other rows reference
+    return new ConflictError("Cannot delete or modify: referenced by existing records");
+  }
+  if (pgCode === "23505") {
+    // unique_violation — e.g. two concurrent inserts racing past the service-level check
+    return new ConflictError("This record already exists");
   }
   return err;
 }

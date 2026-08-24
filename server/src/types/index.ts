@@ -106,6 +106,7 @@ export interface HardwareAnalytics {
   checkedOutItems: number;
   damagedItems: number;
   overdueItems: number;
+  activeCheckouts: number;
   itemsByCategory: Record<string, number>;
   itemsByStatus: Record<string, number>;
   checkoutsOverTime: Array<{ date: string; count: number }>;

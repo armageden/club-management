@@ -26,6 +26,10 @@ const createHardwareItemSchema = z.object({
 
 const updateHardwareItemSchema = createHardwareItemSchema.partial();
 
+const bulkItemsSchema = z.object({
+  items: z.array(createHardwareItemSchema).min(1).max(200),
+});
+
 const checkoutSchema = z.object({
   hardware_item_id: z.string().uuid(),
   borrower_user_id: z.string().uuid(),
@@ -112,6 +116,22 @@ export const hardwareController = {
     }
   },
 
+  async createItemsBulk(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      const eventId = getParam(req.params, 'eventId');
+      if (!eventId) throw new ValidationError('Event ID required');
+
+      if (!req.user) throw new AuthorizationError('Authentication required');
+
+      const { items } = bulkItemsSchema.parse(req.body);
+      const result = await hardwareService.createItemsBulk(eventId, items, req.user.id);
+
+      res.status(201).json({ success: true, data: result });
+    } catch (err) {
+      next(err);
+    }
+  },
+
   async updateItem(req: AuthRequest, res: Response, next: NextFunction) {
     try {
       const eventId = getParam(req.params, 'eventId');
@@ -178,7 +198,7 @@ export const hardwareController = {
       if (!req.user) throw new AuthorizationError('Authentication required');
 
       const data = checkoutSchema.parse(req.body);
-      const checkout = await hardwareService.checkoutItem(eventId, data, req.user.id);
+      const checkout = await hardwareService.checkoutItem(eventId, data, req.user);
 
       res.status(201).json({ success: true, data: checkout });
     } catch (err) {

@@ -36,7 +36,17 @@ export function useEventRole(eventId: string = EVENT_ID) {
   const isVolunteer = eventRole === "volunteer";
   const isParticipant = eventRole === "participant";
   const isJudge = eventRole === "judge";
-  const canManage = isOrganizer || isVolunteer;
+  const canManage = isOrganizer;
+  const canCheckIn = isOrganizer || isVolunteer;
 
-  return { eventRole, loading, isOrganizer, isVolunteer, isParticipant, isJudge, canManage };
+  return {
+    eventRole,
+    loading,
+    isOrganizer,
+    isVolunteer,
+    isParticipant,
+    isJudge,
+    canManage,
+    canCheckIn,
+  };
 }
