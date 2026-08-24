@@ -1,4 +1,5 @@
 import { apiRequest } from "../../lib/api";
+import { getActiveEventId } from "../../lib/event-id";
 import type { Team, TeamApplication, ParticipantProfile, TechTag } from "./teams.types";
 
 export async function listTeams(eventId: string): Promise<{ teams: Team[] }> {
@@ -94,7 +95,7 @@ export async function createOrUpdateProfile(
 }
 
 export async function getTechTags(): Promise<{ tags: TechTag[] }> {
-  return apiRequest("/events/e0000000-0000-0000-0000-000000000001/participants/tech-tags");
+  return apiRequest(`/events/${getActiveEventId()}/participants/tech-tags`);
 }
 
 export async function deleteTeamByAdmin(eventId: string, teamId: string): Promise<void> {

@@ -1,16 +1,14 @@
 import { apiRequest } from "../../lib/api";
+import { getActiveEventId } from "../../lib/event-id";
 import type { Checkin, CheckinStats } from "./checkin.types";
 
-
-const EVENT_ID = "e0000000-0000-0000-0000-000000000001";
-
-export async function listCheckins(eventId: string = EVENT_ID): Promise<Checkin[]> {
+export async function listCheckins(eventId: string = getActiveEventId()): Promise<Checkin[]> {
   const res = await apiRequest<{ checkins: Checkin[] }>(`/events/${eventId}/checkin`);
   return res.checkins;
 }
 
 export async function manualCheckin(
-  eventId: string = EVENT_ID,
+  eventId: string = getActiveEventId(),
   userId: string,
   itineraryItemId?: string
 ): Promise<Checkin> {
@@ -22,7 +20,7 @@ export async function manualCheckin(
 }
 
 export async function qrCheckin(
-  eventId: string = EVENT_ID,
+  eventId: string = getActiveEventId(),
   token: string
 ): Promise<Checkin> {
   const res = await apiRequest<{ checkin: Checkin }>(`/events/${eventId}/checkin/qr`, {
@@ -33,7 +31,7 @@ export async function qrCheckin(
 }
 
 export async function generateQRToken(
-  eventId: string = EVENT_ID,
+  eventId: string = getActiveEventId(),
   userId?: string,
   expiresInMinutes?: number
 ): Promise<{ token: string }> {
@@ -47,7 +45,7 @@ export async function generateQRToken(
   return res;
 }
 
-export async function getCheckinStats(eventId: string = EVENT_ID): Promise<CheckinStats> {
+export async function getCheckinStats(eventId: string = getActiveEventId()): Promise<CheckinStats> {
   const res = await apiRequest<{ stats: CheckinStats }>(`/events/${eventId}/checkin/stats`);
   return res.stats;
 }

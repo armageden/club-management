@@ -4,6 +4,10 @@ import { render, screen } from "@testing-library/react";
 const useEventRole = vi.hoisted(() => vi.fn());
 vi.mock("@/hooks/useEventRole", () => ({ useEventRole }));
 
+vi.mock("@/app/demo-mode", () => ({
+  useActiveEventId: () => "e0000000-0000-0000-0000-000000000001",
+}));
+
 const checkinApi = vi.hoisted(() => ({
   listCheckins: vi.fn(),
   manualCheckin: vi.fn(),

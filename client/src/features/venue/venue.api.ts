@@ -1,4 +1,5 @@
 import { apiRequest } from "../../lib/api";
+import { getActiveEventId } from "../../lib/event-id";
 import type {
   VenueLocation,
   VenueAssignment,
@@ -8,9 +9,7 @@ import type {
   UpdateVenueAssignmentRequest,
 } from "@/types/api";
 
-const EVENT_ID = "e0000000-0000-0000-0000-000000000001";
-
-export async function listLocations(eventId: string = EVENT_ID): Promise<VenueLocation[]> {
+export async function listLocations(eventId: string = getActiveEventId()): Promise<VenueLocation[]> {
   const res = await apiRequest<{ locations: VenueLocation[] }>(
     `/events/${eventId}/venue/locations`
   );
@@ -18,7 +17,7 @@ export async function listLocations(eventId: string = EVENT_ID): Promise<VenueLo
 }
 
 export async function createLocation(
-  eventId: string = EVENT_ID,
+  eventId: string = getActiveEventId(),
   data: CreateVenueLocationRequest
 ): Promise<VenueLocation> {
   const res = await apiRequest<{ location: VenueLocation }>(
@@ -29,7 +28,7 @@ export async function createLocation(
 }
 
 export async function updateLocation(
-  eventId: string = EVENT_ID,
+  eventId: string = getActiveEventId(),
   locationId: string,
   data: UpdateVenueLocationRequest
 ): Promise<VenueLocation> {
@@ -41,7 +40,7 @@ export async function updateLocation(
 }
 
 export async function listAssignments(
-  eventId: string = EVENT_ID,
+  eventId: string = getActiveEventId(),
   locationId?: string
 ): Promise<VenueAssignment[]> {
   const query = locationId ? `?location_id=${encodeURIComponent(locationId)}` : "";
@@ -52,7 +51,7 @@ export async function listAssignments(
 }
 
 export async function createAssignment(
-  eventId: string = EVENT_ID,
+  eventId: string = getActiveEventId(),
   data: CreateVenueAssignmentRequest
 ): Promise<VenueAssignment> {
   const res = await apiRequest<{ assignment: VenueAssignment }>(
@@ -63,7 +62,7 @@ export async function createAssignment(
 }
 
 export async function updateAssignment(
-  eventId: string = EVENT_ID,
+  eventId: string = getActiveEventId(),
   assignmentId: string,
   data: UpdateVenueAssignmentRequest
 ): Promise<VenueAssignment> {
@@ -75,7 +74,7 @@ export async function updateAssignment(
 }
 
 export async function cancelAssignment(
-  eventId: string = EVENT_ID,
+  eventId: string = getActiveEventId(),
   assignmentId: string
 ): Promise<void> {
   await apiRequest(`/events/${eventId}/venue/assignments/${assignmentId}`, {

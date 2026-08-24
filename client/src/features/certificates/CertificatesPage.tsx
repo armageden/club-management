@@ -8,8 +8,7 @@ import {
 } from "./certificates.api";
 import type { Certificate, EligibilityEntry } from "./certificates.types";
 import { useEventRole } from "../../hooks/useEventRole";
-
-const EVENT_ID = "e0000000-0000-0000-0000-000000000001";
+import { useActiveEventId } from "../../app/demo-mode";
 
 type Tab = "certificates" | "eligibility";
 
@@ -43,6 +42,7 @@ function XIcon() {
 }
 
 export default function CertificatesPage() {
+  const EVENT_ID = useActiveEventId();
   const { isOrganizer, loading: roleLoading } = useEventRole();
   const [activeTab, setActiveTab] = useState<Tab>("certificates");
   const [certificates, setCertificates] = useState<Certificate[]>([]);

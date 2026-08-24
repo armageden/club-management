@@ -10,8 +10,7 @@ import {
 import { listItinerary } from "../itinerary/itinerary.api";
 import type { ItineraryItem } from "../itinerary/itinerary.types";
 import { useEventRole } from "../../hooks/useEventRole";
-
-const EVENT_ID = "e0000000-0000-0000-0000-000000000001";
+import { useActiveEventId } from "../../app/demo-mode";
 
 function formatTimestamp(iso: string): string {
   const d = new Date(iso);
@@ -24,6 +23,7 @@ function formatTimestamp(iso: string): string {
 }
 
 export default function CheckinPage() {
+  const EVENT_ID = useActiveEventId();
   const { canManage, canCheckIn, loading: roleLoading } = useEventRole();
   const [activeTab, setActiveTab] = useState<"checkins" | "qr">("checkins");
 

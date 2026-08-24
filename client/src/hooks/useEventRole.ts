@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "../app/providers";
 import { apiRequest } from "../lib/api";
-
-const EVENT_ID = "e0000000-0000-0000-0000-000000000001";
+import { getActiveEventId } from "../lib/event-id";
 
 type EventRole = "organizer" | "participant" | "volunteer" | "judge" | null;
 
-export function useEventRole(eventId: string = EVENT_ID) {
+export function useEventRole(eventId: string = getActiveEventId()) {
   const { user } = useAuth();
   const [eventRole, setEventRole] = useState<EventRole>(null);
   const [loading, setLoading] = useState(true);

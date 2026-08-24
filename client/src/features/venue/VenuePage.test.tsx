@@ -2,6 +2,10 @@ import { describe, it, expect, vi } from "vitest";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 
+vi.mock("@/app/demo-mode", () => ({
+  useActiveEventId: () => "e0000000-0000-0000-0000-000000000001",
+}));
+
 vi.mock("@/hooks/useEventRole", () => ({
   useEventRole: () => ({
     eventRole: "organizer",

@@ -14,12 +14,12 @@ import {
 } from "./teams.api";
 import type { Team, ParticipantProfile, TechTag } from "./teams.types";
 import { useEventRole } from "../../hooks/useEventRole";
-
-const EVENT_ID = "e0000000-0000-0000-0000-000000000001";
+import { useActiveEventId } from "../../app/demo-mode";
 
 type Tab = "teams" | "profile" | "browse";
 
 export default function TeamsPage() {
+  const EVENT_ID = useActiveEventId();
   const { isOrganizer, loading: roleLoading } = useEventRole();
   const [activeTab, setActiveTab] = useState<Tab>("teams");
 

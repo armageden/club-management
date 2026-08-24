@@ -8,6 +8,8 @@ import { Avatar } from '@/components/ui/Avatar';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/DropdownMenu';
 import { Sheet, SheetTrigger, SheetContent } from '@/components/ui/Sheet';
 import { useAuth } from '@/app/providers';
+import { useDemoMode } from '@/app/demo-mode';
+import { enableDemoData, disableDemoData } from '@/lib/demo.api';
 import {
   LayoutDashboard,
   Box,
@@ -22,6 +24,7 @@ import {
   Menu,
   X,
   ChevronDown,
+  FlaskConical,
 } from 'lucide-react';
 
 const navigation = [
@@ -35,6 +38,63 @@ const navigation = [
   { name: 'Check-in', href: '/checkin', icon: UserCheck },
   { name: 'Certificates', href: '/certificates', icon: Award },
 ];
+
+function DemoModeToggle({ collapsed }: { collapsed?: boolean }) {
+  const { demoMode, toggleDemoMode } = useDemoMode();
+  const { user } = useAuth();
+  const isAdmin = user?.global_role === 'admin';
+
+  // Admins seed/purge the demo event server-side before the view flips, so
+  // one click is the whole lifecycle. Other roles just switch which event
+  // they are looking at (server rejects their data calls anyway).
+  const handleToggle = async () => {
+    if (isAdmin) {
+      try {
+        if (demoMode) await disableDemoData();
+        else await enableDemoData();
+      } catch (err) {
+        console.warn('Demo data sync failed; switching view anyway.', err);
+      }
+    }
+    toggleDemoMode();
+  };
+
+  return (
+    <button
+      type="button"
+      role="switch"
+      aria-checked={demoMode}
+      aria-label="Demo mode"
+      onClick={handleToggle}
+      title="Switch between the seeded Demo Hackathon and your real event data"
+      className={cn(
+        'flex items-center gap-3 rounded-lg text-sm font-medium transition-colors w-full',
+        demoMode ? 'bg-amber-500/10 text-amber-400' : 'text-gray-400 hover:bg-gray-800 hover:text-white',
+        collapsed ? 'justify-center px-2 py-2.5' : 'px-3 py-2.5'
+      )}
+    >
+      <FlaskConical className="h-5 w-5 flex-shrink-0" aria-hidden="true" />
+      {!collapsed && (
+        <>
+          <span className="flex-1 text-left">Demo Mode</span>
+          <span
+            className={cn(
+              'relative inline-flex h-5 w-9 flex-shrink-0 items-center rounded-full transition-colors',
+              demoMode ? 'bg-amber-500' : 'bg-gray-700'
+            )}
+          >
+            <span
+              className={cn(
+                'inline-block h-4 w-4 transform rounded-full bg-white transition-transform',
+                demoMode ? 'translate-x-[18px]' : 'translate-x-0.5'
+              )}
+            />
+          </span>
+        </>
+      )}
+    </button>
+  );
+}
 
 export function Sidebar() {
   const { user, logout } = useAuth();
@@ -94,6 +154,11 @@ export function Sidebar() {
           );
         })}
       </nav>
+
+      {/* Demo mode switch */}
+      <div className={cn('border-t border-gray-800 py-3', collapsed ? 'px-2' : 'px-4')}>
+        <DemoModeToggle collapsed={collapsed} />
+      </div>
 
       {/* User Menu */}
       <div className="p-4 border-t border-gray-800">
@@ -199,6 +264,9 @@ export function MobileSidebar() {
         </nav>
 
         <div className="border-t border-gray-800 pt-4">
+          <div className="mb-4">
+            <DemoModeToggle />
+          </div>
           <div className="flex items-center gap-3 mb-4">
             <Avatar src={null} fallback={user?.full_name || 'U'} size="md" />
             <div className="flex-1 min-w-0">

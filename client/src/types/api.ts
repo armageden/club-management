@@ -170,6 +170,7 @@ export interface CreateHardwareItemRequest {
   condition?: string;
   location?: string;
   notes?: string;
+  status?: string;
 }
 
 export interface UpdateHardwareItemRequest extends Partial<CreateHardwareItemRequest> {}
@@ -186,6 +187,7 @@ export interface ReturnHardwareRequest {
   condition: string;
   received_by: string;
   notes?: string;
+  damage_severity?: 'minor' | 'moderate' | 'major' | 'critical';
 }
 
 export interface CreateDamageReportRequest {

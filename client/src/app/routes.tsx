@@ -15,9 +15,11 @@ import VenuePage from '../features/venue/VenuePage';
 import ProjectsPage from '../features/projects/ProjectsPage';
 import JudgingPage from '../features/judging/JudgingPage';
 import { useAuth } from './providers';
+import { useActiveEventId } from './demo-mode';
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
+  const eventId = useActiveEventId();
 
   if (loading) {
     return (
@@ -31,7 +33,9 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
     return <Navigate to="/login" replace />;
   }
 
-  return <>{children}</>;
+  // Keyed by event so toggling Demo Mode remounts the page and its data
+  // loads re-run against the other event.
+  return <div key={eventId}>{children}</div>;
 }
 
 function GuestRoute({ children }: { children: React.ReactNode }) {
@@ -66,9 +70,10 @@ function PublicLayout({ children }: { children?: React.ReactNode }) {
 // Hardware route - shows different page based on role
 function HardwareRoute() {
   const { user } = useAuth();
+  const eventId = useActiveEventId();
   const isOrganizer = user?.global_role === 'admin'; // Simplified - in real app check event membership
 
-  return isOrganizer ? <HardwareDashboardPage eventId="e0000000-0000-0000-0000-000000000001" /> : <HardwareBrowsePage eventId="e0000000-0000-0000-0000-000000000001" />;
+  return isOrganizer ? <HardwareDashboardPage eventId={eventId} /> : <HardwareBrowsePage eventId={eventId} />;
 }
 
 export const router = createBrowserRouter([

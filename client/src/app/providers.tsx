@@ -10,6 +10,7 @@ import {
 } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from '@/components/ui/Toast';
+import { DemoModeProvider } from './demo-mode';
 import type { User } from '@/types/api';
 
 const queryClient = new QueryClient({
@@ -118,12 +119,14 @@ export function useTheme(): ThemeContextType {
 export function Providers({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <ThemeProvider>
-        <AuthProviderInner>
-          {children}
-          <Toaster position="top-right" richColors />
-        </AuthProviderInner>
-      </ThemeProvider>
+      <DemoModeProvider>
+        <ThemeProvider>
+          <AuthProviderInner>
+            {children}
+            <Toaster position="top-right" richColors />
+          </AuthProviderInner>
+        </ThemeProvider>
+      </DemoModeProvider>
     </QueryClientProvider>
   );
 }

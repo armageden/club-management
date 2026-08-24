@@ -14,8 +14,7 @@ import {
 import type { ProjectSubmission, LeaderboardEntry } from "@/types/api";
 import * as judgingApi from "./judging.api";
 import { formatDateTime, formatScore } from "@/lib/formatters";
-
-const EVENT_ID = "e0000000-0000-0000-0000-000000000001";
+import { useActiveEventId } from "@/app/demo-mode";
 
 const DIMENSIONS = [
   { key: "score_innovation", label: "Innovation", weight: "30%" },
@@ -34,6 +33,7 @@ interface Message {
 }
 
 export default function JudgingPage() {
+  const EVENT_ID = useActiveEventId();
   const { isJudge, isOrganizer } = useEventRole();
   const canScore = isJudge || isOrganizer;
 

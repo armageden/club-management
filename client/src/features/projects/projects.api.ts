@@ -1,19 +1,18 @@
 import { apiRequest } from "../../lib/api";
+import { getActiveEventId } from "../../lib/event-id";
 import type {
   ProjectSubmission,
   CreateProjectRequest,
   UpdateProjectRequest,
 } from "@/types/api";
 
-const EVENT_ID = "e0000000-0000-0000-0000-000000000001";
-
-export async function listProjects(eventId: string = EVENT_ID): Promise<ProjectSubmission[]> {
+export async function listProjects(eventId: string = getActiveEventId()): Promise<ProjectSubmission[]> {
   const res = await apiRequest<{ projects: ProjectSubmission[] }>(`/events/${eventId}/projects`);
   return res.projects;
 }
 
 export async function createProject(
-  eventId: string = EVENT_ID,
+  eventId: string = getActiveEventId(),
   data: CreateProjectRequest
 ): Promise<ProjectSubmission> {
   const res = await apiRequest<{ project: ProjectSubmission }>(`/events/${eventId}/projects`, {
@@ -24,7 +23,7 @@ export async function createProject(
 }
 
 export async function getProject(
-  eventId: string = EVENT_ID,
+  eventId: string = getActiveEventId(),
   projectId: string
 ): Promise<ProjectSubmission> {
   const res = await apiRequest<{ project: ProjectSubmission }>(
@@ -34,7 +33,7 @@ export async function getProject(
 }
 
 export async function updateProject(
-  eventId: string = EVENT_ID,
+  eventId: string = getActiveEventId(),
   projectId: string,
   data: UpdateProjectRequest
 ): Promise<ProjectSubmission> {
@@ -46,7 +45,7 @@ export async function updateProject(
 }
 
 export async function submitProject(
-  eventId: string = EVENT_ID,
+  eventId: string = getActiveEventId(),
   projectId: string
 ): Promise<ProjectSubmission> {
   const res = await apiRequest<{ project: ProjectSubmission }>(
@@ -57,7 +56,7 @@ export async function submitProject(
 }
 
 export async function disqualifyProject(
-  eventId: string = EVENT_ID,
+  eventId: string = getActiveEventId(),
   projectId: string
 ): Promise<ProjectSubmission> {
   const res = await apiRequest<{ project: ProjectSubmission }>(

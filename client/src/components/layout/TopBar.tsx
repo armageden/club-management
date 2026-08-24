@@ -13,7 +13,7 @@ interface TopBarProps {
 }
 
 export function TopBar({ onMenuClick }: TopBarProps) {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   const [commandOpen, setCommandOpen] = useState(false);
   const [notificationsOpen, setNotificationsOpen] = useState(false);
 
@@ -150,7 +150,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
                 Keyboard Shortcuts
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => { /* logout */ }}>
+              <DropdownMenuItem onClick={logout}>
                 <LogOut className="h-4 w-4 mr-2" />
                 Logout
               </DropdownMenuItem>
@@ -183,7 +183,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
           ))}
           <CommandSeparatorComp />
           <CommandItemComp
-            onSelect={() => { /* logout */ }}
+            onSelect={logout}
             shortcut="⇧⌘Q"
           >
             Logout

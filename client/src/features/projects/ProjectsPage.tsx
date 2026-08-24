@@ -15,8 +15,7 @@ import {
 import type { ProjectSubmission, CreateProjectRequest } from "@/types/api";
 import * as projectsApi from "./projects.api";
 import { formatDateTime } from "@/lib/formatters";
-
-const EVENT_ID = "e0000000-0000-0000-0000-000000000001";
+import { useActiveEventId } from "@/app/demo-mode";
 
 interface Message {
   type: "success" | "error";
@@ -24,6 +23,7 @@ interface Message {
 }
 
 export default function ProjectsPage() {
+  const EVENT_ID = useActiveEventId();
   const { isOrganizer, isParticipant } = useEventRole();
 
   const [projects, setProjects] = useState<ProjectSubmission[]>([]);
