@@ -1,0 +1,74 @@
+name: Update Project Summary
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'server/src/**'
+      - 'client/src/**'
+      - 'docs/**'
+      - 'scripts/update-project-summary.ts'
+  pull_request:
+    types: [closed]
+    branches: [main]
+    paths:
+      - 'server/src/**'
+      - 'client/src/**'
+
+permissions:
+  contents: write
+
+jobs:
+  update-summary:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.pull_request.merged == true)
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: |
+          cd server && npm ci
+          cd ../client && npm ci
+
+      - name: Install tsx globally
+        run: npm install -g tsx
+
+      - name: Run summary generator
+        run: |
+          npx tsx scripts/update-project-summary.ts
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          if git diff --quiet docs/PROJECT_SUMMARY.md; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "No changes to PROJECT_SUMMARY.md"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "PROJECT_SUMMARY.md has changes"
+          fi
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changed == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/PROJECT_SUMMARY.md
+          git commit -m "docs: auto-update PROJECT_SUMMARY.md [skip ci]"
+          git push
+
+      - name: Summary
+        run: |
+          echo "✅ Project summary updated automatically"
+          echo "📄 Check docs/PROJECT_SUMMARY.md for latest status"

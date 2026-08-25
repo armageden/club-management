@@ -1,0 +1,238 @@
+import { describe, it, expect, vi, beforeEach } from "vitest";
+
+vi.mock("./hardware.repository.js", () => ({
+  hardwareRepository: {
+    getById: vi.fn(),
+    listByEvent: vi.fn(),
+    create: vi.fn(),
+    update: vi.fn(),
+    delete: vi.fn(),
+    listCheckouts: vi.fn(),
+    getCheckoutById: vi.fn(),
+    getActiveCheckoutForItem: vi.fn(),
+    getUserActiveCheckouts: vi.fn(),
+    checkout: vi.fn(),
+    returnHardware: vi.fn(),
+    listDamageReports: vi.fn(),
+    createDamageReport: vi.fn(),
+    resolveDamageReport: vi.fn(),
+    getAnalytics: vi.fn(),
+    getOverdueCheckouts: vi.fn(),
+    markOverdue: vi.fn(),
+    getItemTimeline: vi.fn(),
+  },
+}));
+
+vi.mock("../auth/auth.repository.js", () => ({
+  authRepository: {
+    findById: vi.fn(),
+    findByEmail: vi.fn(),
+  },
+}));
+
+import { hardwareService } from "./hardware.service.js";
+import { hardwareRepository } from "./hardware.repository.js";
+import { authRepository } from "../auth/auth.repository.js";
+
+const repo = hardwareRepository as unknown as Record<string, ReturnType<typeof vi.fn>>;
+const authRepo = authRepository as unknown as Record<string, ReturnType<typeof vi.fn>>;
+
+const EVENT_ID = "evt-1";
+const ITEM_ID = "item-1";
+
+const baseItem = {
+  id: ITEM_ID,
+  event_id: EVENT_ID,
+  name: "Laptop",
+  category: "electronics",
+  model: null,
+  serial_number: null,
+  quantity_available: 1,
+  condition: "good",
+  status: "available",
+  location: null,
+  notes: null,
+  created_at: new Date(),
+  updated_at: new Date(),
+};
+
+const activeCheckout = {
+  id: "co-1",
+  event_id: EVENT_ID,
+  hardware_item_id: ITEM_ID,
+  borrower_user_id: "user-1",
+  checked_out_by: "admin-1",
+  checked_out_at: new Date(),
+  due_at: null,
+  status: "active",
+  notes: null,
+};
+
+describe("hardwareService.checkoutItem", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("rejects checkout when item is unavailable", async () => {
+    repo.getById.mockResolvedValue({ ...baseItem, status: "checked_out" });
+    await expect(
+      hardwareService.checkoutItem(EVENT_ID, { hardware_item_id: ITEM_ID, borrower_user_id: "user-1" }, "admin-1")
+    ).rejects.toThrow("not available");
+    expect(repo.checkout).not.toHaveBeenCalled();
+  });
+
+  it("rejects checkout when quantity is zero", async () => {
+    repo.getById.mockResolvedValue({ ...baseItem, quantity_available: 0 });
+    await expect(
+      hardwareService.checkoutItem(EVENT_ID, { hardware_item_id: ITEM_ID, borrower_user_id: "user-1" }, "admin-1")
+    ).rejects.toThrow("No quantity available");
+    expect(repo.checkout).not.toHaveBeenCalled();
+  });
+
+  it("rejects checkout when borrower does not exist", async () => {
+    repo.getById.mockResolvedValue(baseItem);
+    authRepo.findById.mockResolvedValue(null);
+    await expect(
+      hardwareService.checkoutItem(EVENT_ID, { hardware_item_id: ITEM_ID, borrower_user_id: "ghost" }, "admin-1")
+    ).rejects.toThrow("Borrower not found");
+    expect(repo.checkout).not.toHaveBeenCalled();
+  });
+
+  it("rejects checkout with due date in the past", async () => {
+    repo.getById.mockResolvedValue(baseItem);
+    authRepo.findById.mockResolvedValue({ id: "user-1" });
+    await expect(
+      hardwareService.checkoutItem(
+        EVENT_ID,
+        { hardware_item_id: ITEM_ID, borrower_user_id: "user-1", due_at: new Date(Date.now() - 60000).toISOString() },
+        "admin-1"
+      )
+    ).rejects.toThrow("Due date must be in the future");
+    expect(repo.checkout).not.toHaveBeenCalled();
+  });
+
+  it("creates checkout when item is available and borrower exists", async () => {
+    repo.getById.mockResolvedValue(baseItem);
+    authRepo.findById.mockResolvedValue({ id: "user-1" });
+    repo.checkout.mockResolvedValue(activeCheckout);
+    const result = await hardwareService.checkoutItem(
+      EVENT_ID,
+      { hardware_item_id: ITEM_ID, borrower_user_id: "user-1", due_at: new Date(Date.now() + 86400000).toISOString() },
+      "admin-1"
+    );
+    expect(result).toEqual(activeCheckout);
+    expect(repo.checkout).toHaveBeenCalledOnce();
+  });
+});
+
+describe("hardwareService.returnItem", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("rejects return with invalid condition", async () => {
+    repo.getCheckoutById.mockResolvedValue(activeCheckout);
+    await expect(
+      hardwareService.returnItem(EVENT_ID, { checkout_id: "co-1", condition: "exploded", received_by: "admin-1" })
+    ).rejects.toThrow("Invalid condition");
+    expect(repo.returnHardware).not.toHaveBeenCalled();
+  });
+
+  it("rejects return for unknown checkout", async () => {
+    repo.getCheckoutById.mockResolvedValue(null);
+    await expect(
+      hardwareService.returnItem(EVENT_ID, { checkout_id: "nope", condition: "good", received_by: "admin-1" })
+    ).rejects.toThrow("Checkout not found");
+  });
+
+  it("completes a normal return without creating a damage report", async () => {
+    repo.getCheckoutById.mockResolvedValue(activeCheckout);
+    repo.returnHardware.mockResolvedValue({ checkout: activeCheckout, returnRecord: { id: "ret-1" } });
+    await hardwareService.returnItem(EVENT_ID, { checkout_id: "co-1", condition: "good", received_by: "admin-1" });
+    expect(repo.returnHardware).toHaveBeenCalledOnce();
+    expect(repo.createDamageReport).not.toHaveBeenCalled();
+  });
+
+  it("creates a damage report AND completes the return when condition is damaged", async () => {
+    repo.getCheckoutById.mockResolvedValue(activeCheckout);
+    repo.returnHardware.mockResolvedValue({ checkout: activeCheckout, returnRecord: { id: "ret-1" } });
+    repo.createDamageReport.mockResolvedValue({ id: "dr-1" });
+
+    await hardwareService.returnItem(EVENT_ID, {
+      checkout_id: "co-1",
+      condition: "damaged",
+      received_by: "admin-1",
+      notes: "Cracked screen",
+    });
+
+    expect(repo.returnHardware).toHaveBeenCalledOnce();
+    expect(repo.createDamageReport).toHaveBeenCalledWith(
+      EVENT_ID,
+      {
+        hardware_item_id: ITEM_ID,
+        checkout_id: "co-1",
+        description: "Cracked screen",
+        severity: "moderate",
+      },
+      "admin-1"
+    );
+  });
+
+  it("uses provided damage severity for damaged returns", async () => {
+    repo.getCheckoutById.mockResolvedValue(activeCheckout);
+    repo.returnHardware.mockResolvedValue({ checkout: activeCheckout, returnRecord: { id: "ret-1" } });
+    repo.createDamageReport.mockResolvedValue({ id: "dr-1" });
+
+    await hardwareService.returnItem(EVENT_ID, {
+      checkout_id: "co-1",
+      condition: "damaged",
+      received_by: "admin-1",
+      damage_severity: "critical",
+    });
+
+    expect(repo.createDamageReport).toHaveBeenCalledWith(
+      EVENT_ID,
+      expect.objectContaining({ severity: "critical" }),
+      "admin-1"
+    );
+  });
+});
+
+describe("hardwareService.updateItem", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("rejects marking a checked-out item as available", async () => {
+    repo.getById.mockResolvedValue({ ...baseItem, status: "checked_out" });
+    repo.getActiveCheckoutForItem.mockResolvedValue(activeCheckout);
+    await expect(
+      hardwareService.updateItem(EVENT_ID, ITEM_ID, { status: "available" })
+    ).rejects.toThrow("Cannot mark as available while checked out");
+    expect(repo.update).not.toHaveBeenCalled();
+  });
+});
+
+describe("hardwareService.deleteItem", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("blocks deletion when item has an active checkout", async () => {
+    repo.getById.mockResolvedValue(baseItem);
+    repo.getActiveCheckoutForItem.mockResolvedValue(activeCheckout);
+    await expect(hardwareService.deleteItem(EVENT_ID, ITEM_ID)).rejects.toThrow(
+      "Cannot delete item with active checkout"
+    );
+    expect(repo.delete).not.toHaveBeenCalled();
+  });
+});
+
+describe("hardwareService.createDamageReport", () => {
+  beforeEach(() => vi.clearAllMocks());
+
+  it("rejects a damage report whose checkout belongs to a different item", async () => {
+    repo.getById.mockResolvedValue(baseItem);
+    repo.getCheckoutById.mockResolvedValue({ ...activeCheckout, hardware_item_id: "other-item" });
+    await expect(
+      hardwareService.createDamageReport(
+        EVENT_ID,
+        { hardware_item_id: ITEM_ID, checkout_id: "co-1", description: "Broken", severity: "major" },
+        "admin-1"
+      )
+    ).rejects.toThrow("Checkout does not match hardware item");
+    expect(repo.createDamageReport).not.toHaveBeenCalled();
+  });
+});

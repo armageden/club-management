@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<svg width="1292pt" height="1549pt" viewBox="0.00 0.00 1292.40 1548.60" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 1544.6)">
+<title>RelationalSchema</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-1544.6 1288.3966,-1544.6 1288.3966,4 -4,4"/>
+<text text-anchor="middle" x="642.1983" y="-1520.4" font-family="Arial" font-size="18.00" fill="#000000">Relational Schema Diagram</text>
+<g id="clust1" class="cluster">
+<title>cluster_users</title>
+<polygon fill="#ffffff" stroke="#999999" points="582.382,-474 582.382,-837 1276.3966,-837 1276.3966,-474 582.382,-474"/>
+<text text-anchor="middle" x="929.3893" y="-816.8" font-family="Arial" font-size="18.00" fill="#000000">Users / Roles</text>
+</g>
+<g id="clust3" class="cluster">
+<title>cluster_schedule</title>
+<polygon fill="#ffffff" stroke="#999999" points="421.382,-312 421.382,-466 855.382,-466 855.382,-312 421.382,-312"/>
+<text text-anchor="middle" x="638.382" y="-445.8" font-family="Arial" font-size="18.00" fill="#000000">Sessions / Check-in</text>
+</g>
+<g id="clust4" class="cluster">
+<title>cluster_inventory</title>
+<polygon fill="#ffffff" stroke="#999999" points="421.382,-8 421.382,-162 865.882,-162 865.882,-8 421.382,-8"/>
+<text text-anchor="middle" x="643.632" y="-141.8" font-family="Arial" font-size="18.00" fill="#000000">Inventory / Checkout</text>
+</g>
+<g id="clust5" class="cluster">
+<title>cluster_venue</title>
+<polygon fill="#ffffff" stroke="#999999" points="733.382,-1087 733.382,-1261 1072.8893,-1261 1072.8893,-1087 733.382,-1087"/>
+<text text-anchor="middle" x="903.1357" y="-1240.8" font-family="Arial" font-size="18.00" fill="#000000">Venue / Booking</text>
+</g>
+<g id="clust6" class="cluster">
+<title>cluster_finance</title>
+<polygon fill="#ffffff" stroke="#999999" points="105.191,-170 105.191,-304 855.382,-304 855.382,-170 105.191,-170"/>
+<text text-anchor="middle" x="480.2865" y="-283.8" font-family="Arial" font-size="18.00" fill="#000000">Budget / Sponsorship</text>
+</g>
+<g id="clust7" class="cluster">
+<title>cluster_other</title>
+<polygon fill="#ffffff" stroke="#999999" points="421.382,-845 421.382,-1079 1089.8893,-1079 1089.8893,-845 421.382,-845"/>
+<text text-anchor="middle" x="755.6357" y="-1058.8" font-family="Arial" font-size="18.00" fill="#000000">Certificates / Volunteers / Incidents</text>
+</g>
+<g id="clust2" class="cluster">
+<title>cluster_projects</title>
+<polygon fill="#ffffff" stroke="#999999" points="96.691,-1269 96.691,-1503 1063.8893,-1503 1063.8893,-1269 96.691,-1269"/>
+<text text-anchor="middle" x="580.2902" y="-1482.8" font-family="Arial" font-size="18.00" fill="#000000">Teams / Projects / Judging</text>
+</g>
+<!-- LEGEND -->
+<g id="node1" class="node">
+<title>LEGEND</title>
+<text text-anchor="middle" x="172.691" y="-124.4" font-family="Arial" font-size="12.00" fill="#000000">Arrow direction: Foreign Key points to referenced Primary Key</text>
+</g>
+<!-- USERS -->
+<g id="node2" class="node">
+<title>USERS</title>
+<polygon fill="#dbeafe" stroke="transparent" points="1170.3966,-669 1170.3966,-689 1260.3966,-689 1260.3966,-669 1170.3966,-669"/>
+<polygon fill="none" stroke="#000000" points="1170.3966,-669 1170.3966,-689 1260.3966,-689 1260.3966,-669 1170.3966,-669"/>
+<text text-anchor="start" x="1194.7296" y="-676.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">USERS</text>
+<polygon fill="none" stroke="#000000" points="1170.3966,-649 1170.3966,-669 1260.3966,-669 1260.3966,-649 1170.3966,-649"/>
+<text text-anchor="start" x="1173.3966" y="-655.2" font-family="Arial" font-size="12.00" fill="#000000">id PK</text>
+<polygon fill="none" stroke="#000000" points="1170.3966,-629 1170.3966,-649 1260.3966,-649 1260.3966,-629 1170.3966,-629"/>
+<text text-anchor="start" x="1173.3966" y="-635.2" font-family="Arial" font-size="12.00" fill="#000000">email</text>
+<polygon fill="none" stroke="#000000" points="1170.3966,-609 1170.3966,-629 1260.3966,-629 1260.3966,-609 1170.3966,-609"/>
+<text text-anchor="start" x="1173.3966" y="-615.2" font-family="Arial" font-size="12.00" fill="#000000">full_name</text>
+<polygon fill="none" stroke="#000000" points="1170.3966,-589 1170.3966,-609 1260.3966,-609 1260.3966,-589 1170.3966,-589"/>
+<text text-anchor="start" x="1173.3846" y="-595.2" font-family="Arial" font-size="12.00" fill="#000000">password_hash</text>
+<polygon fill="none" stroke="#000000" points="1170.3966,-569 1170.3966,-589 1260.3966,-589 1260.3966,-569 1170.3966,-569"/>
+<text text-anchor="start" x="1173.3966" y="-575.2" font-family="Arial" font-size="12.00" fill="#000000">role</text>
+</g>
+<!-- ADMIN -->
+<g id="node3" class="node">
+<title>ADMIN</title>
+<polygon fill="#e2e8f0" stroke="transparent" points="972.8893,-775 972.8893,-795 1055.8893,-795 1055.8893,-775 972.8893,-775"/>
+<polygon fill="none" stroke="#000000" points="972.8893,-775 972.8893,-795 1055.8893,-795 1055.8893,-775 972.8893,-775"/>
+<text text-anchor="start" x="995.0603" y="-782.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">ADMIN</text>
+<polygon fill="none" stroke="#000000" points="972.8893,-755 972.8893,-775 1055.8893,-775 1055.8893,-755 972.8893,-755"/>
+<text text-anchor="start" x="975.7145" y="-761.2" font-family="Arial" font-size="12.00" fill="#000000">user_id PK/FK</text>
+</g>
+<!-- ADMIN&#45;&gt;USERS -->
+<g id="edge1" class="edge">
+<title>ADMIN:user_id-&gt;USERS:id</title>
+<path fill="none" stroke="#444444" d="M1055.8893,-765C1087.8555,-765 1128.7296,-674.9155 1162.0877,-660.8398"/>
+<polygon fill="#444444" stroke="#444444" points="1162.7408,-663.7424 1170.3966,-659 1161.4544,-657.9331 1162.7408,-663.7424"/>
+<text text-anchor="middle" x="1122.143" y="-707.7" font-family="Arial" font-size="9.00" fill="#000000">1:1</text>
+</g>
+<!-- ORGANIZER -->
+<g id="node4" class="node">
+<title>ORGANIZER</title>
+<polygon fill="#e2e8f0" stroke="transparent" points="972.8893,-506 972.8893,-526 1055.8893,-526 1055.8893,-506 972.8893,-506"/>
+<polygon fill="none" stroke="#000000" points="972.8893,-506 972.8893,-526 1055.8893,-526 1055.8893,-506 972.8893,-506"/>
+<text text-anchor="start" x="978.7247" y="-513.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">ORGANIZER</text>
+<polygon fill="none" stroke="#000000" points="972.8893,-486 972.8893,-506 1055.8893,-506 1055.8893,-486 972.8893,-486"/>
+<text text-anchor="start" x="975.7145" y="-492.2" font-family="Arial" font-size="12.00" fill="#000000">user_id PK/FK</text>
+</g>
+<!-- ORGANIZER&#45;&gt;USERS -->
+<g id="edge2" class="edge">
+<title>ORGANIZER:user_id-&gt;USERS:id</title>
+<path fill="none" stroke="#444444" d="M1055.8893,-496C1103.2858,-496 1101.4878,-535.1827 1128.3966,-574.2 1150.4092,-606.1179 1131.7866,-651.2547 1161.6933,-658.1126"/>
+<polygon fill="#444444" stroke="#444444" points="1161.6386,-661.0973 1170.3966,-659 1162.2423,-655.178 1161.6386,-661.0973"/>
+<text text-anchor="middle" x="1122.143" y="-576.7" font-family="Arial" font-size="9.00" fill="#000000">1:1</text>
+</g>
+<!-- PARTICIPANT -->
+<g id="node5" class="node">
+<title>PARTICIPANT</title>
+<polygon fill="#e2e8f0" stroke="transparent" points="752.382,-581 752.382,-601 837.382,-601 837.382,-581 752.382,-581"/>
+<polygon fill="none" stroke="#000000" points="752.382,-581 752.382,-601 837.382,-601 837.382,-581 752.382,-581"/>
+<text text-anchor="start" x="755.2166" y="-588.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">PARTICIPANT</text>
+<polygon fill="none" stroke="#000000" points="752.382,-561 752.382,-581 837.382,-581 837.382,-561 752.382,-561"/>
+<text text-anchor="start" x="755.382" y="-567.2" font-family="Arial" font-size="12.00" fill="#000000">user_id PK/FK</text>
+</g>
+<!-- PARTICIPANT&#45;&gt;USERS -->
+<g id="edge3" class="edge">
+<title>PARTICIPANT:user_id-&gt;USERS:id</title>
+<path fill="none" stroke="#444444" d="M837.382,-571C951.5513,-571 978.7036,-592.2702 1089.8893,-618.2 1107.1995,-622.237 1112.3671,-621.3191 1128.3966,-629 1146.0131,-637.4413 1147.4483,-653.2608 1161.6519,-657.7712"/>
+<polygon fill="#444444" stroke="#444444" points="1161.5653,-660.7632 1170.3966,-659 1162.3933,-654.8711 1161.5653,-660.7632"/>
+<text text-anchor="middle" x="1013.8893" y="-620.7" font-family="Arial" font-size="9.00" fill="#000000">1:1</text>
+</g>
+<!-- JUDGE -->
+<g id="node6" class="node">
+<title>JUDGE</title>
+<polygon fill="#e2e8f0" stroke="transparent" points="598.882,-710 598.882,-730 681.882,-730 681.882,-710 598.882,-710"/>
+<polygon fill="none" stroke="#000000" points="598.882,-710 598.882,-730 681.882,-730 681.882,-710 598.882,-710"/>
+<text text-anchor="start" x="620.0504" y="-717.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">JUDGE</text>
+<polygon fill="none" stroke="#000000" points="598.882,-690 598.882,-710 681.882,-710 681.882,-690 598.882,-690"/>
+<text text-anchor="start" x="601.7072" y="-696.2" font-family="Arial" font-size="12.00" fill="#000000">user_id PK/FK</text>
+</g>
+<!-- JUDGE&#45;&gt;USERS -->
+<g id="edge4" class="edge">
+<title>JUDGE:user_id-&gt;USERS:id</title>
+<path fill="none" stroke="#444444" d="M681.882,-700C800.9109,-700 827.2843,-665.0357 945.8893,-655 1009.6614,-649.6039 1025.909,-653.4116 1089.8893,-655 1122.6256,-655.8128 1132.8482,-658.4817 1161.7235,-658.9345"/>
+<polygon fill="#444444" stroke="#444444" points="1161.8743,-661.9106 1170.3966,-659 1161.9194,-655.9608 1161.8743,-661.9106"/>
+<text text-anchor="middle" x="905.6357" y="-662.7" font-family="Arial" font-size="9.00" fill="#000000">1:1</text>
+</g>
+<!-- VOLUNTEER -->
+<g id="node7" class="node">
+<title>VOLUNTEER</title>
+<polygon fill="#e2e8f0" stroke="transparent" points="972.8893,-695 972.8893,-715 1055.8893,-715 1055.8893,-695 972.8893,-695"/>
+<polygon fill="none" stroke="#000000" points="972.8893,-695 972.8893,-715 1055.8893,-715 1055.8893,-695 972.8893,-695"/>
+<text text-anchor="start" x="977.7227" y="-702.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">VOLUNTEER</text>
+<polygon fill="none" stroke="#000000" points="972.8893,-675 972.8893,-695 1055.8893,-695 1055.8893,-675 972.8893,-675"/>
+<text text-anchor="start" x="975.7145" y="-681.2" font-family="Arial" font-size="12.00" fill="#000000">user_id PK/FK</text>
+</g>
+<!-- VOLUNTEER&#45;&gt;USERS -->
+<g id="edge5" class="edge">
+<title>VOLUNTEER:user_id-&gt;USERS:id</title>
+<path fill="none" stroke="#444444" d="M1055.8893,-685C1105.019,-685 1116.8773,-661.9576 1161.6392,-659.2573"/>
+<polygon fill="#444444" stroke="#444444" points="1161.9877,-662.2235 1170.3966,-659 1161.8129,-656.276 1161.9877,-662.2235"/>
+<text text-anchor="middle" x="1122.143" y="-672.7" font-family="Arial" font-size="9.00" fill="#000000">1:1</text>
+</g>
+<!-- TEAM -->
+<g id="node8" class="node">
+<title>TEAM</title>
+<polygon fill="#dcfce7" stroke="transparent" points="979.8893,-1321 979.8893,-1341 1047.8893,-1341 1047.8893,-1321 979.8893,-1321"/>
+<polygon fill="none" stroke="#000000" points="979.8893,-1321 979.8893,-1341 1047.8893,-1341 1047.8893,-1321 979.8893,-1321"/>
+<text text-anchor="start" x="997.2237" y="-1328.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">TEAM</text>
+<polygon fill="none" stroke="#000000" points="979.8893,-1301 979.8893,-1321 1047.8893,-1321 1047.8893,-1301 979.8893,-1301"/>
+<text text-anchor="start" x="982.8813" y="-1307.2" font-family="Arial" font-size="12.00" fill="#000000">team_id PK</text>
+<polygon fill="none" stroke="#000000" points="979.8893,-1281 979.8893,-1301 1047.8893,-1301 1047.8893,-1281 979.8893,-1281"/>
+<text text-anchor="start" x="982.8893" y="-1287.2" font-family="Arial" font-size="12.00" fill="#000000">name</text>
+</g>
+<!-- TEAM_MEMBER -->
+<g id="node9" class="node">
+<title>TEAM_MEMBER</title>
+<polygon fill="#f0fdf4" stroke="transparent" points="428.382,-1321 428.382,-1341 543.382,-1341 543.382,-1321 428.382,-1321"/>
+<polygon fill="none" stroke="#000000" points="428.382,-1321 428.382,-1341 543.382,-1341 543.382,-1321 428.382,-1321"/>
+<text text-anchor="start" x="439.5506" y="-1328.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">TEAM_MEMBER</text>
+<polygon fill="none" stroke="#000000" points="428.382,-1301 428.382,-1321 543.382,-1321 543.382,-1301 428.382,-1301"/>
+<text text-anchor="start" x="431.382" y="-1307.2" font-family="Arial" font-size="12.00" fill="#000000">team_id PK/FK</text>
+<polygon fill="none" stroke="#000000" points="428.382,-1281 428.382,-1301 543.382,-1301 543.382,-1281 428.382,-1281"/>
+<text text-anchor="start" x="431.2034" y="-1287.2" font-family="Arial" font-size="12.00" fill="#000000">participant_id PK/FK</text>
+</g>
+<!-- TEAM_MEMBER&#45;&gt;PARTICIPANT -->
+<g id="edge7" class="edge">
+<title>TEAM_MEMBER:participant_id-&gt;PARTICIPANT:user_id</title>
+<path fill="none" stroke="#444444" d="M543.382,-1291C627.3761,-1291 649.6937,-1245.026 689.382,-1171 751.3072,-1055.4981 624.2541,-592.4619 743.7493,-571.7197"/>
+<polygon fill="#444444" stroke="#444444" points="744.1586,-574.671 752.382,-571 743.6642,-568.7415 744.1586,-574.671"/>
+</g>
+<!-- TEAM_MEMBER&#45;&gt;TEAM -->
+<g id="edge6" class="edge">
+<title>TEAM_MEMBER:team_id-&gt;TEAM:team_id</title>
+<path fill="none" stroke="#444444" d="M543.382,-1311C734.4487,-1311 784.3844,-1311 971.1786,-1311"/>
+<polygon fill="#444444" stroke="#444444" points="971.3893,-1313.9751 979.8893,-1311 971.3893,-1308.0251 971.3893,-1313.9751"/>
+</g>
+<!-- PROJECT -->
+<g id="node10" class="node">
+<title>PROJECT</title>
+<polygon fill="#dcfce7" stroke="transparent" points="736.382,-1406 736.382,-1426 853.382,-1426 853.382,-1406 736.382,-1406"/>
+<polygon fill="none" stroke="#000000" points="736.382,-1406 736.382,-1426 853.382,-1426 853.382,-1406 736.382,-1406"/>
+<text text-anchor="start" x="766.8836" y="-1413.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">PROJECT</text>
+<polygon fill="none" stroke="#000000" points="736.382,-1386 736.382,-1406 853.382,-1406 853.382,-1386 736.382,-1386"/>
+<text text-anchor="start" x="739.382" y="-1392.2" font-family="Arial" font-size="12.00" fill="#000000">project_id PK</text>
+<polygon fill="none" stroke="#000000" points="736.382,-1366 736.382,-1386 853.382,-1386 853.382,-1366 736.382,-1366"/>
+<text text-anchor="start" x="739.382" y="-1372.2" font-family="Arial" font-size="12.00" fill="#000000">title</text>
+<polygon fill="none" stroke="#000000" points="736.382,-1346 736.382,-1366 853.382,-1366 853.382,-1346 736.382,-1346"/>
+<text text-anchor="start" x="739.2122" y="-1352.2" font-family="Arial" font-size="12.00" fill="#000000">team_id FK UNIQUE</text>
+</g>
+<!-- PROJECT&#45;&gt;TEAM -->
+<g id="edge8" class="edge">
+<title>PROJECT:team_id-&gt;TEAM:team_id</title>
+<path fill="none" stroke="#444444" d="M853.382,-1356C910.0282,-1356 919.3506,-1315.4543 971.1905,-1311.3363"/>
+<polygon fill="#444444" stroke="#444444" points="971.5106,-1314.3013 979.8893,-1311 971.2807,-1308.3557 971.5106,-1314.3013"/>
+<text text-anchor="middle" x="905.6357" y="-1345.7" font-family="Arial" font-size="9.00" fill="#000000">1:1</text>
+</g>
+<!-- SUBMISSION -->
+<g id="node11" class="node">
+<title>SUBMISSION</title>
+<polygon fill="#dcfce7" stroke="transparent" points="422.382,-1441 422.382,-1461 548.382,-1461 548.382,-1441 422.382,-1441"/>
+<polygon fill="none" stroke="#000000" points="422.382,-1441 422.382,-1461 548.382,-1461 548.382,-1441 422.382,-1441"/>
+<text text-anchor="start" x="447.714" y="-1448.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">SUBMISSION</text>
+<polygon fill="none" stroke="#000000" points="422.382,-1421 422.382,-1441 548.382,-1441 548.382,-1421 422.382,-1421"/>
+<text text-anchor="start" x="425.382" y="-1427.2" font-family="Arial" font-size="12.00" fill="#000000">submission_id PK</text>
+<polygon fill="none" stroke="#000000" points="422.382,-1401 422.382,-1421 548.382,-1421 548.382,-1401 422.382,-1401"/>
+<text text-anchor="start" x="425.382" y="-1407.2" font-family="Arial" font-size="12.00" fill="#000000">repo_url</text>
+<polygon fill="none" stroke="#000000" points="422.382,-1381 422.382,-1401 548.382,-1401 548.382,-1381 422.382,-1381"/>
+<text text-anchor="start" x="425.0454" y="-1387.2" font-family="Arial" font-size="12.00" fill="#000000">project_id FK UNIQUE</text>
+</g>
+<!-- SUBMISSION&#45;&gt;PROJECT -->
+<g id="edge9" class="edge">
+<title>SUBMISSION:project_id-&gt;PROJECT:project_id</title>
+<path fill="none" stroke="#444444" d="M548.382,-1391C629.0286,-1391 651.2547,-1395.6546 727.7936,-1395.9819"/>
+<polygon fill="#444444" stroke="#444444" points="727.8757,-1398.957 736.382,-1396 727.8883,-1393.007 727.8757,-1398.957"/>
+<text text-anchor="middle" x="639.882" y="-1397.7" font-family="Arial" font-size="9.00" fill="#000000">1:1</text>
+</g>
+<!-- SCORE -->
+<g id="node12" class="node">
+<title>SCORE</title>
+<polygon fill="#f0fdf4" stroke="transparent" points="112.691,-1391 112.691,-1411 232.691,-1411 232.691,-1391 112.691,-1391"/>
+<polygon fill="none" stroke="#000000" points="112.691,-1391 112.691,-1411 232.691,-1411 232.691,-1391 112.691,-1391"/>
+<text text-anchor="start" x="151.358" y="-1398.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">SCORE</text>
+<polygon fill="none" stroke="#000000" points="112.691,-1371 112.691,-1391 232.691,-1391 232.691,-1371 112.691,-1371"/>
+<text text-anchor="start" x="115.691" y="-1377.2" font-family="Arial" font-size="12.00" fill="#000000">judge_id PK/FK</text>
+<polygon fill="none" stroke="#000000" points="112.691,-1351 112.691,-1371 232.691,-1371 232.691,-1351 112.691,-1351"/>
+<text text-anchor="start" x="115.6826" y="-1357.2" font-family="Arial" font-size="12.00" fill="#000000">submission_id PK/FK</text>
+<polygon fill="none" stroke="#000000" points="112.691,-1331 112.691,-1351 232.691,-1351 232.691,-1331 112.691,-1331"/>
+<text text-anchor="start" x="115.691" y="-1337.2" font-family="Arial" font-size="12.00" fill="#000000">points</text>
+</g>
+<!-- SCORE&#45;&gt;JUDGE -->
+<g id="edge10" class="edge">
+<title>SCORE:judge_id-&gt;JUDGE:user_id</title>
+<path fill="none" stroke="#444444" d="M232.691,-1381C487.5975,-1381 264.78,-1043.3893 414.382,-837 472.5676,-756.7278 495.4014,-703.2063 590.1076,-700.1392"/>
+<polygon fill="#444444" stroke="#444444" points="590.4303,-703.1095 598.882,-700 590.3359,-697.1603 590.4303,-703.1095"/>
+</g>
+<!-- SCORE&#45;&gt;SUBMISSION -->
+<g id="edge11" class="edge">
+<title>SCORE:submission_id-&gt;SUBMISSION:submission_id</title>
+<path fill="none" stroke="#444444" d="M232.691,-1361C319.5715,-1361 331.7681,-1426.4287 413.6891,-1430.7736"/>
+<polygon fill="#444444" stroke="#444444" points="413.8074,-1433.7526 422.382,-1431 413.9624,-1427.8046 413.8074,-1433.7526"/>
+</g>
+<!-- SESSION -->
+<g id="node13" class="node">
+<title>SESSION</title>
+<polygon fill="#fef9c3" stroke="transparent" points="749.382,-404 749.382,-424 839.382,-424 839.382,-404 749.382,-404"/>
+<polygon fill="none" stroke="#000000" points="749.382,-404 749.382,-424 839.382,-424 839.382,-404 749.382,-404"/>
+<text text-anchor="start" x="767.7102" y="-411.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">SESSION</text>
+<polygon fill="none" stroke="#000000" points="749.382,-384 749.382,-404 839.382,-404 839.382,-384 749.382,-384"/>
+<text text-anchor="start" x="752.382" y="-390.2" font-family="Arial" font-size="12.00" fill="#000000">session_id PK</text>
+<polygon fill="none" stroke="#000000" points="749.382,-364 749.382,-384 839.382,-384 839.382,-364 749.382,-364"/>
+<text text-anchor="start" x="752.382" y="-370.2" font-family="Arial" font-size="12.00" fill="#000000">title</text>
+<polygon fill="none" stroke="#000000" points="749.382,-344 749.382,-364 839.382,-364 839.382,-344 749.382,-344"/>
+<text text-anchor="start" x="752.382" y="-350.2" font-family="Arial" font-size="12.00" fill="#000000">start_at</text>
+<polygon fill="none" stroke="#000000" points="749.382,-324 749.382,-344 839.382,-344 839.382,-324 749.382,-324"/>
+<text text-anchor="start" x="752.0424" y="-330.2" font-family="Arial" font-size="12.00" fill="#000000">organizer_id FK</text>
+</g>
+<!-- SESSION&#45;&gt;ORGANIZER -->
+<g id="edge12" class="edge">
+<title>SESSION:organizer_id-&gt;ORGANIZER:user_id</title>
+<path fill="none" stroke="#444444" d="M839.382,-334C929.5838,-334 882.9539,-485.4208 964.0692,-495.4761"/>
+<polygon fill="#444444" stroke="#444444" points="964.2278,-498.4656 972.8893,-496 964.5807,-492.5261 964.2278,-498.4656"/>
+</g>
+<!-- CHECKIN -->
+<g id="node14" class="node">
+<title>CHECKIN</title>
+<polygon fill="#fefce8" stroke="transparent" points="437.382,-404 437.382,-424 533.382,-424 533.382,-404 437.382,-404"/>
+<polygon fill="none" stroke="#000000" points="437.382,-404 437.382,-424 533.382,-424 533.382,-404 437.382,-404"/>
+<text text-anchor="start" x="458.3862" y="-411.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">CHECKIN</text>
+<polygon fill="none" stroke="#000000" points="437.382,-384 437.382,-404 533.382,-404 533.382,-384 437.382,-384"/>
+<text text-anchor="start" x="440.382" y="-390.2" font-family="Arial" font-size="12.00" fill="#000000">checkin_id PK</text>
+<polygon fill="none" stroke="#000000" points="437.382,-364 437.382,-384 533.382,-384 533.382,-364 437.382,-364"/>
+<text text-anchor="start" x="440.3736" y="-370.2" font-family="Arial" font-size="12.00" fill="#000000">participant_id FK</text>
+<polygon fill="none" stroke="#000000" points="437.382,-344 437.382,-364 533.382,-364 533.382,-344 437.382,-344"/>
+<text text-anchor="start" x="440.382" y="-350.2" font-family="Arial" font-size="12.00" fill="#000000">session_id FK</text>
+<polygon fill="none" stroke="#000000" points="437.382,-324 437.382,-344 533.382,-344 533.382,-324 437.382,-324"/>
+<text text-anchor="start" x="440.382" y="-330.2" font-family="Arial" font-size="12.00" fill="#000000">method</text>
+</g>
+<!-- CHECKIN&#45;&gt;PARTICIPANT -->
+<g id="edge13" class="edge">
+<title>CHECKIN:participant_id-&gt;PARTICIPANT:user_id</title>
+<path fill="none" stroke="#444444" d="M533.382,-374C582.4765,-374 548.7836,-437.2031 582.382,-473 639.9675,-534.3536 663.5014,-568.5444 743.4173,-570.8726"/>
+<polygon fill="#444444" stroke="#444444" points="743.8406,-573.8539 752.382,-571 743.9252,-567.9045 743.8406,-573.8539"/>
+</g>
+<!-- CHECKIN&#45;&gt;SESSION -->
+<g id="edge14" class="edge">
+<title>CHECKIN:session_id-&gt;SESSION:session_id</title>
+<path fill="none" stroke="#444444" d="M533.382,-354C556.1573,-354 560.1698,-363.9669 582.382,-369 652.7166,-384.9374 672.7843,-393.3301 740.8382,-393.9615"/>
+<polygon fill="#444444" stroke="#444444" points="740.8686,-396.9366 749.382,-394 740.8955,-390.9866 740.8686,-396.9366"/>
+</g>
+<!-- INVENTORY_ITEM -->
+<g id="node15" class="node">
+<title>INVENTORY_ITEM</title>
+<polygon fill="#ffe4e6" stroke="transparent" points="739.382,-100 739.382,-120 850.382,-120 850.382,-100 739.382,-100"/>
+<polygon fill="none" stroke="#000000" points="739.382,-100 739.382,-120 850.382,-120 850.382,-100 739.382,-100"/>
+<text text-anchor="start" x="742.2164" y="-107.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">INVENTORY_ITEM</text>
+<polygon fill="none" stroke="#000000" points="739.382,-80 739.382,-100 850.382,-100 850.382,-80 739.382,-80"/>
+<text text-anchor="start" x="742.382" y="-86.2" font-family="Arial" font-size="12.00" fill="#000000">item_id PK</text>
+<polygon fill="none" stroke="#000000" points="739.382,-60 739.382,-80 850.382,-80 850.382,-60 739.382,-60"/>
+<text text-anchor="start" x="742.382" y="-66.2" font-family="Arial" font-size="12.00" fill="#000000">name</text>
+<polygon fill="none" stroke="#000000" points="739.382,-40 739.382,-60 850.382,-60 850.382,-40 739.382,-40"/>
+<text text-anchor="start" x="742.382" y="-46.2" font-family="Arial" font-size="12.00" fill="#000000">quantity_available</text>
+<polygon fill="none" stroke="#000000" points="739.382,-20 739.382,-40 850.382,-40 850.382,-20 739.382,-20"/>
+<text text-anchor="start" x="742.382" y="-26.2" font-family="Arial" font-size="12.00" fill="#000000">organizer_id FK</text>
+</g>
+<!-- INVENTORY_ITEM&#45;&gt;ORGANIZER -->
+<g id="edge15" class="edge">
+<title>INVENTORY_ITEM:organizer_id-&gt;ORGANIZER:user_id</title>
+<path fill="none" stroke="#444444" d="M850.382,-30C954.4239,-30 870.8463,-469.9792 964.2613,-494.8999"/>
+<polygon fill="#444444" stroke="#444444" points="964.0813,-497.876 972.8893,-496 964.8339,-491.9737 964.0813,-497.876"/>
+</g>
+<!-- CHECKOUT -->
+<g id="node16" class="node">
+<title>CHECKOUT</title>
+<polygon fill="#fff1f2" stroke="transparent" points="437.382,-100 437.382,-120 533.382,-120 533.382,-100 437.382,-100"/>
+<polygon fill="none" stroke="#000000" points="437.382,-100 437.382,-120 533.382,-120 533.382,-100 437.382,-100"/>
+<text text-anchor="start" x="451.7208" y="-107.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">CHECKOUT</text>
+<polygon fill="none" stroke="#000000" points="437.382,-80 437.382,-100 533.382,-100 533.382,-80 437.382,-80"/>
+<text text-anchor="start" x="440.382" y="-86.2" font-family="Arial" font-size="12.00" fill="#000000">checkout_id PK</text>
+<polygon fill="none" stroke="#000000" points="437.382,-60 437.382,-80 533.382,-80 533.382,-60 437.382,-60"/>
+<text text-anchor="start" x="440.3736" y="-66.2" font-family="Arial" font-size="12.00" fill="#000000">participant_id FK</text>
+<polygon fill="none" stroke="#000000" points="437.382,-40 437.382,-60 533.382,-60 533.382,-40 437.382,-40"/>
+<text text-anchor="start" x="440.382" y="-46.2" font-family="Arial" font-size="12.00" fill="#000000">item_id FK</text>
+<polygon fill="none" stroke="#000000" points="437.382,-20 437.382,-40 533.382,-40 533.382,-20 437.382,-20"/>
+<text text-anchor="start" x="440.382" y="-26.2" font-family="Arial" font-size="12.00" fill="#000000">due_at</text>
+</g>
+<!-- CHECKOUT&#45;&gt;PARTICIPANT -->
+<g id="edge16" class="edge">
+<title>CHECKOUT:participant_id-&gt;PARTICIPANT:user_id</title>
+<path fill="none" stroke="#444444" d="M533.382,-70C591.4056,-70 682.9442,-526.9993 743.9789,-568.0578"/>
+<polygon fill="#444444" stroke="#444444" points="743.3764,-570.9989 752.382,-571 745.3427,-565.3832 743.3764,-570.9989"/>
+</g>
+<!-- CHECKOUT&#45;&gt;INVENTORY_ITEM -->
+<g id="edge17" class="edge">
+<title>CHECKOUT:item_id-&gt;INVENTORY_ITEM:item_id</title>
+<path fill="none" stroke="#444444" d="M533.382,-50C623.733,-50 644.8275,-87.5391 730.85,-89.8853"/>
+<polygon fill="#444444" stroke="#444444" points="730.8427,-92.8603 739.382,-90 730.9228,-86.9109 730.8427,-92.8603"/>
+</g>
+<!-- VENUE_AREA -->
+<g id="node17" class="node">
+<title>VENUE_AREA</title>
+<polygon fill="#e0f2fe" stroke="transparent" points="970.8893,-1159 970.8893,-1179 1056.8893,-1179 1056.8893,-1159 970.8893,-1159"/>
+<polygon fill="none" stroke="#000000" points="970.8893,-1159 970.8893,-1179 1056.8893,-1179 1056.8893,-1159 970.8893,-1159"/>
+<text text-anchor="start" x="973.5513" y="-1166.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">VENUE_AREA</text>
+<polygon fill="none" stroke="#000000" points="970.8893,-1139 970.8893,-1159 1056.8893,-1159 1056.8893,-1139 970.8893,-1139"/>
+<text text-anchor="start" x="973.8893" y="-1145.2" font-family="Arial" font-size="12.00" fill="#000000">area_id PK</text>
+<polygon fill="none" stroke="#000000" points="970.8893,-1119 970.8893,-1139 1056.8893,-1139 1056.8893,-1119 970.8893,-1119"/>
+<text text-anchor="start" x="973.8893" y="-1125.2" font-family="Arial" font-size="12.00" fill="#000000">name</text>
+</g>
+<!-- BOOKING -->
+<g id="node18" class="node">
+<title>BOOKING</title>
+<polygon fill="#f0f9ff" stroke="transparent" points="749.382,-1199 749.382,-1219 839.382,-1219 839.382,-1199 749.382,-1199"/>
+<polygon fill="none" stroke="#000000" points="749.382,-1199 749.382,-1219 839.382,-1219 839.382,-1199 749.382,-1199"/>
+<text text-anchor="start" x="766.3782" y="-1206.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">BOOKING</text>
+<polygon fill="none" stroke="#000000" points="749.382,-1179 749.382,-1199 839.382,-1199 839.382,-1179 749.382,-1179"/>
+<text text-anchor="start" x="752.382" y="-1185.2" font-family="Arial" font-size="12.00" fill="#000000">booking_id PK</text>
+<polygon fill="none" stroke="#000000" points="749.382,-1159 749.382,-1179 839.382,-1179 839.382,-1159 749.382,-1159"/>
+<text text-anchor="start" x="752.382" y="-1165.2" font-family="Arial" font-size="12.00" fill="#000000">team_id FK</text>
+<polygon fill="none" stroke="#000000" points="749.382,-1139 749.382,-1159 839.382,-1159 839.382,-1139 749.382,-1139"/>
+<text text-anchor="start" x="752.382" y="-1145.2" font-family="Arial" font-size="12.00" fill="#000000">area_id FK</text>
+<polygon fill="none" stroke="#000000" points="749.382,-1119 749.382,-1139 839.382,-1139 839.382,-1119 749.382,-1119"/>
+<text text-anchor="start" x="752.0424" y="-1125.2" font-family="Arial" font-size="12.00" fill="#000000">organizer_id FK</text>
+<polygon fill="none" stroke="#000000" points="749.382,-1099 749.382,-1119 839.382,-1119 839.382,-1099 749.382,-1099"/>
+<text text-anchor="start" x="752.382" y="-1105.2" font-family="Arial" font-size="12.00" fill="#000000">start_at</text>
+</g>
+<!-- BOOKING&#45;&gt;ORGANIZER -->
+<g id="edge20" class="edge">
+<title>BOOKING:organizer_id-&gt;ORGANIZER:user_id</title>
+<path fill="none" stroke="#444444" d="M839.382,-1129C908.4548,-1129 901.6844,-544.4872 964.832,-498.8222"/>
+<polygon fill="#444444" stroke="#444444" points="965.8506,-501.6177 972.8893,-496 963.8837,-496.0022 965.8506,-501.6177"/>
+</g>
+<!-- BOOKING&#45;&gt;TEAM -->
+<g id="edge18" class="edge">
+<title>BOOKING:team_id-&gt;TEAM:team_id</title>
+<path fill="none" stroke="#444444" d="M839.382,-1169C925.0454,-1169 893.555,-1301.1911 970.981,-1310.4858"/>
+<polygon fill="#444444" stroke="#444444" points="971.232,-1313.4802 979.8893,-1311 971.5749,-1307.5401 971.232,-1313.4802"/>
+</g>
+<!-- BOOKING&#45;&gt;VENUE_AREA -->
+<g id="edge19" class="edge">
+<title>BOOKING:area_id-&gt;VENUE_AREA:area_id</title>
+<path fill="none" stroke="#444444" d="M839.382,-1149C894.8616,-1149 910.8445,-1149 962.3128,-1149"/>
+<polygon fill="#444444" stroke="#444444" points="962.3893,-1151.9751 970.8893,-1149 962.3893,-1146.0251 962.3893,-1151.9751"/>
+</g>
+<!-- SPONSOR -->
+<g id="node19" class="node">
+<title>SPONSOR</title>
+<polygon fill="#ede9fe" stroke="transparent" points="443.382,-222 443.382,-242 527.382,-242 527.382,-222 443.382,-222"/>
+<polygon fill="none" stroke="#000000" points="443.382,-222 443.382,-242 527.382,-242 527.382,-222 443.382,-222"/>
+<text text-anchor="start" x="455.3802" y="-229.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">SPONSOR</text>
+<polygon fill="none" stroke="#000000" points="443.382,-202 443.382,-222 527.382,-222 527.382,-202 443.382,-202"/>
+<text text-anchor="start" x="446.3706" y="-208.2" font-family="Arial" font-size="12.00" fill="#000000">sponsor_id PK</text>
+<polygon fill="none" stroke="#000000" points="443.382,-182 443.382,-202 527.382,-202 527.382,-182 443.382,-182"/>
+<text text-anchor="start" x="446.382" y="-188.2" font-family="Arial" font-size="12.00" fill="#000000">name</text>
+</g>
+<!-- CONTRIBUTION -->
+<g id="node20" class="node">
+<title>CONTRIBUTION</title>
+<polygon fill="#f5f3ff" stroke="transparent" points="121.691,-242 121.691,-262 224.691,-262 224.691,-242 121.691,-242"/>
+<polygon fill="none" stroke="#000000" points="121.691,-242 121.691,-262 224.691,-262 224.691,-242 121.691,-242"/>
+<text text-anchor="start" x="127.5322" y="-249.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">CONTRIBUTION</text>
+<polygon fill="none" stroke="#000000" points="121.691,-222 121.691,-242 224.691,-242 224.691,-222 121.691,-222"/>
+<text text-anchor="start" x="124.5112" y="-228.2" font-family="Arial" font-size="12.00" fill="#000000">contribution_id PK</text>
+<polygon fill="none" stroke="#000000" points="121.691,-202 121.691,-222 224.691,-222 224.691,-202 121.691,-202"/>
+<text text-anchor="start" x="124.691" y="-208.2" font-family="Arial" font-size="12.00" fill="#000000">sponsor_id FK</text>
+<polygon fill="none" stroke="#000000" points="121.691,-182 121.691,-202 224.691,-202 224.691,-182 121.691,-182"/>
+<text text-anchor="start" x="124.691" y="-188.2" font-family="Arial" font-size="12.00" fill="#000000">amount</text>
+</g>
+<!-- CONTRIBUTION&#45;&gt;SPONSOR -->
+<g id="edge21" class="edge">
+<title>CONTRIBUTION:sponsor_id-&gt;SPONSOR:sponsor_id</title>
+<path fill="none" stroke="#444444" d="M224.691,-212C318.9445,-212 344.648,-212 434.751,-212"/>
+<polygon fill="#444444" stroke="#444444" points="434.882,-214.9751 443.382,-212 434.882,-209.0251 434.882,-214.9751"/>
+</g>
+<!-- EXPENSE -->
+<g id="node21" class="node">
+<title>EXPENSE</title>
+<polygon fill="#f5f3ff" stroke="transparent" points="749.382,-242 749.382,-262 839.382,-262 839.382,-242 749.382,-242"/>
+<polygon fill="none" stroke="#000000" points="749.382,-242 749.382,-262 839.382,-262 839.382,-242 749.382,-242"/>
+<text text-anchor="start" x="766.0422" y="-249.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">EXPENSE</text>
+<polygon fill="none" stroke="#000000" points="749.382,-222 749.382,-242 839.382,-242 839.382,-222 749.382,-222"/>
+<text text-anchor="start" x="752.382" y="-228.2" font-family="Arial" font-size="12.00" fill="#000000">expense_id PK</text>
+<polygon fill="none" stroke="#000000" points="749.382,-202 749.382,-222 839.382,-222 839.382,-202 749.382,-202"/>
+<text text-anchor="start" x="752.0424" y="-208.2" font-family="Arial" font-size="12.00" fill="#000000">organizer_id FK</text>
+<polygon fill="none" stroke="#000000" points="749.382,-182 749.382,-202 839.382,-202 839.382,-182 749.382,-182"/>
+<text text-anchor="start" x="752.382" y="-188.2" font-family="Arial" font-size="12.00" fill="#000000">amount</text>
+</g>
+<!-- EXPENSE&#45;&gt;ORGANIZER -->
+<g id="edge22" class="edge">
+<title>EXPENSE:organizer_id-&gt;ORGANIZER:user_id</title>
+<path fill="none" stroke="#444444" d="M839.382,-212C906.1223,-212 903.5255,-472.1181 964.3071,-494.472"/>
+<polygon fill="#444444" stroke="#444444" points="963.9994,-497.4389 972.8893,-496 965.0424,-491.581 963.9994,-497.4389"/>
+</g>
+<!-- CERTIFICATE -->
+<g id="node22" class="node">
+<title>CERTIFICATE</title>
+<polygon fill="#fce7f3" stroke="transparent" points="437.382,-917 437.382,-937 533.382,-937 533.382,-917 437.382,-917"/>
+<polygon fill="none" stroke="#000000" points="437.382,-917 437.382,-937 533.382,-937 533.382,-917 437.382,-917"/>
+<text text-anchor="start" x="446.0526" y="-924.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">CERTIFICATE</text>
+<polygon fill="none" stroke="#000000" points="437.382,-897 437.382,-917 533.382,-917 533.382,-897 437.382,-897"/>
+<text text-anchor="start" x="440.382" y="-903.2" font-family="Arial" font-size="12.00" fill="#000000">certificate_id PK</text>
+<polygon fill="none" stroke="#000000" points="437.382,-877 437.382,-897 533.382,-897 533.382,-877 437.382,-877"/>
+<text text-anchor="start" x="440.3736" y="-883.2" font-family="Arial" font-size="12.00" fill="#000000">participant_id FK</text>
+<polygon fill="none" stroke="#000000" points="437.382,-857 437.382,-877 533.382,-877 533.382,-857 437.382,-857"/>
+<text text-anchor="start" x="440.3724" y="-863.2" font-family="Arial" font-size="12.00" fill="#000000">verification_code</text>
+</g>
+<!-- CERTIFICATE&#45;&gt;PARTICIPANT -->
+<g id="edge23" class="edge">
+<title>CERTIFICATE:participant_id-&gt;PARTICIPANT:user_id</title>
+<path fill="none" stroke="#444444" d="M533.382,-887C612.1277,-887 640.4199,-864.6734 689.382,-803 753.9342,-721.6891 651.6413,-579.3491 743.8178,-571.352"/>
+<polygon fill="#444444" stroke="#444444" points="744.0114,-574.3217 752.382,-571 743.767,-568.3767 744.0114,-574.3217"/>
+</g>
+<!-- VOLUNTEER_SHIFT -->
+<g id="node23" class="node">
+<title>VOLUNTEER_SHIFT</title>
+<polygon fill="#ffedd5" stroke="transparent" points="953.8893,-1017 953.8893,-1037 1073.8893,-1037 1073.8893,-1017 953.8893,-1017"/>
+<polygon fill="none" stroke="#000000" points="953.8893,-1017 953.8893,-1037 1073.8893,-1037 1073.8893,-1017 953.8893,-1017"/>
+<text text-anchor="start" x="956.5563" y="-1024.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">VOLUNTEER_SHIFT</text>
+<polygon fill="none" stroke="#000000" points="953.8893,-997 953.8893,-1017 1073.8893,-1017 1073.8893,-997 953.8893,-997"/>
+<text text-anchor="start" x="956.8893" y="-1003.2" font-family="Arial" font-size="12.00" fill="#000000">shift_id PK</text>
+<polygon fill="none" stroke="#000000" points="953.8893,-977 953.8893,-997 1073.8893,-997 1073.8893,-977 953.8893,-977"/>
+<text text-anchor="start" x="956.8893" y="-983.2" font-family="Arial" font-size="12.00" fill="#000000">capacity</text>
+</g>
+<!-- SHIFT_ASSIGNMENT -->
+<g id="node24" class="node">
+<title>SHIFT_ASSIGNMENT</title>
+<polygon fill="#fff7ed" stroke="transparent" points="731.382,-967 731.382,-987 857.382,-987 857.382,-967 731.382,-967"/>
+<polygon fill="none" stroke="#000000" points="731.382,-967 731.382,-987 857.382,-987 857.382,-967 731.382,-967"/>
+<text text-anchor="start" x="734.0496" y="-974.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">SHIFT_ASSIGNMENT</text>
+<polygon fill="none" stroke="#000000" points="731.382,-947 731.382,-967 857.382,-967 857.382,-947 731.382,-947"/>
+<text text-anchor="start" x="734.382" y="-953.2" font-family="Arial" font-size="12.00" fill="#000000">volunteer_id PK/FK</text>
+<polygon fill="none" stroke="#000000" points="731.382,-927 731.382,-947 857.382,-947 857.382,-927 731.382,-927"/>
+<text text-anchor="start" x="734.382" y="-933.2" font-family="Arial" font-size="12.00" fill="#000000">shift_id PK/FK</text>
+<polygon fill="none" stroke="#000000" points="731.382,-907 731.382,-927 857.382,-927 857.382,-907 731.382,-907"/>
+<text text-anchor="start" x="734.382" y="-913.2" font-family="Arial" font-size="12.00" fill="#000000">status</text>
+</g>
+<!-- SHIFT_ASSIGNMENT&#45;&gt;VOLUNTEER -->
+<g id="edge24" class="edge">
+<title>SHIFT_ASSIGNMENT:volunteer_id-&gt;VOLUNTEER:user_id</title>
+<path fill="none" stroke="#444444" d="M857.382,-957C985.6414,-957 848.2972,-697.6006 964.1064,-685.4412"/>
+<polygon fill="#444444" stroke="#444444" points="964.5493,-688.3978 972.8893,-685 964.2507,-682.4553 964.5493,-688.3978"/>
+</g>
+<!-- SHIFT_ASSIGNMENT&#45;&gt;VOLUNTEER_SHIFT -->
+<g id="edge25" class="edge">
+<title>SHIFT_ASSIGNMENT:shift_id-&gt;VOLUNTEER_SHIFT:shift_id</title>
+<path fill="none" stroke="#444444" d="M857.382,-937C907.2644,-937 901.7972,-999.0372 945.1933,-1006.3072"/>
+<polygon fill="#444444" stroke="#444444" points="945.1798,-1009.2905 953.8893,-1007 945.6525,-1003.3592 945.1798,-1009.2905"/>
+</g>
+<!-- INCIDENT -->
+<g id="node25" class="node">
+<title>INCIDENT</title>
+<polygon fill="#fee2e2" stroke="transparent" points="969.8893,-917 969.8893,-937 1057.8893,-937 1057.8893,-917 969.8893,-917"/>
+<polygon fill="none" stroke="#000000" points="969.8893,-917 969.8893,-937 1057.8893,-937 1057.8893,-917 969.8893,-917"/>
+<text text-anchor="start" x="985.5621" y="-924.2" font-family="Arial" font-weight="bold" font-size="12.00" fill="#000000">INCIDENT</text>
+<polygon fill="none" stroke="#000000" points="969.8893,-897 969.8893,-917 1057.8893,-917 1057.8893,-897 969.8893,-897"/>
+<text text-anchor="start" x="972.8893" y="-903.2" font-family="Arial" font-size="12.00" fill="#000000">incident_id PK</text>
+<polygon fill="none" stroke="#000000" points="969.8893,-877 969.8893,-897 1057.8893,-897 1057.8893,-877 969.8893,-877"/>
+<text text-anchor="start" x="972.5451" y="-883.2" font-family="Arial" font-size="12.00" fill="#000000">reported_by FK</text>
+<polygon fill="none" stroke="#000000" points="969.8893,-857 969.8893,-877 1057.8893,-877 1057.8893,-857 969.8893,-857"/>
+<text text-anchor="start" x="972.8893" y="-863.2" font-family="Arial" font-size="12.00" fill="#000000">severity</text>
+</g>
+<!-- INCIDENT&#45;&gt;USERS -->
+<g id="edge26" class="edge">
+<title>INCIDENT:reported_by-&gt;USERS:id</title>
+<path fill="none" stroke="#444444" d="M1057.8893,-887C1081.3566,-887 1078.0302,-865.2504 1089.8893,-845 1100.1581,-827.4652 1139.11,-690.1295 1163.1652,-663.4734"/>
+<polygon fill="#444444" stroke="#444444" points="1164.733,-666.0018 1170.3966,-659 1161.6028,-660.9417 1164.733,-666.0018"/>
+</g>
+</g>
+</svg>

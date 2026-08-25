@@ -1,0 +1,888 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<svg width="3044pt" height="1059pt" viewBox="0.00 0.00 3043.71 1059.00" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 1055)">
+<title>EER</title>
+<polygon fill="#ffffff" stroke="transparent" points="-4,4 -4,-1055 3039.7071,-1055 3039.7071,4 -4,4"/>
+<!-- USERS -->
+<g id="node1" class="node">
+<title>USERS</title>
+<polygon fill="none" stroke="#000000" stroke-width="2" points="2238.7667,-1051 2181.0968,-1051 2181.0968,-1015 2238.7667,-1015 2238.7667,-1051"/>
+<text text-anchor="middle" x="2209.9317" y="-1029.4" font-family="Arial" font-size="12.00" fill="#000000">USERS</text>
+</g>
+<!-- u_id -->
+<g id="node2" class="node">
+<title>u_id</title>
+<ellipse fill="none" stroke="#000000" cx="1893.9317" cy="-927" rx="33.773" ry="18"/>
+<text text-anchor="middle" x="1893.9317" y="-923.4" font-family="Arial" font-size="12.00" fill="#000000">id (PK)</text>
+</g>
+<!-- USERS&#45;&gt;u_id -->
+<g id="edge1" class="edge">
+<title>USERS-&gt;u_id</title>
+<path fill="none" stroke="#000000" d="M2180.975,-1024.1669C2131.3426,-1008.8924 2026.9561,-976.1787 1939.9317,-945 1933.7961,-942.8017 1927.2493,-940.3223 1921.0762,-937.9223"/>
+</g>
+<!-- u_email -->
+<g id="node3" class="node">
+<title>u_email</title>
+<ellipse fill="none" stroke="#000000" cx="1980.9317" cy="-927" rx="28.5512" ry="18"/>
+<text text-anchor="middle" x="1980.9317" y="-923.4" font-family="Arial" font-size="12.00" fill="#000000">email</text>
+</g>
+<!-- USERS&#45;&gt;u_email -->
+<g id="edge2" class="edge">
+<title>USERS-&gt;u_email</title>
+<path fill="none" stroke="#000000" d="M2180.9287,-1019.575C2134.9539,-998.2941 2046.2526,-957.2359 2004.173,-937.7579"/>
+</g>
+<!-- u_name -->
+<g id="node4" class="node">
+<title>u_name</title>
+<ellipse fill="none" stroke="#000000" cx="2077.9317" cy="-927" rx="43.375" ry="18"/>
+<text text-anchor="middle" x="2077.9317" y="-923.4" font-family="Arial" font-size="12.00" fill="#000000">full_name</text>
+</g>
+<!-- USERS&#45;&gt;u_name -->
+<g id="edge3" class="edge">
+<title>USERS-&gt;u_name</title>
+<path fill="none" stroke="#000000" d="M2187.2401,-1014.778C2162.1779,-994.6522 2122.1987,-962.5477 2098.1661,-943.2488"/>
+</g>
+<!-- u_pass -->
+<g id="node5" class="node">
+<title>u_pass</title>
+<ellipse fill="none" stroke="#000000" cx="2209.9317" cy="-927" rx="63.7708" ry="18"/>
+<text text-anchor="middle" x="2209.9317" y="-923.4" font-family="Arial" font-size="12.00" fill="#000000">password_hash</text>
+</g>
+<!-- USERS&#45;&gt;u_pass -->
+<g id="edge4" class="edge">
+<title>USERS-&gt;u_pass</title>
+<path fill="none" stroke="#000000" d="M2209.9317,-1014.5362C2209.9317,-995.0806 2209.9317,-964.6276 2209.9317,-945.2522"/>
+</g>
+<!-- u_role -->
+<g id="node6" class="node">
+<title>u_role</title>
+<ellipse fill="none" stroke="#000000" cx="2325.9317" cy="-927" rx="27" ry="18"/>
+<text text-anchor="middle" x="2325.9317" y="-923.4" font-family="Arial" font-size="12.00" fill="#000000">role</text>
+</g>
+<!-- USERS&#45;&gt;u_role -->
+<g id="edge5" class="edge">
+<title>USERS-&gt;u_role</title>
+<path fill="none" stroke="#000000" d="M2229.8729,-1014.778C2252.545,-994.0603 2289.1084,-960.6489 2309.9764,-941.5798"/>
+</g>
+<!-- SPEC -->
+<g id="node7" class="node">
+<title>SPEC</title>
+<ellipse fill="none" stroke="#000000" cx="2393.9317" cy="-927" rx="16" ry="16"/>
+<text text-anchor="middle" x="2393.9317" y="-923.4" font-family="Arial" font-size="12.00" fill="#000000">d</text>
+</g>
+<!-- USERS&#45;&gt;SPEC -->
+<g id="edge6" class="edge">
+<title>USERS-&gt;SPEC</title>
+<path fill="none" stroke="#000000" stroke-width="4" d="M2238.6927,-1017.1135C2269.9582,-999.741 2321.2984,-970.9142 2364.9317,-945 2369.9247,-942.0346 2375.3448,-938.7018 2380.1332,-935.7174"/>
+<text text-anchor="middle" x="2324.3792" y="-977" font-family="Arial" font-size="10.00" fill="#000000">total</text>
+</g>
+<!-- reports -->
+<g id="node76" class="node">
+<title>reports</title>
+<polygon fill="none" stroke="#000000" points="2506.9317,-945 2458.5773,-927 2506.9317,-909 2555.2861,-927 2506.9317,-945"/>
+<text text-anchor="middle" x="2506.9317" y="-923.4" font-family="Arial" font-size="12.00" fill="#000000">reports</text>
+</g>
+<!-- USERS&#45;&gt;reports -->
+<g id="edge77" class="edge">
+<title>USERS-&gt;reports</title>
+<path fill="none" stroke="#000000" d="M2238.6792,-1022.74C2296.7646,-1002.0092 2427.2292,-955.446 2481.9878,-935.9026"/>
+<text text-anchor="middle" x="2370.7112" y="-977" font-family="Arial" font-size="10.00" fill="#000000">1</text>
+</g>
+<!-- ADMIN -->
+<g id="node8" class="node">
+<title>ADMIN</title>
+<polygon fill="none" stroke="#000000" points="2447.0908,-839 2392.7727,-839 2392.7727,-803 2447.0908,-803 2447.0908,-839"/>
+<text text-anchor="middle" x="2419.9317" y="-817.4" font-family="Arial" font-size="12.00" fill="#000000">ADMIN</text>
+</g>
+<!-- SPEC&#45;&gt;ADMIN -->
+<g id="edge7" class="edge">
+<title>SPEC-&gt;ADMIN</title>
+<path fill="none" stroke="#000000" d="M2397.7681,-911.3593C2402.4861,-892.1245 2410.4804,-859.5325 2415.4686,-839.1957"/>
+</g>
+<!-- ORGANIZER -->
+<g id="node9" class="node">
+<title>ORGANIZER</title>
+<polygon fill="none" stroke="#000000" points="2060.7616,-839 1973.1019,-839 1973.1019,-803 2060.7616,-803 2060.7616,-839"/>
+<text text-anchor="middle" x="2016.9317" y="-817.4" font-family="Arial" font-size="12.00" fill="#000000">ORGANIZER</text>
+</g>
+<!-- SPEC&#45;&gt;ORGANIZER -->
+<g id="edge8" class="edge">
+<title>SPEC-&gt;ORGANIZER</title>
+<path fill="none" stroke="#000000" d="M2380.8259,-917.6743C2376.0042,-914.5695 2370.386,-911.3162 2364.9317,-909 2260.2489,-864.5448 2127.9628,-838.7502 2060.6308,-827.603"/>
+</g>
+<!-- PARTICIPANT -->
+<g id="node10" class="node">
+<title>PARTICIPANT</title>
+<polygon fill="none" stroke="#000000" points="1120.7631,-839 1025.1004,-839 1025.1004,-803 1120.7631,-803 1120.7631,-839"/>
+<text text-anchor="middle" x="1072.9317" y="-817.4" font-family="Arial" font-size="12.00" fill="#000000">PARTICIPANT</text>
+</g>
+<!-- SPEC&#45;&gt;PARTICIPANT -->
+<g id="edge9" class="edge">
+<title>SPEC-&gt;PARTICIPANT</title>
+<path fill="none" stroke="#000000" d="M2381.0329,-917.1188C2376.2306,-913.9617 2370.5718,-910.8176 2364.9317,-909 2244.6971,-870.2534 1339.755,-831.7135 1120.6135,-822.8817"/>
+</g>
+<!-- JUDGE -->
+<g id="node11" class="node">
+<title>JUDGE</title>
+<polygon fill="none" stroke="#000000" points="2513.0959,-774 2456.7675,-774 2456.7675,-738 2513.0959,-738 2513.0959,-774"/>
+<text text-anchor="middle" x="2484.9317" y="-752.4" font-family="Arial" font-size="12.00" fill="#000000">JUDGE</text>
+</g>
+<!-- SPEC&#45;&gt;JUDGE -->
+<g id="edge10" class="edge">
+<title>SPEC-&gt;JUDGE</title>
+<path fill="none" stroke="#000000" d="M2405.0447,-915.1032C2419.5491,-898.9967 2444.8549,-868.8261 2459.9317,-839 2470.5907,-817.9137 2477.5786,-791.4736 2481.3893,-774.1773"/>
+</g>
+<!-- VOLUNTEER -->
+<g id="node12" class="node">
+<title>VOLUNTEER</title>
+<polygon fill="none" stroke="#000000" points="2367.7656,-839 2278.0979,-839 2278.0979,-803 2367.7656,-803 2367.7656,-839"/>
+<text text-anchor="middle" x="2322.9317" y="-817.4" font-family="Arial" font-size="12.00" fill="#000000">VOLUNTEER</text>
+</g>
+<!-- SPEC&#45;&gt;VOLUNTEER -->
+<g id="edge11" class="edge">
+<title>SPEC-&gt;VOLUNTEER</title>
+<path fill="none" stroke="#000000" d="M2384.9395,-913.575C2372.3272,-894.7453 2349.3437,-860.4319 2335.1787,-839.2843"/>
+</g>
+<!-- manages1 -->
+<g id="node30" class="node">
+<title>manages1</title>
+<polygon fill="none" stroke="#000000" points="1708.9317,-709 1649.8781,-691 1708.9317,-673 1767.9854,-691 1708.9317,-709"/>
+<text text-anchor="middle" x="1708.9317" y="-687.4" font-family="Arial" font-size="12.00" fill="#000000">manages</text>
+</g>
+<!-- ORGANIZER&#45;&gt;manages1 -->
+<g id="edge29" class="edge">
+<title>ORGANIZER-&gt;manages1</title>
+<path fill="none" stroke="#000000" d="M1974.1057,-802.9241C1908.815,-775.3663 1786.4374,-723.7134 1733.9165,-701.5455"/>
+<text text-anchor="middle" x="1902.7112" y="-753" font-family="Arial" font-size="10.00" fill="#000000">1</text>
+</g>
+<!-- manages2 -->
+<g id="node39" class="node">
+<title>manages2</title>
+<polygon fill="none" stroke="#000000" points="1888.9317,-709 1829.8781,-691 1888.9317,-673 1947.9854,-691 1888.9317,-709"/>
+<text text-anchor="middle" x="1888.9317" y="-687.4" font-family="Arial" font-size="12.00" fill="#000000">manages</text>
+</g>
+<!-- ORGANIZER&#45;&gt;manages2 -->
+<g id="edge39" class="edge">
+<title>ORGANIZER-&gt;manages2</title>
+<path fill="none" stroke="#000000" d="M1999.1339,-802.9241C1973.3053,-776.6919 1925.9797,-728.6268 1902.6603,-704.9431"/>
+<text text-anchor="middle" x="1971.7112" y="-753" font-family="Arial" font-size="10.00" fill="#000000">1</text>
+</g>
+<!-- assigns -->
+<g id="node50" class="node">
+<title>assigns</title>
+<polygon fill="none" stroke="#000000" points="2019.9317,-514 1968.5464,-496 2019.9317,-478 2071.3171,-496 2019.9317,-514"/>
+<text text-anchor="middle" x="2019.9317" y="-492.4" font-family="Arial" font-size="12.00" fill="#000000">assigns</text>
+</g>
+<!-- ORGANIZER&#45;&gt;assigns -->
+<g id="edge50" class="edge">
+<title>ORGANIZER-&gt;assigns</title>
+<path fill="none" stroke="#000000" d="M2017.1016,-802.5954C2017.6297,-745.3918 2019.2382,-571.1299 2019.7637,-514.2027"/>
+<text text-anchor="middle" x="2021.7112" y="-688" font-family="Arial" font-size="10.00" fill="#000000">1</text>
+</g>
+<!-- records -->
+<g id="node62" class="node">
+<title>records</title>
+<polygon fill="none" stroke="#000000" points="2097.9317,-709 2047.2631,-691 2097.9317,-673 2148.6003,-691 2097.9317,-709"/>
+<text text-anchor="middle" x="2097.9317" y="-687.4" font-family="Arial" font-size="12.00" fill="#000000">records</text>
+</g>
+<!-- ORGANIZER&#45;&gt;records -->
+<g id="edge63" class="edge">
+<title>ORGANIZER-&gt;records</title>
+<path fill="none" stroke="#000000" d="M2028.1944,-802.9241C2044.2783,-777.1105 2073.535,-730.1552 2088.5262,-706.0953"/>
+<text text-anchor="middle" x="2070.7112" y="-753" font-family="Arial" font-size="10.00" fill="#000000">1</text>
+</g>
+<!-- forms -->
+<g id="node16" class="node">
+<title>forms</title>
+<polygon fill="none" stroke="#000000" points="680.9317,-709 639.3407,-691 680.9317,-673 722.5228,-691 680.9317,-709"/>
+<text text-anchor="middle" x="680.9317" y="-687.4" font-family="Arial" font-size="12.00" fill="#000000">forms</text>
+</g>
+<!-- PARTICIPANT&#45;&gt;forms -->
+<g id="edge14" class="edge">
+<title>PARTICIPANT-&gt;forms</title>
+<path fill="none" stroke="#000000" d="M1025.2567,-805.1894C940.784,-777.1755 767.7916,-719.8056 704.6628,-698.87"/>
+<text text-anchor="middle" x="928.0962" y="-753" font-family="Arial" font-size="10.00" fill="#000000">M</text>
+</g>
+<!-- attends -->
+<g id="node34" class="node">
+<title>attends</title>
+<polygon fill="none" stroke="#000000" points="1072.9317,-709 1022.9361,-691 1072.9317,-673 1122.9274,-691 1072.9317,-709"/>
+<text text-anchor="middle" x="1072.9317" y="-687.4" font-family="Arial" font-size="12.00" fill="#000000">attends</text>
+</g>
+<!-- PARTICIPANT&#45;&gt;attends -->
+<g id="edge33" class="edge">
+<title>PARTICIPANT-&gt;attends</title>
+<path fill="none" stroke="#000000" d="M1072.9317,-802.9241C1072.9317,-778.2267 1072.9317,-734.1767 1072.9317,-709.3415"/>
+<text text-anchor="middle" x="1077.0962" y="-753" font-family="Arial" font-size="10.00" fill="#000000">M</text>
+</g>
+<!-- borrows -->
+<g id="node43" class="node">
+<title>borrows</title>
+<polygon fill="none" stroke="#000000" points="1200.9317,-709 1147.9529,-691 1200.9317,-673 1253.9106,-691 1200.9317,-709"/>
+<text text-anchor="middle" x="1200.9317" y="-687.4" font-family="Arial" font-size="12.00" fill="#000000">borrows</text>
+</g>
+<!-- PARTICIPANT&#45;&gt;borrows -->
+<g id="edge43" class="edge">
+<title>PARTICIPANT-&gt;borrows</title>
+<path fill="none" stroke="#000000" d="M1090.7296,-802.9241C1116.6956,-776.5523 1164.3879,-728.1149 1187.5732,-704.5673"/>
+<text text-anchor="middle" x="1157.0962" y="-753" font-family="Arial" font-size="10.00" fill="#000000">M</text>
+</g>
+<!-- receives -->
+<g id="node66" class="node">
+<title>receives</title>
+<polygon fill="none" stroke="#000000" points="942.9317,-709 888.3297,-691 942.9317,-673 997.5337,-691 942.9317,-709"/>
+<text text-anchor="middle" x="942.9317" y="-687.4" font-family="Arial" font-size="12.00" fill="#000000">receives</text>
+</g>
+<!-- PARTICIPANT&#45;&gt;receives -->
+<g id="edge67" class="edge">
+<title>PARTICIPANT-&gt;receives</title>
+<path fill="none" stroke="#000000" d="M1054.8558,-802.9241C1028.4841,-776.5523 980.0466,-728.1149 956.499,-704.5673"/>
+<text text-anchor="middle" x="1026.7112" y="-753" font-family="Arial" font-size="10.00" fill="#000000">1</text>
+</g>
+<!-- scores -->
+<g id="node25" class="node">
+<title>scores</title>
+<polygon fill="none" stroke="#000000" points="2515.9317,-644 2469.6914,-626 2515.9317,-608 2562.1721,-626 2515.9317,-644"/>
+<text text-anchor="middle" x="2515.9317" y="-622.4" font-family="Arial" font-size="12.00" fill="#000000">scores</text>
+</g>
+<!-- JUDGE&#45;&gt;scores -->
+<g id="edge24" class="edge">
+<title>JUDGE-&gt;scores</title>
+<path fill="none" stroke="#000000" d="M2486.5288,-737.955C2488.3018,-720.9816 2491.7202,-694.9656 2497.6027,-673 2500.5028,-662.171 2505.085,-650.421 2508.9423,-641.3783"/>
+<text text-anchor="middle" x="2502.0962" y="-688" font-family="Arial" font-size="10.00" fill="#000000">M</text>
+</g>
+<!-- works -->
+<g id="node72" class="node">
+<title>works</title>
+<polygon fill="none" stroke="#000000" points="2359.9317,-709 2316.9308,-691 2359.9317,-673 2402.9327,-691 2359.9317,-709"/>
+<text text-anchor="middle" x="2359.9317" y="-687.4" font-family="Arial" font-size="12.00" fill="#000000">works</text>
+</g>
+<!-- VOLUNTEER&#45;&gt;works -->
+<g id="edge72" class="edge">
+<title>VOLUNTEER-&gt;works</title>
+<path fill="none" stroke="#000000" d="M2328.0764,-802.9241C2335.3042,-777.5291 2348.3557,-731.6726 2355.2971,-707.2837"/>
+<text text-anchor="middle" x="2350.0962" y="-753" font-family="Arial" font-size="10.00" fill="#000000">M</text>
+</g>
+<!-- TEAM -->
+<g id="node13" class="node">
+<title>TEAM</title>
+<polygon fill="none" stroke="#000000" points="284.9317,-579 230.9317,-579 230.9317,-543 284.9317,-543 284.9317,-579"/>
+<text text-anchor="middle" x="257.9317" y="-557.4" font-family="Arial" font-size="12.00" fill="#000000">TEAM</text>
+</g>
+<!-- t_id -->
+<g id="node14" class="node">
+<title>t_id</title>
+<ellipse fill="none" stroke="#000000" cx="54.9317" cy="-431" rx="54.8636" ry="18"/>
+<text text-anchor="middle" x="54.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">team_id (PK)</text>
+</g>
+<!-- TEAM&#45;&gt;t_id -->
+<g id="edge12" class="edge">
+<title>TEAM-&gt;t_id</title>
+<path fill="none" stroke="#000000" d="M230.5543,-543.4676C190.9445,-518.1018 118.221,-471.53 79.9666,-447.0322"/>
+</g>
+<!-- t_name -->
+<g id="node15" class="node">
+<title>t_name</title>
+<ellipse fill="none" stroke="#000000" cx="163.9317" cy="-431" rx="29.27" ry="18"/>
+<text text-anchor="middle" x="163.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">name</text>
+</g>
+<!-- TEAM&#45;&gt;t_name -->
+<g id="edge13" class="edge">
+<title>TEAM-&gt;t_name</title>
+<path fill="none" stroke="#000000" d="M244.8614,-542.9241C226.5998,-517.6686 193.7051,-472.1759 175.9982,-447.6877"/>
+</g>
+<!-- owns -->
+<g id="node20" class="node">
+<title>owns</title>
+<polygon fill="none" stroke="#000000" points="257.9317,-449 217.9356,-431 257.9317,-413 297.9279,-431 257.9317,-449"/>
+<text text-anchor="middle" x="257.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">owns</text>
+</g>
+<!-- TEAM&#45;&gt;owns -->
+<g id="edge18" class="edge">
+<title>TEAM-&gt;owns</title>
+<path fill="none" stroke="#000000" d="M257.9317,-542.9241C257.9317,-518.2267 257.9317,-474.1767 257.9317,-449.3415"/>
+<text text-anchor="middle" x="260.7112" y="-493" font-family="Arial" font-size="10.00" fill="#000000">1</text>
+</g>
+<!-- occupies -->
+<g id="node51" class="node">
+<title>occupies</title>
+<polygon fill="none" stroke="#000000" points="379.9317,-449 322.4954,-431 379.9317,-413 437.3681,-431 379.9317,-449"/>
+<text text-anchor="middle" x="379.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">occupies</text>
+</g>
+<!-- TEAM&#45;&gt;occupies -->
+<g id="edge52" class="edge">
+<title>TEAM-&gt;occupies</title>
+<path fill="none" stroke="#000000" d="M274.8953,-542.9241C299.5132,-516.6919 344.6204,-468.6268 366.8467,-444.9431"/>
+<text text-anchor="middle" x="338.0962" y="-493" font-family="Arial" font-size="10.00" fill="#000000">M</text>
+</g>
+<!-- forms&#45;&gt;TEAM -->
+<g id="edge15" class="edge">
+<title>forms-&gt;TEAM</title>
+<path fill="none" stroke="#000000" stroke-width="3" d="M656.3611,-683.4487C582.3926,-660.7161 362.1641,-593.0336 285.0036,-569.3199"/>
+<text text-anchor="middle" x="523.5412" y="-623" font-family="Arial" font-size="10.00" fill="#000000">N</text>
+</g>
+<!-- PROJECT -->
+<g id="node17" class="node">
+<title>PROJECT</title>
+<polygon fill="none" stroke="#000000" points="293.9285,-343 221.9349,-343 221.9349,-307 293.9285,-307 293.9285,-343"/>
+<text text-anchor="middle" x="257.9317" y="-321.4" font-family="Arial" font-size="12.00" fill="#000000">PROJECT</text>
+</g>
+<!-- p_id -->
+<g id="node18" class="node">
+<title>p_id</title>
+<ellipse fill="none" stroke="#000000" cx="257.9317" cy="-219" rx="60.7864" ry="18"/>
+<text text-anchor="middle" x="257.9317" y="-215.4" font-family="Arial" font-size="12.00" fill="#000000">project_id (PK)</text>
+</g>
+<!-- PROJECT&#45;&gt;p_id -->
+<g id="edge16" class="edge">
+<title>PROJECT-&gt;p_id</title>
+<path fill="none" stroke="#000000" d="M257.9317,-306.5362C257.9317,-287.0806 257.9317,-256.6276 257.9317,-237.2522"/>
+</g>
+<!-- p_title -->
+<g id="node19" class="node">
+<title>p_title</title>
+<ellipse fill="none" stroke="#000000" cx="370.9317" cy="-219" rx="27" ry="18"/>
+<text text-anchor="middle" x="370.9317" y="-215.4" font-family="Arial" font-size="12.00" fill="#000000">title</text>
+</g>
+<!-- PROJECT&#45;&gt;p_title -->
+<g id="edge17" class="edge">
+<title>PROJECT-&gt;p_title</title>
+<path fill="none" stroke="#000000" d="M277.3571,-306.778C299.3167,-286.1787 334.6541,-253.0303 355.0391,-233.9081"/>
+</g>
+<!-- submits -->
+<g id="node24" class="node">
+<title>submits</title>
+<polygon fill="none" stroke="#000000" points="119.9317,-237 68.3561,-219 119.9317,-201 171.5074,-219 119.9317,-237"/>
+<text text-anchor="middle" x="119.9317" y="-215.4" font-family="Arial" font-size="12.00" fill="#000000">submits</text>
+</g>
+<!-- PROJECT&#45;&gt;submits -->
+<g id="edge22" class="edge">
+<title>PROJECT-&gt;submits</title>
+<path fill="none" stroke="#000000" d="M234.2087,-306.778C206.3119,-285.35 160.7366,-250.3429 136.4268,-231.6701"/>
+<text text-anchor="middle" x="196.7112" y="-269" font-family="Arial" font-size="10.00" fill="#000000">1</text>
+</g>
+<!-- owns&#45;&gt;PROJECT -->
+<g id="edge19" class="edge">
+<title>owns-&gt;PROJECT</title>
+<path fill="none" stroke="#000000" d="M257.9317,-412.5362C257.9317,-393.0806 257.9317,-362.6276 257.9317,-343.2522"/>
+<text text-anchor="middle" x="260.7112" y="-375" font-family="Arial" font-size="10.00" fill="#000000">1</text>
+</g>
+<!-- SUBMISSION -->
+<g id="node21" class="node">
+<title>SUBMISSION</title>
+<polygon fill="none" stroke="#000000" points="1428.7684,-131 1337.0951,-131 1337.0951,-95 1428.7684,-95 1428.7684,-131"/>
+<text text-anchor="middle" x="1382.9317" y="-109.4" font-family="Arial" font-size="12.00" fill="#000000">SUBMISSION</text>
+</g>
+<!-- s_id -->
+<g id="node22" class="node">
+<title>s_id</title>
+<ellipse fill="none" stroke="#000000" cx="1312.9317" cy="-18" rx="76.4429" ry="18"/>
+<text text-anchor="middle" x="1312.9317" y="-14.4" font-family="Arial" font-size="12.00" fill="#000000">submission_id (PK)</text>
+</g>
+<!-- SUBMISSION&#45;&gt;s_id -->
+<g id="edge20" class="edge">
+<title>SUBMISSION-&gt;s_id</title>
+<path fill="none" stroke="#000000" d="M1369.435,-94.683C1356.9602,-77.7529 1338.5348,-52.7471 1326.1496,-35.9385"/>
+</g>
+<!-- s_repo -->
+<g id="node23" class="node">
+<title>s_repo</title>
+<ellipse fill="none" stroke="#000000" cx="1452.9317" cy="-18" rx="38.1529" ry="18"/>
+<text text-anchor="middle" x="1452.9317" y="-14.4" font-family="Arial" font-size="12.00" fill="#000000">repo_url</text>
+</g>
+<!-- SUBMISSION&#45;&gt;s_repo -->
+<g id="edge21" class="edge">
+<title>SUBMISSION-&gt;s_repo</title>
+<path fill="none" stroke="#000000" d="M1396.4284,-94.683C1409.0622,-77.5372 1427.7991,-52.1086 1440.1842,-35.3002"/>
+</g>
+<!-- submits&#45;&gt;SUBMISSION -->
+<g id="edge23" class="edge">
+<title>submits-&gt;SUBMISSION</title>
+<path fill="none" stroke="#000000" d="M146.8586,-210.2619C158.4552,-206.8341 172.2409,-203.2012 184.9317,-201 413.013,-161.4399 1146.4288,-124.3146 1337.2192,-115.151"/>
+<text text-anchor="middle" x="562.7112" y="-163" font-family="Arial" font-size="10.00" fill="#000000">1</text>
+</g>
+<!-- scores&#45;&gt;SUBMISSION -->
+<g id="edge25" class="edge">
+<title>scores-&gt;SUBMISSION</title>
+<path fill="none" stroke="#000000" d="M2541.9733,-617.8303C2561.9361,-610.4321 2589.0149,-597.7869 2606.9317,-579 2634.932,-549.64 2644.9317,-536.5712 2644.9317,-496 2644.9317,-496 2644.9317,-496 2644.9317,-219 2644.9317,-156.7153 1655.9345,-121.6367 1428.9674,-114.4065"/>
+<text text-anchor="middle" x="2648.5412" y="-375" font-family="Arial" font-size="10.00" fill="#000000">N</text>
+</g>
+<!-- SESSION -->
+<g id="node26" class="node">
+<title>SESSION</title>
+<polygon fill="none" stroke="#000000" points="1487.7762,-579 1418.0873,-579 1418.0873,-543 1487.7762,-543 1487.7762,-579"/>
+<text text-anchor="middle" x="1452.9317" y="-557.4" font-family="Arial" font-size="12.00" fill="#000000">SESSION</text>
+</g>
+<!-- se_id -->
+<g id="node27" class="node">
+<title>se_id</title>
+<ellipse fill="none" stroke="#000000" cx="1452.9317" cy="-431" rx="63.7524" ry="18"/>
+<text text-anchor="middle" x="1452.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">session_id (PK)</text>
+</g>
+<!-- SESSION&#45;&gt;se_id -->
+<g id="edge26" class="edge">
+<title>SESSION-&gt;se_id</title>
+<path fill="none" stroke="#000000" d="M1452.9317,-542.9241C1452.9317,-518.2267 1452.9317,-474.1767 1452.9317,-449.3415"/>
+</g>
+<!-- se_title -->
+<g id="node28" class="node">
+<title>se_title</title>
+<ellipse fill="none" stroke="#000000" cx="1568.9317" cy="-431" rx="27" ry="18"/>
+<text text-anchor="middle" x="1568.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">title</text>
+</g>
+<!-- SESSION&#45;&gt;se_title -->
+<g id="edge27" class="edge">
+<title>SESSION-&gt;se_title</title>
+<path fill="none" stroke="#000000" d="M1469.061,-542.9241C1491.9702,-517.25 1533.5408,-470.6623 1555.1121,-446.4875"/>
+</g>
+<!-- se_time -->
+<g id="node29" class="node">
+<title>se_time</title>
+<ellipse fill="none" stroke="#000000" cx="1327.9317" cy="-431" rx="35.5506" ry="18"/>
+<text text-anchor="middle" x="1327.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">start_at</text>
+</g>
+<!-- SESSION&#45;&gt;se_time -->
+<g id="edge28" class="edge">
+<title>SESSION-&gt;se_time</title>
+<path fill="none" stroke="#000000" d="M1435.551,-542.9241C1411.1328,-517.5291 1367.04,-471.6726 1343.5891,-447.2837"/>
+</g>
+<!-- manages1&#45;&gt;SESSION -->
+<g id="edge30" class="edge">
+<title>manages1-&gt;SESSION</title>
+<path fill="none" stroke="#000000" d="M1686.6613,-679.6908C1642.0168,-657.0198 1541.2847,-605.8667 1487.81,-578.7116"/>
+<text text-anchor="middle" x="1615.5412" y="-623" font-family="Arial" font-size="10.00" fill="#000000">N</text>
+</g>
+<!-- CHECKIN -->
+<g id="node31" class="node">
+<title>CHECKIN</title>
+<polygon fill="none" stroke="#000000" points="657.9233,-579 587.9401,-579 587.9401,-543 657.9233,-543 657.9233,-579"/>
+<text text-anchor="middle" x="622.9317" y="-557.4" font-family="Arial" font-size="12.00" fill="#000000">CHECKIN</text>
+</g>
+<!-- c_id -->
+<g id="node32" class="node">
+<title>c_id</title>
+<ellipse fill="none" stroke="#000000" cx="622.9317" cy="-431" rx="63.7524" ry="18"/>
+<text text-anchor="middle" x="622.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">checkin_id (PK)</text>
+</g>
+<!-- CHECKIN&#45;&gt;c_id -->
+<g id="edge31" class="edge">
+<title>CHECKIN-&gt;c_id</title>
+<path fill="none" stroke="#000000" d="M622.9317,-542.9241C622.9317,-518.2267 622.9317,-474.1767 622.9317,-449.3415"/>
+</g>
+<!-- c_method -->
+<g id="node33" class="node">
+<title>c_method</title>
+<ellipse fill="none" stroke="#000000" cx="497.9317" cy="-431" rx="35.5521" ry="18"/>
+<text text-anchor="middle" x="497.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">method</text>
+</g>
+<!-- CHECKIN&#45;&gt;c_method -->
+<g id="edge32" class="edge">
+<title>CHECKIN-&gt;c_method</title>
+<path fill="none" stroke="#000000" d="M605.551,-542.9241C581.1328,-517.5291 537.04,-471.6726 513.5891,-447.2837"/>
+</g>
+<!-- attends&#45;&gt;SESSION -->
+<g id="edge34" class="edge">
+<title>attends-&gt;SESSION</title>
+<path fill="none" stroke="#000000" d="M1086.691,-677.6433C1106.8597,-658.8925 1146.4431,-625.144 1186.7127,-608 1227.9523,-590.443 1355.8471,-572.9215 1418.135,-565.1558"/>
+<text text-anchor="middle" x="1190.5412" y="-623" font-family="Arial" font-size="10.00" fill="#000000">N</text>
+</g>
+<!-- attends&#45;&gt;CHECKIN -->
+<g id="edge35" class="edge">
+<title>attends-&gt;CHECKIN</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1059.1324,-677.779C1038.5065,-658.8723 997.5852,-624.5699 955.9317,-608 902.2237,-586.6347 732.3928,-570.2032 658.1951,-563.8544"/>
+<text text-anchor="middle" x="1041.6582" y="-623" font-family="Arial" font-size="10.00" fill="#000000">associative</text>
+</g>
+<!-- ITEM -->
+<g id="node35" class="node">
+<title>ITEM</title>
+<polygon fill="none" stroke="#000000" points="1836.7634,-579 1715.1001,-579 1715.1001,-543 1836.7634,-543 1836.7634,-579"/>
+<text text-anchor="middle" x="1775.9317" y="-557.4" font-family="Arial" font-size="12.00" fill="#000000">INVENTORY_ITEM</text>
+</g>
+<!-- i_id -->
+<g id="node36" class="node">
+<title>i_id</title>
+<ellipse fill="none" stroke="#000000" cx="1924.9317" cy="-431" rx="52.244" ry="18"/>
+<text text-anchor="middle" x="1924.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">item_id (PK)</text>
+</g>
+<!-- ITEM&#45;&gt;i_id -->
+<g id="edge36" class="edge">
+<title>ITEM-&gt;i_id</title>
+<path fill="none" stroke="#000000" d="M1796.6496,-542.9241C1825.4363,-517.8081 1877.1624,-472.6779 1905.3377,-448.0955"/>
+</g>
+<!-- i_name -->
+<g id="node37" class="node">
+<title>i_name</title>
+<ellipse fill="none" stroke="#000000" cx="1649.9317" cy="-431" rx="29.27" ry="18"/>
+<text text-anchor="middle" x="1649.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">name</text>
+</g>
+<!-- ITEM&#45;&gt;i_name -->
+<g id="edge37" class="edge">
+<title>ITEM-&gt;i_name</title>
+<path fill="none" stroke="#000000" d="M1758.412,-542.9241C1733.5279,-517.25 1688.3736,-470.6623 1664.9427,-446.4875"/>
+</g>
+<!-- i_qty -->
+<g id="node38" class="node">
+<title>i_qty</title>
+<ellipse fill="none" stroke="#000000" cx="1775.9317" cy="-431" rx="71.6055" ry="18"/>
+<text text-anchor="middle" x="1775.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">quantity_available</text>
+</g>
+<!-- ITEM&#45;&gt;i_qty -->
+<g id="edge38" class="edge">
+<title>ITEM-&gt;i_qty</title>
+<path fill="none" stroke="#000000" d="M1775.9317,-542.9241C1775.9317,-518.2267 1775.9317,-474.1767 1775.9317,-449.3415"/>
+</g>
+<!-- manages2&#45;&gt;ITEM -->
+<g id="edge40" class="edge">
+<title>manages2-&gt;ITEM</title>
+<path fill="none" stroke="#000000" d="M1876.407,-676.591C1855.7204,-652.7923 1814.4509,-605.3141 1791.7703,-579.2214"/>
+<text text-anchor="middle" x="1849.5412" y="-623" font-family="Arial" font-size="10.00" fill="#000000">N</text>
+</g>
+<!-- CHECKOUT -->
+<g id="node40" class="node">
+<title>CHECKOUT</title>
+<polygon fill="none" stroke="#000000" points="1240.7548,-579 1157.1087,-579 1157.1087,-543 1240.7548,-543 1240.7548,-579"/>
+<text text-anchor="middle" x="1198.9317" y="-557.4" font-family="Arial" font-size="12.00" fill="#000000">CHECKOUT</text>
+</g>
+<!-- co_id -->
+<g id="node41" class="node">
+<title>co_id</title>
+<ellipse fill="none" stroke="#000000" cx="1198.9317" cy="-431" rx="68.6319" ry="18"/>
+<text text-anchor="middle" x="1198.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">checkout_id (PK)</text>
+</g>
+<!-- CHECKOUT&#45;&gt;co_id -->
+<g id="edge41" class="edge">
+<title>CHECKOUT-&gt;co_id</title>
+<path fill="none" stroke="#000000" d="M1198.9317,-542.9241C1198.9317,-518.2267 1198.9317,-474.1767 1198.9317,-449.3415"/>
+</g>
+<!-- co_due -->
+<g id="node42" class="node">
+<title>co_due</title>
+<ellipse fill="none" stroke="#000000" cx="1071.9317" cy="-431" rx="33.8053" ry="18"/>
+<text text-anchor="middle" x="1071.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">due_at</text>
+</g>
+<!-- CHECKOUT&#45;&gt;co_due -->
+<g id="edge42" class="edge">
+<title>CHECKOUT-&gt;co_due</title>
+<path fill="none" stroke="#000000" d="M1181.2729,-542.9241C1156.464,-517.5291 1111.6657,-471.6726 1087.8397,-447.2837"/>
+</g>
+<!-- borrows&#45;&gt;ITEM -->
+<g id="edge44" class="edge">
+<title>borrows-&gt;ITEM</title>
+<path fill="none" stroke="#000000" d="M1231.0095,-683.0848C1289.7553,-667.7371 1423.9534,-633.2257 1537.7127,-608 1597.7991,-594.6761 1666.8317,-581.2627 1715.0628,-572.1956"/>
+<text text-anchor="middle" x="1541.5412" y="-623" font-family="Arial" font-size="10.00" fill="#000000">N</text>
+</g>
+<!-- borrows&#45;&gt;CHECKOUT -->
+<g id="edge45" class="edge">
+<title>borrows-&gt;CHECKOUT</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M1200.6536,-672.9241C1200.2737,-648.2267 1199.596,-604.1767 1199.2139,-579.3415"/>
+<text text-anchor="middle" x="1225.6582" y="-623" font-family="Arial" font-size="10.00" fill="#000000">associative</text>
+</g>
+<!-- VENUE -->
+<g id="node44" class="node">
+<title>VENUE</title>
+<polygon fill="none" stroke="#000000" points="500.1083,-343 403.7552,-343 403.7552,-307 500.1083,-307 500.1083,-343"/>
+<text text-anchor="middle" x="451.9317" y="-321.4" font-family="Arial" font-size="12.00" fill="#000000">VENUE_AREA</text>
+</g>
+<!-- v_id -->
+<g id="node45" class="node">
+<title>v_id</title>
+<ellipse fill="none" stroke="#000000" cx="559.9317" cy="-219" rx="53.4615" ry="18"/>
+<text text-anchor="middle" x="559.9317" y="-215.4" font-family="Arial" font-size="12.00" fill="#000000">area_id (PK)</text>
+</g>
+<!-- VENUE&#45;&gt;v_id -->
+<g id="edge46" class="edge">
+<title>VENUE-&gt;v_id</title>
+<path fill="none" stroke="#000000" d="M470.7439,-306.5362C490.9292,-286.7247 522.7331,-255.5098 542.407,-236.2002"/>
+</g>
+<!-- v_name -->
+<g id="node46" class="node">
+<title>v_name</title>
+<ellipse fill="none" stroke="#000000" cx="451.9317" cy="-219" rx="29.27" ry="18"/>
+<text text-anchor="middle" x="451.9317" y="-215.4" font-family="Arial" font-size="12.00" fill="#000000">name</text>
+</g>
+<!-- VENUE&#45;&gt;v_name -->
+<g id="edge47" class="edge">
+<title>VENUE-&gt;v_name</title>
+<path fill="none" stroke="#000000" d="M451.9317,-306.5362C451.9317,-287.0806 451.9317,-256.6276 451.9317,-237.2522"/>
+</g>
+<!-- BOOKING -->
+<g id="node47" class="node">
+<title>BOOKING</title>
+<polygon fill="none" stroke="#000000" points="1400.9393,-343 1328.9241,-343 1328.9241,-307 1400.9393,-307 1400.9393,-343"/>
+<text text-anchor="middle" x="1364.9317" y="-321.4" font-family="Arial" font-size="12.00" fill="#000000">BOOKING</text>
+</g>
+<!-- b_id -->
+<g id="node48" class="node">
+<title>b_id</title>
+<ellipse fill="none" stroke="#000000" cx="1301.9317" cy="-219" rx="64.9668" ry="18"/>
+<text text-anchor="middle" x="1301.9317" y="-215.4" font-family="Arial" font-size="12.00" fill="#000000">booking_id (PK)</text>
+</g>
+<!-- BOOKING&#45;&gt;b_id -->
+<g id="edge48" class="edge">
+<title>BOOKING-&gt;b_id</title>
+<path fill="none" stroke="#000000" d="M1353.958,-306.5362C1342.3242,-286.962 1324.0744,-256.2558 1312.5698,-236.899"/>
+</g>
+<!-- b_time -->
+<g id="node49" class="node">
+<title>b_time</title>
+<ellipse fill="none" stroke="#000000" cx="1427.9317" cy="-219" rx="35.5506" ry="18"/>
+<text text-anchor="middle" x="1427.9317" y="-215.4" font-family="Arial" font-size="12.00" fill="#000000">start_at</text>
+</g>
+<!-- BOOKING&#45;&gt;b_time -->
+<g id="edge49" class="edge">
+<title>BOOKING-&gt;b_time</title>
+<path fill="none" stroke="#000000" d="M1375.9055,-306.5362C1387.6097,-286.8434 1406.0106,-255.8832 1417.5021,-236.5483"/>
+</g>
+<!-- assigns&#45;&gt;BOOKING -->
+<g id="edge51" class="edge">
+<title>assigns-&gt;BOOKING</title>
+<path fill="none" stroke="#000000" d="M2018.737,-478.3817C2016.4302,-459.171 2009.6783,-429.0311 1989.9317,-413 1943.8335,-375.5754 1527.7546,-338.4399 1401.2515,-327.9323"/>
+<text text-anchor="middle" x="2016.5412" y="-428" font-family="Arial" font-size="10.00" fill="#000000">N</text>
+</g>
+<!-- occupies&#45;&gt;VENUE -->
+<g id="edge53" class="edge">
+<title>occupies-&gt;VENUE</title>
+<path fill="none" stroke="#000000" d="M390.2476,-415.8128C403.2349,-396.6926 425.5276,-363.8727 439.4584,-343.3636"/>
+<text text-anchor="middle" x="422.5412" y="-375" font-family="Arial" font-size="10.00" fill="#000000">N</text>
+</g>
+<!-- occupies&#45;&gt;BOOKING -->
+<g id="edge54" class="edge">
+<title>occupies-&gt;BOOKING</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M409.6844,-422.2574C422.0398,-418.913 436.5839,-415.3433 449.9317,-413 788.6618,-353.5339 1205.4972,-331.8258 1328.9087,-326.4456"/>
+<text text-anchor="middle" x="749.6582" y="-375" font-family="Arial" font-size="10.00" fill="#000000">associative</text>
+</g>
+<!-- SPONSOR -->
+<g id="node52" class="node">
+<title>SPONSOR</title>
+<polygon fill="none" stroke="#000000" points="2814.9353,-1051 2738.9281,-1051 2738.9281,-1015 2814.9353,-1015 2814.9353,-1051"/>
+<text text-anchor="middle" x="2776.9317" y="-1029.4" font-family="Arial" font-size="12.00" fill="#000000">SPONSOR</text>
+</g>
+<!-- sp_id -->
+<g id="node53" class="node">
+<title>sp_id</title>
+<ellipse fill="none" stroke="#000000" cx="2656.9317" cy="-927" rx="65.3109" ry="18"/>
+<text text-anchor="middle" x="2656.9317" y="-923.4" font-family="Arial" font-size="12.00" fill="#000000">sponsor_id (PK)</text>
+</g>
+<!-- SPONSOR&#45;&gt;sp_id -->
+<g id="edge55" class="edge">
+<title>SPONSOR-&gt;sp_id</title>
+<path fill="none" stroke="#000000" d="M2756.303,-1014.778C2733.9212,-995.0074 2698.453,-963.6771 2676.4967,-944.2824"/>
+</g>
+<!-- sp_name -->
+<g id="node54" class="node">
+<title>sp_name</title>
+<ellipse fill="none" stroke="#000000" cx="2776.9317" cy="-927" rx="29.27" ry="18"/>
+<text text-anchor="middle" x="2776.9317" y="-923.4" font-family="Arial" font-size="12.00" fill="#000000">name</text>
+</g>
+<!-- SPONSOR&#45;&gt;sp_name -->
+<g id="edge56" class="edge">
+<title>SPONSOR-&gt;sp_name</title>
+<path fill="none" stroke="#000000" d="M2776.9317,-1014.5362C2776.9317,-995.0806 2776.9317,-964.6276 2776.9317,-945.2522"/>
+</g>
+<!-- provides -->
+<g id="node58" class="node">
+<title>provides</title>
+<polygon fill="none" stroke="#000000" points="2886.9317,-945 2831.6185,-927 2886.9317,-909 2942.245,-927 2886.9317,-945"/>
+<text text-anchor="middle" x="2886.9317" y="-923.4" font-family="Arial" font-size="12.00" fill="#000000">provides</text>
+</g>
+<!-- SPONSOR&#45;&gt;provides -->
+<g id="edge59" class="edge">
+<title>SPONSOR-&gt;provides</title>
+<path fill="none" stroke="#000000" d="M2796.0923,-1014.5362C2818.0056,-993.4198 2853.3629,-959.3482 2872.8744,-940.5461"/>
+<text text-anchor="middle" x="2838.7112" y="-977" font-family="Arial" font-size="10.00" fill="#000000">1</text>
+</g>
+<!-- CONTRIBUTION -->
+<g id="node55" class="node">
+<title>CONTRIBUTION</title>
+<polygon fill="none" stroke="#000000" points="2940.7498,-839 2833.1137,-839 2833.1137,-803 2940.7498,-803 2940.7498,-839"/>
+<text text-anchor="middle" x="2886.9317" y="-817.4" font-family="Arial" font-size="12.00" fill="#000000">CONTRIBUTION</text>
+</g>
+<!-- ct_id -->
+<g id="node56" class="node">
+<title>ct_id</title>
+<ellipse fill="none" stroke="#000000" cx="2861.9317" cy="-691" rx="77.5114" ry="18"/>
+<text text-anchor="middle" x="2861.9317" y="-687.4" font-family="Arial" font-size="12.00" fill="#000000">contribution_id (PK)</text>
+</g>
+<!-- CONTRIBUTION&#45;&gt;ct_id -->
+<g id="edge57" class="edge">
+<title>CONTRIBUTION-&gt;ct_id</title>
+<path fill="none" stroke="#000000" d="M2883.4556,-802.9241C2878.7061,-778.2267 2870.235,-734.1767 2865.459,-709.3415"/>
+</g>
+<!-- ct_amt -->
+<g id="node57" class="node">
+<title>ct_amt</title>
+<ellipse fill="none" stroke="#000000" cx="2999.9317" cy="-691" rx="35.5521" ry="18"/>
+<text text-anchor="middle" x="2999.9317" y="-687.4" font-family="Arial" font-size="12.00" fill="#000000">amount</text>
+</g>
+<!-- CONTRIBUTION&#45;&gt;ct_amt -->
+<g id="edge58" class="edge">
+<title>CONTRIBUTION-&gt;ct_amt</title>
+<path fill="none" stroke="#000000" d="M2902.6439,-802.9241C2924.5967,-777.6686 2964.1404,-732.1759 2985.4263,-707.6877"/>
+</g>
+<!-- provides&#45;&gt;CONTRIBUTION -->
+<g id="edge60" class="edge">
+<title>provides-&gt;CONTRIBUTION</title>
+<path fill="none" stroke="#000000" stroke-width="3" d="M2886.9317,-908.5362C2886.9317,-889.0806 2886.9317,-858.6276 2886.9317,-839.2522"/>
+<text text-anchor="middle" x="2890.5412" y="-871" font-family="Arial" font-size="10.00" fill="#000000">N</text>
+</g>
+<!-- EXPENSE -->
+<g id="node59" class="node">
+<title>EXPENSE</title>
+<polygon fill="none" stroke="#000000" points="2134.112,-579 2061.7514,-579 2061.7514,-543 2134.112,-543 2134.112,-579"/>
+<text text-anchor="middle" x="2097.9317" y="-557.4" font-family="Arial" font-size="12.00" fill="#000000">EXPENSE</text>
+</g>
+<!-- e_id -->
+<g id="node60" class="node">
+<title>e_id</title>
+<ellipse fill="none" stroke="#000000" cx="2222.9317" cy="-431" rx="66.7291" ry="18"/>
+<text text-anchor="middle" x="2222.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">expense_id (PK)</text>
+</g>
+<!-- EXPENSE&#45;&gt;e_id -->
+<g id="edge61" class="edge">
+<title>EXPENSE-&gt;e_id</title>
+<path fill="none" stroke="#000000" d="M2115.3125,-542.9241C2139.3282,-517.9477 2182.3753,-473.1787 2206.098,-448.5071"/>
+</g>
+<!-- e_amt -->
+<g id="node61" class="node">
+<title>e_amt</title>
+<ellipse fill="none" stroke="#000000" cx="2094.9317" cy="-431" rx="35.5521" ry="18"/>
+<text text-anchor="middle" x="2094.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">amount</text>
+</g>
+<!-- EXPENSE&#45;&gt;e_amt -->
+<g id="edge62" class="edge">
+<title>EXPENSE-&gt;e_amt</title>
+<path fill="none" stroke="#000000" d="M2097.5146,-542.9241C2096.9447,-518.2267 2095.9281,-474.1767 2095.355,-449.3415"/>
+</g>
+<!-- records&#45;&gt;EXPENSE -->
+<g id="edge64" class="edge">
+<title>records-&gt;EXPENSE</title>
+<path fill="none" stroke="#000000" d="M2097.9317,-672.9241C2097.9317,-648.2267 2097.9317,-604.1767 2097.9317,-579.3415"/>
+<text text-anchor="middle" x="2101.5412" y="-623" font-family="Arial" font-size="10.00" fill="#000000">N</text>
+</g>
+<!-- CERT -->
+<g id="node63" class="node">
+<title>CERT</title>
+<polygon fill="none" stroke="#000000" points="990.0912,-579 895.7723,-579 895.7723,-543 990.0912,-543 990.0912,-579"/>
+<text text-anchor="middle" x="942.9317" y="-557.4" font-family="Arial" font-size="12.00" fill="#000000">CERTIFICATE</text>
+</g>
+<!-- ce_id -->
+<g id="node64" class="node">
+<title>ce_id</title>
+<ellipse fill="none" stroke="#000000" cx="942.9317" cy="-431" rx="70.8723" ry="18"/>
+<text text-anchor="middle" x="942.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">certificate_id (PK)</text>
+</g>
+<!-- CERT&#45;&gt;ce_id -->
+<g id="edge65" class="edge">
+<title>CERT-&gt;ce_id</title>
+<path fill="none" stroke="#000000" d="M942.9317,-542.9241C942.9317,-518.2267 942.9317,-474.1767 942.9317,-449.3415"/>
+</g>
+<!-- ce_code -->
+<g id="node65" class="node">
+<title>ce_code</title>
+<ellipse fill="none" stroke="#000000" cx="779.9317" cy="-431" rx="67.9295" ry="18"/>
+<text text-anchor="middle" x="779.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">verification_code</text>
+</g>
+<!-- CERT&#45;&gt;ce_code -->
+<g id="edge66" class="edge">
+<title>CERT-&gt;ce_code</title>
+<path fill="none" stroke="#000000" d="M920.2673,-542.9241C888.7758,-517.8081 832.1894,-472.6779 801.3668,-448.0955"/>
+</g>
+<!-- receives&#45;&gt;CERT -->
+<g id="edge68" class="edge">
+<title>receives-&gt;CERT</title>
+<path fill="none" stroke="#000000" stroke-width="3" d="M942.9317,-672.9241C942.9317,-648.2267 942.9317,-604.1767 942.9317,-579.3415"/>
+<text text-anchor="middle" x="946.5412" y="-623" font-family="Arial" font-size="10.00" fill="#000000">N</text>
+</g>
+<!-- SHIFT -->
+<g id="node67" class="node">
+<title>SHIFT</title>
+<polygon fill="none" stroke="#000000" points="2425.0982,-579 2294.7653,-579 2294.7653,-543 2425.0982,-543 2425.0982,-579"/>
+<text text-anchor="middle" x="2359.9317" y="-557.4" font-family="Arial" font-size="12.00" fill="#000000">VOLUNTEER_SHIFT</text>
+</g>
+<!-- sh_id -->
+<g id="node68" class="node">
+<title>sh_id</title>
+<ellipse fill="none" stroke="#000000" cx="2467.9317" cy="-431" rx="51.9006" ry="18"/>
+<text text-anchor="middle" x="2467.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">shift_id (PK)</text>
+</g>
+<!-- SHIFT&#45;&gt;sh_id -->
+<g id="edge69" class="edge">
+<title>SHIFT-&gt;sh_id</title>
+<path fill="none" stroke="#000000" d="M2374.9487,-542.9241C2395.6983,-517.9477 2432.8909,-473.1787 2453.3874,-448.5071"/>
+</g>
+<!-- sh_cap -->
+<g id="node69" class="node">
+<title>sh_cap</title>
+<ellipse fill="none" stroke="#000000" cx="2352.9317" cy="-431" rx="38.1575" ry="18"/>
+<text text-anchor="middle" x="2352.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">capacity</text>
+</g>
+<!-- SHIFT&#45;&gt;sh_cap -->
+<g id="edge70" class="edge">
+<title>SHIFT-&gt;sh_cap</title>
+<path fill="none" stroke="#000000" d="M2358.9584,-542.9241C2357.6286,-518.2267 2355.2566,-474.1767 2353.9194,-449.3415"/>
+</g>
+<!-- SHIFTASSIGN -->
+<g id="node70" class="node">
+<title>SHIFTASSIGN</title>
+<polygon fill="none" stroke="#000000" points="2594.097,-579 2457.7665,-579 2457.7665,-543 2594.097,-543 2594.097,-579"/>
+<text text-anchor="middle" x="2525.9317" y="-557.4" font-family="Arial" font-size="12.00" fill="#000000">SHIFT_ASSIGNMENT</text>
+</g>
+<!-- sa_status -->
+<g id="node71" class="node">
+<title>sa_status</title>
+<ellipse fill="none" stroke="#000000" cx="2575.9317" cy="-431" rx="30.8304" ry="18"/>
+<text text-anchor="middle" x="2575.9317" y="-427.4" font-family="Arial" font-size="12.00" fill="#000000">status</text>
+</g>
+<!-- SHIFTASSIGN&#45;&gt;sa_status -->
+<g id="edge71" class="edge">
+<title>SHIFTASSIGN-&gt;sa_status</title>
+<path fill="none" stroke="#000000" d="M2532.884,-542.9241C2542.4367,-518.0872 2559.517,-473.6783 2569.0385,-448.9224"/>
+</g>
+<!-- works&#45;&gt;SHIFT -->
+<g id="edge73" class="edge">
+<title>works-&gt;SHIFT</title>
+<path fill="none" stroke="#000000" d="M2359.9317,-672.9241C2359.9317,-648.2267 2359.9317,-604.1767 2359.9317,-579.3415"/>
+<text text-anchor="middle" x="2363.5412" y="-623" font-family="Arial" font-size="10.00" fill="#000000">N</text>
+</g>
+<!-- works&#45;&gt;SHIFTASSIGN -->
+<g id="edge74" class="edge">
+<title>works-&gt;SHIFTASSIGN</title>
+<path fill="none" stroke="#000000" stroke-dasharray="5,2" d="M2365.3255,-675.1266C2372.343,-656.666 2386.2713,-626.3821 2407.4787,-608 2421.9401,-595.4653 2440.1525,-586.0353 2457.93,-579.043"/>
+<text text-anchor="middle" x="2432.6582" y="-623" font-family="Arial" font-size="10.00" fill="#000000">associative</text>
+</g>
+<!-- INCIDENT -->
+<g id="node73" class="node">
+<title>INCIDENT</title>
+<polygon fill="none" stroke="#000000" points="2619.087,-839 2546.7765,-839 2546.7765,-803 2619.087,-803 2619.087,-839"/>
+<text text-anchor="middle" x="2582.9317" y="-817.4" font-family="Arial" font-size="12.00" fill="#000000">INCIDENT</text>
+</g>
+<!-- in_id -->
+<g id="node74" class="node">
+<title>in_id</title>
+<ellipse fill="none" stroke="#000000" cx="2582.9317" cy="-691" rx="64.1066" ry="18"/>
+<text text-anchor="middle" x="2582.9317" y="-687.4" font-family="Arial" font-size="12.00" fill="#000000">incident_id (PK)</text>
+</g>
+<!-- INCIDENT&#45;&gt;in_id -->
+<g id="edge75" class="edge">
+<title>INCIDENT-&gt;in_id</title>
+<path fill="none" stroke="#000000" d="M2582.9317,-802.9241C2582.9317,-778.2267 2582.9317,-734.1767 2582.9317,-709.3415"/>
+</g>
+<!-- in_sev -->
+<g id="node75" class="node">
+<title>in_sev</title>
+<ellipse fill="none" stroke="#000000" cx="2708.9317" cy="-691" rx="36.7388" ry="18"/>
+<text text-anchor="middle" x="2708.9317" y="-687.4" font-family="Arial" font-size="12.00" fill="#000000">severity</text>
+</g>
+<!-- INCIDENT&#45;&gt;in_sev -->
+<g id="edge76" class="edge">
+<title>INCIDENT-&gt;in_sev</title>
+<path fill="none" stroke="#000000" d="M2600.4515,-802.9241C2625.0651,-777.5291 2669.5106,-731.6726 2693.1491,-707.2837"/>
+</g>
+<!-- reports&#45;&gt;INCIDENT -->
+<g id="edge78" class="edge">
+<title>reports-&gt;INCIDENT</title>
+<path fill="none" stroke="#000000" d="M2517.1814,-912.7044C2530.7952,-893.7168 2554.8572,-860.1566 2569.7911,-839.3277"/>
+<text text-anchor="middle" x="2551.5412" y="-871" font-family="Arial" font-size="10.00" fill="#000000">N</text>
+</g>
+</g>
+</svg>
